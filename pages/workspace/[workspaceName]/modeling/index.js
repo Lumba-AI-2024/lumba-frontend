@@ -42,7 +42,7 @@ const Modeling = () => {
     return (
       <>
         <Toaster />
-        {/* <StepProvider totalStep={5} shouldPlay={shouldPlay} onFinish={() => {}}>
+        <StepProvider totalStep={5} shouldPlay={shouldPlay} onFinish={() => {}}>
           <NotStepContent>
             <ForecastingPage datasets={datasets} />
           </NotStepContent>
@@ -53,7 +53,7 @@ const Modeling = () => {
             <ForecastingTutorial4 />
             <ForecastingTutorial5 />
           </IsStepContent>
-        </StepProvider> */}
+        </StepProvider>
       </>
     );
   }
@@ -61,7 +61,7 @@ const Modeling = () => {
   return (
     <>
       <Toaster />
-      {/* <StepProvider totalStep={6} shouldPlay={shouldPlay} onFinish={() => {}}>
+      <StepProvider totalStep={6} shouldPlay={shouldPlay} onFinish={() => {}}>
         <NotStepContent>
           <PredictingPage datasets={datasets} />
         </NotStepContent>
@@ -73,7 +73,7 @@ const Modeling = () => {
           <PredictingTutorial5 />
           <PredictingTutorial6 />
         </IsStepContent>
-      </StepProvider> */}
+      </StepProvider>
     </>
   );
 };
