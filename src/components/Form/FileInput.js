@@ -17,7 +17,7 @@ const FileIcon = () => {
 	);
 };
 
-export default function FileInput({ setFormData, setIsOpen, workspaceType }) {
+export default function FileInput({ setFormData, setIsOpen, workspaceType, uploadType}) {
 	const inputRef = React.useRef();
 	const submitRef = React.useRef();
 
@@ -44,33 +44,54 @@ export default function FileInput({ setFormData, setIsOpen, workspaceType }) {
 		}, 500);
 	};
 
+	const handleSubmit = () => {
+        setIsOpen(false); // Close the modal or current view
+        router.push('/path-to-next-step'); // Redirect to the next step in the process
+    };
+
 	return (
 		<>
-			<div className="relative pt-8 pb-3 flex flex-col items-center justify-center w-full rounded-sm ring-[1.5px] ring-gray/50">
-				<div className="scale-[280%] text-gray/80">
-					<FileIcon />
+		{uploadType === "auto" ? (
+			<>
+			<input
+                ref={inputRef}
+                type="file"
+                onChange={changeHandler}
+                style={{ display: 'none' }}
+            />
+            <button onClick={() => inputRef.current.click()}>Select File</button>
+            <button onClick={handleSubmit}>Upload File</button>
+			</>
+		) : (
+			<>
+				<div className="relative pt-8 pb-3 flex flex-col items-center justify-center w-full rounded-sm ring-[1.5px] ring-gray/50">
+					<div className="scale-[280%] text-gray/80">
+						<FileIcon />
+					</div>
+					<span className="mt-6 text-gray/80">Drag your file here</span>
+					<input
+						ref={inputRef}
+						type="file"
+						accept=".csv,image/jpeg,image/png,image/gif, application/zip, application/x-zip-compressed, application/x-rar-compressed"	
+						className="absolute inset-0 w-full h-full opacity-0 z-1 cursor-pointer"
+						name="file"
+						multiple
+						onChange={(e) => changeHandler(e)}
+					/>
 				</div>
-				<span className="mt-6 text-gray/80">Drag your file here</span>
-				<input
-					ref={inputRef}
-					type="file"
-					accept=".csv,image/jpeg,image/png,image/gif, application/zip, application/x-zip-compressed, application/x-rar-compressed"	
-					className="absolute inset-0 w-full h-full opacity-0 z-1 cursor-pointer"
-					name="file"
-					multiple
-					onChange={(e) => changeHandler(e)}
-				/>
-			</div>
-			<div className="mb-5 mt-2">
-				<div className="h-[1px] bg-gray/30 w-full absolute left-0 mt-2"></div>
-			</div>
-			<div className="flex gap-2 items-center">
-				<Button onClick={() => inputRef.current.click()}>Browse</Button>
-				<div className="-mb-2 flex-1">
-					<Input name="fileName" disabled placeholder="Your Dataset" inputValue={fileName} />
+				<div className="mb-5 mt-2">
+					<div className="h-[1px] bg-gray/30 w-full absolute left-0 mt-2"></div>
 				</div>
-			</div>
-			<button type="submit" ref={submitRef}></button>
+				<div className="flex gap-2 items-center">
+					<Button onClick={() => inputRef.current.click()}>Browse</Button>
+					<div className="-mb-2 flex-1">
+						<Input name="fileName" disabled placeholder="Your Dataset" inputValue={fileName} />
+					</div>
+				</div>
+				<button type="submit" ref={submitRef}></button>
+			</>
+		)
+		}
 		</>
 	);
 }
