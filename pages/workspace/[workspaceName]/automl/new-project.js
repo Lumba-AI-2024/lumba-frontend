@@ -12,7 +12,6 @@ const NewProject = () => {
 
     const handleSubmit = (formData) => {
         console.log(formData); // Process formData or perform API submission
-        Router.push('/next-step'); // Redirect to the next step after upload
     };
 
     return (
@@ -28,7 +27,7 @@ const NewProject = () => {
           <h1>Create a new automated ML Job</h1>
         </div>
         <div>
-            <UploadFile onFileUpload={setFile} onSubmit={handleSubmit} uploadType={"auto"}/>
+            <UploadFile onFileUpload={setFile} handleSubmit={handleSubmit} uploadType={"auto"} buttonLabel={"Upload"}/>
         </div>
         </>
     );

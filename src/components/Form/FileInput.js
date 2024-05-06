@@ -46,7 +46,7 @@ export default function FileInput({ setFormData, setIsOpen, workspaceType, uploa
 
 	const handleSubmit = () => {
         setIsOpen(false); // Close the modal or current view
-        router.push('/path-to-next-step'); // Redirect to the next step in the process
+        // router.push('/path-to-next-step'); // Redirect to the next step in the process
     };
 
 	return (

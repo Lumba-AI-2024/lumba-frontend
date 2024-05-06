@@ -9,6 +9,7 @@ import useDatasets from "../../../hooks/useDatasets";
 import useCookie from "../../../hooks/useCookie";
 import { useSearchParams } from "next/navigation";
 import InfoWarning from "../../Icon/InfoWarning";
+import Button from "../../Button/Button";
 export default function AutoMLPage() {
   const router = useRouter();
   const { workspaceName } = router.query;
@@ -21,11 +22,23 @@ export default function AutoMLPage() {
   const { datasets, addDataset } = useDatasets(workspaceName, username, type);
 
   const [isUploading, setIsUploading] = React.useState(false);
+  // route to new-project.js
+  
+  const handleNewProject = () => {
+    router.push(`/workspace/${workspaceName}/automl/new-project`);
+  };
+
 
   return (
     <div className="h-full flex flex-col">
       <div className="flex items-center">
-        <FormModalContextProvider>
+        <Button onClick={handleNewProject} className="flex items-center gap-1">
+            <div className="flex font-semibold items-center gap-1">
+                <Plus />
+                Add Automated ML Job
+            </div>
+        </Button>
+        {/* <FormModalContextProvider>
           <UploadFile
             buttonLabel={
               <div className="flex font-semibold items-center gap-1">
@@ -34,33 +47,13 @@ export default function AutoMLPage() {
               </div>
             }
             formLabel="Upload File Datasets"
-            handleSubmit={(formData) => {
-              setIsUploading(true);
-              const dataset = new FormData();
-              if (type === "object_segmentation"){
-                dataset.append("file", formData?.file);
-              } else {
-                dataset.append("file", formData?.file);
-              }
-              console.log(dataset.get('file0'))
-              dataset.append("username", username);
-              dataset.append("workspace", workspaceName);
-              dataset.append("type", type);
-              console.log(dataset)
-              addDataset(dataset).then(() => setIsUploading(false));
+            handleSubmit={() => {
+              handleNewProject();
             }}
             workspaceType={type}
           />
-        </FormModalContextProvider>
+        </FormModalContextProvider> */}
       </div>
-
-      {type === "forecasting" && (
-        <div className="flex justify-end mt-3">
-          <p className="flex items-center gap-2">
-            For forecasting, you can only upload weekly timestamped data <InfoWarning />
-          </p>
-        </div>
-      )}
 
       {datasets.length > 0 || isUploading ? (
         <table className="mt-4">
