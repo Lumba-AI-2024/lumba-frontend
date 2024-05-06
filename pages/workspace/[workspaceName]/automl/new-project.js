@@ -18,7 +18,12 @@ const NewProject = () => {
     return (
         <>
         <Seo title={`${workspaceName} - AutoML`}  />
-        <Breadcrumb links={[{ label: workspaceName }, { label: "AutoML", href: router.asPath }]} active={"AutoML"} />
+        <Breadcrumb links={[
+            { label: workspaceName }, 
+            { label: "AutoML", href: "/workspace/" + workspaceName + "/automl"  },
+            { label: "new project", href: router.asPath }
+            ]} 
+            active={"AutoML"} />
         <div className="flex flex-col gap-6 my-6">
           <h1>Create a new automated ML Job</h1>
         </div>
