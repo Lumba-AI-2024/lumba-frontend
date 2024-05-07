@@ -9,14 +9,6 @@ const AutoML = () => {
     const router = useRouter();
     const { workspaceName } = router.query;
     // route to new-project.js
-    
-    const handleNewProject = () => {
-      router.push(`/workspace/${workspaceName}/automl/new-project`);
-    };
-
-    const refreshJobs = () => {
-        console.log("Refreshing ML job list...");
-    };
 
     return (
         <>

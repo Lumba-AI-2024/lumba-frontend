@@ -19,6 +19,7 @@ import useCookie from "../../../../src/hooks/useCookie";
 import ChevronDoubleLeft from "../../../../src/components/Icon/ChevronDoubleLeft";
 import { motion } from "framer-motion";
 import { useSearchParams } from "next/navigation";
+import CheckDataAuto from "../../CheckDataAuto";
 
 const CustomButton = ({ onClick }) => {
   return (
@@ -71,12 +72,20 @@ const getKeysValues = (dataset) => {
   return { keys, values };
 };
 
-const CleaningPage = () => {
+const PreprocessPage = () => {
   const router = useRouter();
-  const { workspaceName } = router.query;
+  const [workspaceName, setWorkspaceName] = React.useState(null);
+  React.useEffect(() => {
+    if (router.isReady && router.query!==null) {
+        const { workspaceName } = router.query;
+        setWorkspaceName(workspaceName);
+    }
+  }, [router.isReady]);
+  
+  console.log(workspaceName)
 
   const username = useCookie("username");
-  const {datasets}  = useDatasets(workspaceName, username);
+  const { datasets } = useDatasets(workspaceName, username);
 
   const [checkedDataset, setCheckedDataset] = React.useState(null);
   const [columns, setColumns] = React.useState([]);
@@ -139,7 +148,7 @@ const CleaningPage = () => {
             </div>
 
             {/* Row 2 */}
-            <CheckData workspace={'ws110'} setCheckedDataset={setCheckedDataset} setIsChecked={setIsChecked} />
+            <CheckDataAuto workspace={workspaceName} setCheckedDataset={setCheckedDataset} setIsChecked={setIsChecked} />
 
             {/* Row 3 */}
             <div className="mt-8 pb-4 flex overflow-hidden">
@@ -442,4 +451,4 @@ const CleaningPage = () => {
   );
 };
 
-export default CleaningPage;
+export default PreprocessPage;

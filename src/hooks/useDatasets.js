@@ -11,15 +11,21 @@ const ADD_DATASET_OBJECT_SEGMENTATION = API_ROUTE + "/file/object-segmentation/"
 const DELETE_DATASET = API_ROUTE + "/file/";
 
 export const getAllDatasets = async (url, token) => {
-  const response = await axios.get(url, {
-    headers: {
-      Authorization: `Token ${token || getCookie("token")}`,
-    },
-  });
+  try {
+    const response = await axios.get(url, 
+      {
+      headers: {
+        Authorization: `Token ${token || getCookie("token")}`,
+      },
+    }
+  );
 
-  const { data } = response;
+    const { data } = response;
 
-  return data.reverse();
+    return data.reverse();
+  } catch (err) {
+    console.error("Error:", err.message);
+  }
 };
 
 const useDatasets = (workspace, username, type) => {
@@ -29,7 +35,7 @@ const useDatasets = (workspace, username, type) => {
     data: datasets,
     error,
     mutate,
-  } = useFetch(DATASET_URL, () => getAllDatasets(DATASET_URL), { fallbackData: [] });
+  } = useFetch(DATASET_URL, () => getAllDatasets(DATASET_URL,workspace), { fallbackData: [] });
 
   const addDataset = async (dataset) => {
     try {

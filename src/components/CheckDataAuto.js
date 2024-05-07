@@ -29,23 +29,6 @@ const MissingDataIcon = () => {
   );
 };
 
-const OutlierDataIcon = () => {
-  return (
-    <svg width="41" height="41" viewBox="0 0 41 41" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-      <g clipPath="url(#clip0_2320_15116)">
-        <path
-          d="M1.91675 0.5C2.24827 0.5 2.56621 0.631696 2.80063 0.866117C3.03505 1.10054 3.16675 1.41848 3.16675 1.75V39.25C3.16675 39.5815 3.03505 39.8995 2.80063 40.1339C2.56621 40.3683 2.24827 40.5 1.91675 40.5C1.58523 40.5 1.26729 40.3683 1.03286 40.1339C0.798444 39.8995 0.666748 39.5815 0.666748 39.25V1.75C0.666748 1.41848 0.798444 1.10054 1.03286 0.866117C1.26729 0.631696 1.58523 0.5 1.91675 0.5V0.5ZM5.66675 4.25C5.66675 3.91848 5.79844 3.60054 6.03286 3.36612C6.26729 3.1317 6.58523 3 6.91675 3H16.9167C17.2483 3 17.5662 3.1317 17.8006 3.36612C18.0351 3.60054 18.1667 3.91848 18.1667 4.25V6.75C18.1667 7.08152 18.0351 7.39946 17.8006 7.63388C17.5662 7.8683 17.2483 8 16.9167 8H6.91675C6.58523 8 6.26729 7.8683 6.03286 7.63388C5.79844 7.39946 5.66675 7.08152 5.66675 6.75V4.25ZM10.6667 14.25C10.6667 13.9185 10.7984 13.6005 11.0329 13.3661C11.2673 13.1317 11.5852 13 11.9167 13H29.4167C29.7483 13 30.0662 13.1317 30.3006 13.3661C30.5351 13.6005 30.6667 13.9185 30.6667 14.25V16.75C30.6667 17.0815 30.5351 17.3995 30.3006 17.6339C30.0662 17.8683 29.7483 18 29.4167 18H11.9167C11.5852 18 11.2673 17.8683 11.0329 17.6339C10.7984 17.3995 10.6667 17.0815 10.6667 16.75V14.25ZM15.6667 24.25C15.6667 23.9185 15.7984 23.6005 16.0329 23.3661C16.2673 23.1317 16.5852 23 16.9167 23H31.9167C32.2483 23 32.5662 23.1317 32.8006 23.3661C33.0351 23.6005 33.1667 23.9185 33.1667 24.25V26.75C33.1667 27.0815 33.0351 27.3995 32.8006 27.6339C32.5662 27.8683 32.2483 28 31.9167 28H16.9167C16.5852 28 16.2673 27.8683 16.0329 27.6339C15.7984 27.3995 15.6667 27.0815 15.6667 26.75V24.25ZM20.6667 34.25C20.6667 33.9185 20.7984 33.6005 21.0329 33.3661C21.2673 33.1317 21.5852 33 21.9167 33H39.4167C39.7483 33 40.0662 33.1317 40.3006 33.3661C40.5351 33.6005 40.6667 33.9185 40.6667 34.25V36.75C40.6667 37.0815 40.5351 37.3995 40.3006 37.6339C40.0662 37.8683 39.7483 38 39.4167 38H21.9167C21.5852 38 21.2673 37.8683 21.0329 37.6339C20.7984 37.3995 20.6667 37.0815 20.6667 36.75V34.25Z"
-          fill="currentColor"
-        />
-      </g>
-      <defs>
-        <clipPath id="clip0_2320_15116">
-          <rect width="40" height="40" fill="currentColor" transform="translate(0.666748 0.5)" />
-        </clipPath>
-      </defs>
-    </svg>
-  );
-};
 
 const DuplicateDataIcon = () => {
   return (
@@ -136,32 +119,11 @@ const DuplicateDataButton = ({ onClick, children }) => {
   );
 };
 
-const OutlierDataButton = ({ onClick, children }) => {
-  return (
-    <button
-      className=" w-full py-5 items-center gap-2 from-lightblue to-blue hover:bg-gradient-to-r cursor-pointer hover:text-white flex justify-center group"
-      onClick={onClick}
-    >
-      <div className="text-[#C72C41] group-hover:text-white">
-        <OutlierDataIcon />
-      </div>
-      <div>
-        <span className="block text-left font-bold text-2xl">{children}</span>
-        <span className="block text-left text-xs">Total Outlier Data</span>
-      </div>
-      <div className="self-end mb-1.5 text-[#ABB5BE] group-hover:text-white">
-        <BoxArrowUpRightIcon />
-      </div>
-    </button>
-  );
-};
 
-export default function CheckData({ workspace, setCheckedDataset, setIsChecked }) {
+export default function CheckDataAuto({ workspace, setCheckedDataset, setIsChecked }) {
   const { formData } = React.useContext(FormModalContext);
   const [missingData, setMissingData] = React.useState(null);
   const [duplicateData, setDuplicateData] = React.useState(null);
-  const [outlierData, setOutlierData] = React.useState(null);
-  const [boxplotDatas, setBoxplotDatas] = React.useState(null);
   const [isChecking, setIsChecking] = React.useState(false);
 
   const searchParams = useSearchParams();
@@ -169,11 +131,11 @@ export default function CheckData({ workspace, setCheckedDataset, setIsChecked }
 
   const username = useCookie("username");
   React.useEffect(() => {
-    if (missingData != null && duplicateData != null && outlierData != null && boxplotDatas != null) {
+    if (missingData != null && duplicateData != null) {
       setCheckedDataset(formData?.dataset);
       setIsChecked(true);
     }
-  }, [missingData, duplicateData, outlierData, boxplotDatas]);
+  }, [missingData, duplicateData]);
 
   return (
     <div className="mt-6 rounded-md shadow bg-white">
@@ -181,7 +143,7 @@ export default function CheckData({ workspace, setCheckedDataset, setIsChecked }
         <h3 className="font-semibold text-sm">Check Data</h3>
         <div className="h-[1.5px] bg-gray/30 w-full absolute left-0 mt-2"></div>
       </div>
-      {missingData != null && duplicateData != null && outlierData != null ? (
+      {missingData != null && duplicateData != null ? (
         <div className="grid grid-cols-3 -mt-2">
           <FormModalContextProvider>
             <DetailsModal
@@ -203,16 +165,6 @@ export default function CheckData({ workspace, setCheckedDataset, setIsChecked }
             ></DetailsModal>
           </FormModalContextProvider>
 
-          <FormModalContextProvider>
-            <DetailsModal
-              CustomButton={OutlierDataButton}
-              formLabel="Outlier Data Details"
-              buttonLabel={Object.values(outlierData).reduce((a, b) => a + b, 0)}
-              values={outlierData}
-              boxplotDatas={boxplotDatas}
-              variant="outlier"
-            ></DetailsModal>
-          </FormModalContextProvider>
         </div>
       ) : (
         <div className="px-4 py-8 text-center">
@@ -228,11 +180,9 @@ export default function CheckData({ workspace, setCheckedDataset, setIsChecked }
                   const res = await fetch(
                     `${process.env.NEXT_PUBLIC_BASE_URL}/api/checking?filename=${formData?.dataset}&username=${username}&workspace=${workspace}&type=${type}`
                   );
-                  const { missingData, duplicateData, outlierData, boxplotDatas } = await res.json();
+                  const { missingData, duplicateData } = await res.json();
                   setMissingData(missingData);
                   setDuplicateData(duplicateData);
-                  setOutlierData(outlierData);
-                  setBoxplotDatas(boxplotDatas);
                 };
 
                 check();

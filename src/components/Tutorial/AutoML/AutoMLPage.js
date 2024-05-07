@@ -25,7 +25,7 @@ export default function AutoMLPage() {
   // route to new-project.js
   
   const handleNewProject = () => {
-    router.push(`/workspace/${workspaceName}/automl/new-project`);
+    router.push(`/workspace/${workspaceName}/automl/newProject/upload`);
   };
 
 
