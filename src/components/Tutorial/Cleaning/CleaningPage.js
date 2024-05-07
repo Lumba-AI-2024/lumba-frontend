@@ -133,13 +133,13 @@ const CleaningPage = () => {
                   variant="withoutBorder"
                   placeholder="Select dataset..."
                   name="dataset"
-                  items={datasets?.map((dataset) => ({ value: dataset.file, label: dataset.file })) || []}
+                  items={datasets?.map((dataset) => ({ value: dataset.name, label: dataset.name })) || []}
                 />
               </div>
             </div>
 
             {/* Row 2 */}
-            <CheckData workspace={'ws110'} setCheckedDataset={setCheckedDataset} setIsChecked={setIsChecked} />
+            <CheckData workspace={workspaceName}setCheckedDataset={setCheckedDataset} setIsChecked={setIsChecked} />
 
             {/* Row 3 */}
             <div className="mt-8 pb-4 flex overflow-hidden">

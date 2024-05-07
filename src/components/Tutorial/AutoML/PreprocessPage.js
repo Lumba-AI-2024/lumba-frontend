@@ -142,7 +142,7 @@ const PreprocessPage = () => {
                   variant="withoutBorder"
                   placeholder="Select dataset..."
                   name="dataset"
-                  items={datasets?.map((dataset) => ({ value: dataset.file, label: dataset.file })) || []}
+                  items={datasets?.map((dataset) => ({ value: dataset.name, label: dataset.name })) || []}
                 />
               </div>
             </div>

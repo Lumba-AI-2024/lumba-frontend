@@ -49,10 +49,13 @@ export default function DatasetPage() {
                 dataset.append("file", formData?.file);
               }
               console.log(dataset.get('file0'))
+              dataset.append("namaFile", formData?.file["name"]);
               dataset.append("username", username);
               dataset.append("workspace", workspaceName);
               dataset.append("type", type);
-              console.log(dataset)
+              console.log(dataset.get('file'));
+              console.log(formData?.file["name"]);
+              console.log(formData?.file);
               addDataset(dataset).then(() => setIsUploading(false));
             }}
             workspaceType={type}
@@ -72,7 +75,7 @@ export default function DatasetPage() {
         <table className="mt-4">
           <thead>
             <tr>
-              <th>File Name</th>
+              <th>Name</th>
               <th className="px-4">Size</th>
               <th>Created on</th>
               <th>Modified on</th>
