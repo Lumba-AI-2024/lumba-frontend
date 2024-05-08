@@ -48,8 +48,7 @@ export default function DatasetPage() {
               } else {
                 dataset.append("file", formData?.file);
               }
-              console.log(dataset.get('file0'))
-              dataset.append("namaFile", formData?.file["name"]);
+              console.log(dataset.get('file0'));
               dataset.append("username", username);
               dataset.append("workspace", workspaceName);
               dataset.append("type", type);
@@ -91,6 +90,7 @@ export default function DatasetPage() {
               <Dataset
                 key={dataset.file}
                 file={dataset.file}
+                name={dataset.name}
                 size={dataset.size}
                 createdOn={dataset.created_time}
                 modifiedOn={dataset.updated_time}

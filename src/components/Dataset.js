@@ -15,6 +15,7 @@ import { useSearchParams } from "next/navigation";
 
 export default function Dataset({
   file,
+  name,
   size = "1",
   createdOn,
   modifiedOn,
@@ -42,12 +43,12 @@ export default function Dataset({
       </tr>
       <tr
         className="relative cursor-pointer"
-        onClick={() => router.push(realPath + (isHome ? "/datasets/" : "/") + file + "?" + params)}
+        onClick={() => router.push(realPath + (isHome ? "/datasets/" : "/") + name + "?" + params)}
       >
         <td className="py-2 rounded-l-md w-56 px-4 h-14 relative z-10 bg-white">
           <div className={`flex gap-2 items-center ${isLoading && "text-gray/50"}`}>
             <img src="/assets/CSVIcon.svg" alt="csv" />
-            {file}
+            {name}
           </div>
         </td>
         <td className={`h-14 relative z-10 bg-white px-4 ${isLoading && "text-gray/50"}`}>{size} MB</td>
@@ -84,7 +85,7 @@ export default function Dataset({
                       submitLabel="Delete"
                       handleSubmit={async () => {
                         const dataset = new FormData();
-                        dataset.append("filename", file);
+                        dataset.append("filename", name);
                         dataset.append("workspace", workspaceName);
                         dataset.append("username", username);
                         dataset.append("type", type);
