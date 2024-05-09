@@ -210,14 +210,13 @@ export default function CheckDataAuto({ workspace, setCheckedDataset, setIsCheck
                 setIsChecking(true);
                 const check = async () => {
                   const res = await fetch(
-                    `${process.env.NEXT_PUBLIC_BASE_URL}/api/checking?filename=${formData?.dataset}&username=${username}&workspace=${workspace}&type=${type}`
+                    `${process.env.NEXT_PUBLIC_BASE_URL}/api/checkingAuto?filename=${formData?.dataset}&username=${username}&workspace=${workspace}&type=${type}`
                   );
                   console.log(res)
                   const { missingData, duplicateData, categoricalData} = await res.json();
                   setMissingData(missingData);
                   setDuplicateData(duplicateData);
                   setCategoricalData(categoricalData);
-                  console.log("categoryyy",categoricalData);
                 };
 
                 check();
