@@ -124,6 +124,7 @@ export default function CheckDataAuto({ workspace, setCheckedDataset, setIsCheck
   const { formData } = React.useContext(FormModalContext);
   const [missingData, setMissingData] = React.useState(null);
   const [duplicateData, setDuplicateData] = React.useState(null);
+  const [categoricalData, setCategoricalData] = React.useState(null);
   const [isChecking, setIsChecking] = React.useState(false);
 
   const searchParams = useSearchParams();
@@ -131,11 +132,11 @@ export default function CheckDataAuto({ workspace, setCheckedDataset, setIsCheck
 
   const username = useCookie("username");
   React.useEffect(() => {
-    if (missingData != null && duplicateData != null) {
+    if (missingData != null && duplicateData != null && categoricalData != null) {
       setCheckedDataset(formData?.dataset);
       setIsChecked(true);
     }
-  }, [missingData, duplicateData]);
+  }, [missingData, duplicateData, categoricalData]);
 
   return (
     <div className="mt-6 rounded-md shadow bg-white">
@@ -165,6 +166,16 @@ export default function CheckDataAuto({ workspace, setCheckedDataset, setIsCheck
             ></DetailsModal>
           </FormModalContextProvider>
 
+          <FormModalContextProvider>
+            <DetailsModal
+              CustomButton={DuplicateDataButton}
+              formLabel="Categorical Data Details"
+              buttonLabel={categoricalData}
+              values={categoricalData}
+              variant="categorical"
+            ></DetailsModal>
+          </FormModalContextProvider>
+
         </div>
       ) : (
         <div className="px-4 py-8 text-center">
@@ -180,9 +191,11 @@ export default function CheckDataAuto({ workspace, setCheckedDataset, setIsCheck
                   const res = await fetch(
                     `${process.env.NEXT_PUBLIC_BASE_URL}/api/checking?filename=${formData?.dataset}&username=${username}&workspace=${workspace}&type=${type}`
                   );
-                  const { missingData, duplicateData } = await res.json();
+                  const { missingData, duplicateData} = await res.json();
                   setMissingData(missingData);
                   setDuplicateData(duplicateData);
+                  // setCategoricalData(categoricalData);
+
                 };
 
                 check();

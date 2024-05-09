@@ -48,7 +48,7 @@ export default function FileInput({ setFormData, setIsOpen, workspaceType, uploa
         setIsOpen(false); // Close the modal or current view
         // router.push('/path-to-next-step'); // Redirect to the next step in the process
     };
-
+	
 	return (
 		<>
 		{uploadType === "auto" ? (
@@ -83,12 +83,14 @@ export default function FileInput({ setFormData, setIsOpen, workspaceType, uploa
 					<div className="h-[1px] bg-gray/30 w-full absolute left-0 mt-2"></div>
 				</div>
 				<div className="flex gap-2 items-center">
-					<Button onClick={() => inputRef.current.click()}>Browse</Button>
+					{/* Explicitly set the type to "button" to prevent it from submitting the form */}
+					<Button type="button" onClick={() => inputRef.current.click()}>Browse</Button>
 					<div className="-mb-2 flex-1">
 						<Input name="fileName" disabled placeholder="Your Dataset" inputValue={fileName} />
 					</div>
 				</div>
-				<button type="submit" ref={submitRef}></button>
+				<button type="submit" ref={submitRef} style={{ display: 'none' }}></button>
+
 			</>
 		)
 		}

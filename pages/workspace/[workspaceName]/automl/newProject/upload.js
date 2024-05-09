@@ -61,7 +61,7 @@ const upload = () => {
                                         setIsUploading(true);
                                         const dataset = new FormData();
                                         dataset.append("file", formData?.file);
-                                        dataset.append("name", formData?.file["name"]);
+                                        console.log(formData?.file);
                                         dataset.append("username", username);
                                         dataset.append("workspace", workspaceName);
                                         dataset.append("type", type);
