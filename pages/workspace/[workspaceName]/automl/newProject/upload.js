@@ -29,7 +29,7 @@ const upload = () => {
     const [isUploading, setIsUploading] = useState(false); 
 
     const back = () => {
-        router.push(`/workspace/${workspaceName}/automl`);
+        router.push(`/workspace/${workspaceName}/automl?type=${type}`);
     };
 
 
@@ -49,7 +49,39 @@ const upload = () => {
                     </div>
                     <div className="h-full flex flex-col">
                         <div className="flex items-center">
-                            <DatasetPage />
+                            <FormModalContextProvider>
+                                <UploadFile
+                                    buttonLabel={
+                                        <div className="flex font-semibold items-center gap-1">
+                                            <Plus />
+                                            Upload
+                                        </div>
+                                    }
+                                    formLabel="Upload File Datasets"
+                                    handleSubmit={ async (formData) => {
+                                        setIsUploading(true);
+                                        const dataset = new FormData();
+                                        dataset.append("file", formData?.file);
+                                        dataset.append("name", formData?.file["name"]);
+                                        dataset.append("username", username);
+                                        dataset.append("workspace", workspaceName);
+                                        dataset.append("type", type);
+                                        try {
+                                          // Wait for the addDataset function to complete
+                                          await addDataset(dataset);
+                                          // If successful, reset the uploading state and navigate
+                                          setIsUploading(false);
+                                          router.push(`/workspace/${workspaceName}/automl/newProject/preprocess?type=${type}`);
+                                        } catch (error) {
+                                            // Handle errors if the upload fails
+                                            console.error('Upload failed:', error);
+                                            setIsUploading(false);
+                                            // Optionally, set error messages or state here
+                                        }
+                                    }}
+                                    workspaceType={type}
+                                />
+                            </FormModalContextProvider>
                         </div>
                         <div className="flex items-center my-6">
                             <Button onClick={back} className="flex items-center gap-1">

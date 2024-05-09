@@ -238,7 +238,7 @@ export async function getServerSideProps({ query, req, params, resolvedUrl }) {
       },
     }
   );
-  details = details.filter((dataset) => dataset.file === datasetName);
+  details = details.filter((dataset) => dataset.name === datasetName);
 
   const fetchedDataset = {
     details: details[0],

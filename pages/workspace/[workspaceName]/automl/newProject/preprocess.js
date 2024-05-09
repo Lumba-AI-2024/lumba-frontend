@@ -30,11 +30,11 @@ const preprocess = () => {
     const [isUploading, setIsUploading] = useState(false); 
 
     const back = () => {
-        router.push(`/workspace/${workspaceName}/automl/preprocess`);
+        router.push(`/workspace/${workspaceName}/automl/preprocess?type=${type}`);
     };
 
     const next = () => {
-        router.push(`/workspace/${workspaceName}/automl/target`)  ;
+        router.push(`/workspace/${workspaceName}/automl/target?type=${type}`)  ;
     }; 
 
     return (
