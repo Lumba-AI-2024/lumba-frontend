@@ -194,8 +194,8 @@ export default function CheckDataAuto({ workspace, setCheckedDataset, setIsCheck
                   const { missingData, duplicateData} = await res.json();
                   setMissingData(missingData);
                   setDuplicateData(duplicateData);
-                  // setCategoricalData(categoricalData);
-
+                  setCategoricalData(categoricalData);
+                  console.log("categoryyy",categoricalData)
                 };
 
                 check();

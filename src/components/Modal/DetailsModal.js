@@ -25,8 +25,8 @@ export default function DetailsModal({
   values = {},
   boxplotDatas = {},
 }) {
+  console.log(values)
   const { isOpen, setIsOpen } = useContext(FormModalContext);
-
   return (
     <>
       {CustomButton ? (
@@ -83,6 +83,13 @@ export default function DetailsModal({
                     <p>{item[1]}</p>
                   </div>
                 ))}
+              {variant === "categorical" &&
+                Object.entries(values).map((item, index) => (
+                  <div key={index} className="grid grid-cols-2 mb-3">
+                    <p>{item[0]}</p>
+                    <p>{item[1]}</p>
+                  </div>
+                ))}  
               {variant === "outlier" && <BoxPlot boxplotDatas={boxplotDatas} />}
             </div>
           )}

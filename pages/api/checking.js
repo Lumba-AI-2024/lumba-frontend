@@ -48,17 +48,17 @@ export default function handler(req, res) {
           );
           const boxplotDatas = await response4.json();
 
-          // const response5 = await fetch(
-          //   `${API_ROUTE}/preprocess/categorical/?username=${req.query.username}&workspace=${req.query.workspace}&filename=${req.query.filename}&type=${req.query.type}`,
-          //   {
-          //     headers: {
-          //       Authorization: `Token ${token}`,
-          //     },
-          //   }
-          // );
-          // const categoricalData = await response5.json();
+          const response5 = await fetch(
+            `${API_ROUTE}/preprocess/categorical/?username=${req.query.username}&workspace=${req.query.workspace}&filename=${req.query.filename}&type=${req.query.type}`,
+            {
+              headers: {
+                Authorization: `Token ${token}`,
+              },
+            }
+          );
+          const categoricalData = await response5.json();
 
-          return { missingData, duplicateData, outlierData, boxplotDatas };
+          return { missingData, duplicateData, outlierData, boxplotDatas,categoricalData };
         };
         checkDataset().then((data) => res.status(200).json(data));
         break;
