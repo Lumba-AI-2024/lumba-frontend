@@ -7,13 +7,13 @@ import Close from "../Icon/Close";
 const stats = {
   missing: "Total Missing Data",
   duplicate: "Total Duplicate Data",
-  outlier: "Total Outlier Data",
+  categorical: "Total Categorical Columns",
 };
 
 const info = {
   missing: "Missing Data Count",
   duplicate: "Total Duplicate Data",
-  outlier: "",
+  categorical: "Unique Values",
 };
 
 export default function DetailsModal({
@@ -87,7 +87,7 @@ export default function DetailsModal({
                 Object.entries(values).map((item, index) => (
                   <div key={index} className="grid grid-cols-2 mb-3">
                     <p>{item[0]}</p>
-                    <p>{item[1]}</p>
+                    <p>{item[1].join(", ")}</p>
                   </div>
                 ))}  
               {variant === "outlier" && <BoxPlot boxplotDatas={boxplotDatas} />}

@@ -119,6 +119,27 @@ const DuplicateDataButton = ({ onClick, children }) => {
   );
 };
 
+const CategoricalDataButton = ({ onClick, children }) => {
+  return (
+    <button
+      className="border-gray/30 border-r-[1.5px] w-full py-5 items-center gap-2 from-lightblue to-blue hover:bg-gradient-to-r cursor-pointer hover:text-white flex justify-center group"
+      onClick={onClick}
+    >
+      <div className="text-[#C72C41] group-hover:text-white">
+        <DuplicateDataIcon />
+      </div>
+      <div>
+        <span className="block text-left font-bold text-2xl">{children}</span>
+        <span className="block text-left text-xs">Total Categorical Columns</span>
+      </div>
+      <div className="self-end mb-1.5 text-[#ABB5BE] group-hover:text-white">
+        <BoxArrowUpRightIcon />
+      </div>
+    </button>
+  );
+};
+
+
 
 export default function CheckDataAuto({ workspace, setCheckedDataset, setIsChecked }) {
   const { formData } = React.useContext(FormModalContext);
@@ -144,7 +165,7 @@ export default function CheckDataAuto({ workspace, setCheckedDataset, setIsCheck
         <h3 className="font-semibold text-sm">Check Data</h3>
         <div className="h-[1.5px] bg-gray/30 w-full absolute left-0 mt-2"></div>
       </div>
-      {missingData != null && duplicateData != null ? (
+      {missingData != null && duplicateData != null && categoricalData != null ? (
         <div className="grid grid-cols-3 -mt-2">
           <FormModalContextProvider>
             <DetailsModal
@@ -168,9 +189,9 @@ export default function CheckDataAuto({ workspace, setCheckedDataset, setIsCheck
 
           <FormModalContextProvider>
             <DetailsModal
-              CustomButton={DuplicateDataButton}
+              CustomButton={CategoricalDataButton}
               formLabel="Categorical Data Details"
-              buttonLabel={categoricalData}
+              buttonLabel={Object.keys(categoricalData).length}
               values={categoricalData}
               variant="categorical"
             ></DetailsModal>
@@ -191,11 +212,12 @@ export default function CheckDataAuto({ workspace, setCheckedDataset, setIsCheck
                   const res = await fetch(
                     `${process.env.NEXT_PUBLIC_BASE_URL}/api/checking?filename=${formData?.dataset}&username=${username}&workspace=${workspace}&type=${type}`
                   );
-                  const { missingData, duplicateData} = await res.json();
+                  console.log(res)
+                  const { missingData, duplicateData, categoricalData} = await res.json();
                   setMissingData(missingData);
                   setDuplicateData(duplicateData);
                   setCategoricalData(categoricalData);
-                  console.log("categoryyy",categoricalData)
+                  console.log("categoryyy",categoricalData);
                 };
 
                 check();
