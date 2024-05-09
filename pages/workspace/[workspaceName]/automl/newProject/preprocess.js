@@ -16,10 +16,10 @@ import PreprocessPage from "../../../../../src/components/Tutorial/AutoML/Prepro
 
 
 const preprocess = () => {
-    
+
     const router = useRouter();
 
-    let searchParams = useSearchParams();   
+    let searchParams = useSearchParams();
     let type = searchParams.get("type");
 
     const { workspaceName } = router.query;
@@ -27,40 +27,38 @@ const preprocess = () => {
     const username = useCookie("username");
 
     const { datasets, addDataset } = useDatasets(workspaceName, username, type);
-    const [isUploading, setIsUploading] = useState(false); 
+    const [isUploading, setIsUploading] = useState(false);
 
     const back = () => {
         router.push(`/workspace/${workspaceName}/automl/newProject/upload?type=${type}`);
     };
 
     const next = () => {
-        router.push(`/workspace/${workspaceName}/automl/newProject/target?type=${type}`)  ;
-    }; 
+        router.push(`/workspace/${workspaceName}/automl/newProject/target?type=${type}`);
+    };
 
     return (
         <>
-        <Seo title={`${workspaceName} - AutoML`} />
+            <Seo title={`${workspaceName} - AutoML`} />
             <div className="flex">
                 <SidebarAuto />
-                <PreprocessPage />
-                <div className="h-full flex flex-col">
-                        <div className="flex items-center">
-                            <Button onClick={next} className="flex items-center gap-1">
-                                    <div className="flex font-semibold items-center gap-1">
-                                        Next
-                                    </div>
-                            </Button> 
-                        </div>
-                        <div className="flex items-center">
-                            <Button onClick={back} className="flex items-center gap-1">
-                                            <div className="flex font-semibold items-center gap-1">
-                                                Back
-                                            </div>
-                            </Button>
+                <div className="container">
+                    <PreprocessPage />
+                    <div className="flex space-betweens">
+                        <Button onClick={back} className="flex items-center gap-1">
+                            <div className="flex font-semibold items-center gap-1">
+                                Back
+                            </div>
+                        </Button>
+                        <Button onClick={next} className="flex items-center gap-1">
+                            <div className="flex font-semibold items-center gap-1">
+                                Next
+                            </div>
+                        </Button>
+                    </div>
+                </div>
 
-                        </div>
-                            </div>
-                            </div>
+            </div>
         </>
     );
 };
