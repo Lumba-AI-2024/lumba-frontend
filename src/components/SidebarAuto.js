@@ -21,7 +21,7 @@ export default function SidebarAuto() {
     const [activeStep, setActiveStep] = useState(0);  // State to keep track of the active step
 
     return (
-      <div className="relative py-4 pl-8 h-[calc(100vh-55px)] bg-white shadow pr-4">
+      <div className="mr-7 relative py-4 pl-8 h-[calc(100vh-55px)] bg-white shadow pr-4">
         <ul className="flex flex-col gap-8 py-4">
           {steps.map((step, index) => (
             <li key={index} className={`flex items-center font-medium cursor-pointer transition duration-300 ${index === activeStep ? 'text-green-500' : 'hover:text-gray-500'}`}
