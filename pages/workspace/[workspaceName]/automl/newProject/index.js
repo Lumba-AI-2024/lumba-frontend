@@ -12,7 +12,7 @@ export default function newProject() {
 
     useEffect(() => {
         // Redirect to the upload page
-        router.push(`/workspace/${workspaceName}/automl/newproject/upload`);
+        router.push(`/workspace/${workspaceName}/automl/newproject/upload?type=${type}`);
     }, [router]);
 
     return null;  // Render nothing while redirecting

@@ -28,7 +28,7 @@ const upload = () => {
     const [isUploading, setIsUploading] = useState(false); 
 
     const back = () => {
-        router.push(`/workspace/${workspaceName}/automl`);
+        router.push(`/workspace/${workspaceName}/automl?type=${type}`);
     };
 
 
@@ -61,6 +61,7 @@ const upload = () => {
                                         setIsUploading(true);
                                         const dataset = new FormData();
                                         dataset.append("file", formData?.file);
+                                        dataset.append("name", formData?.file["name"]);
                                         dataset.append("username", username);
                                         dataset.append("workspace", workspaceName);
                                         dataset.append("type", type);
@@ -69,7 +70,7 @@ const upload = () => {
                                           await addDataset(dataset);
                                           // If successful, reset the uploading state and navigate
                                           setIsUploading(false);
-                                          router.push(`/workspace/${workspaceName}/automl/newProject/preprocess`);
+                                          router.push(`/workspace/${workspaceName}/automl/newProject/preprocess?type=${type}`);
                                         } catch (error) {
                                             // Handle errors if the upload fails
                                             console.error('Upload failed:', error);
