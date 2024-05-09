@@ -75,6 +75,7 @@ export default function AutoMLPage() {
               <Dataset
                 key={dataset.file}
                 file={dataset.file}
+                name={dataset.name}
                 size={dataset.size}
                 createdOn={dataset.created_time}
                 modifiedOn={dataset.updated_time}
