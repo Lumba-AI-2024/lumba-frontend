@@ -53,7 +53,6 @@ export default function DatasetPage() {
               dataset.append("workspace", workspaceName);
               dataset.append("type", type);
               console.log(dataset.get('file'));
-              console.log(formData?.file["name"]);
               console.log(formData?.file);
               addDataset(dataset).then(() => setIsUploading(false));
             }}
@@ -87,6 +86,8 @@ export default function DatasetPage() {
           <tbody>
             {isUploading && <Dataset file="Uploading..." createdOn="1" modifiedOn="1" isLoading={true} />}
             {datasets.map((dataset, index) => (
+              console.log(dataset),
+              console.log(dataset.file),
               <Dataset
                 key={dataset.file}
                 file={dataset.file}
