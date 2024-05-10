@@ -6,6 +6,7 @@ import DetailsModal from "./Modal/DetailsModal";
 import Spinner from "./Spinner";
 import useCookie from "../hooks/useCookie";
 import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/router";
 
 const MissingDataIcon = () => {
   return (
@@ -142,6 +143,7 @@ const CategoricalDataButton = ({ onClick, children }) => {
 
 
 export default function CheckDataAuto({ workspace, setCheckedDataset, setIsChecked }) {
+  const router = useRouter();
   const { formData } = React.useContext(FormModalContext);
   const [missingData, setMissingData] = React.useState(null);
   const [duplicateData, setDuplicateData] = React.useState(null);
@@ -152,6 +154,8 @@ export default function CheckDataAuto({ workspace, setCheckedDataset, setIsCheck
   const type = searchParams.get("type");
 
   const username = useCookie("username");
+  const { checkedDataset } = router.query;
+
   React.useEffect(() => {
     if (missingData != null && duplicateData != null && categoricalData != null) {
       setCheckedDataset(formData?.dataset);
@@ -203,14 +207,14 @@ export default function CheckDataAuto({ workspace, setCheckedDataset, setIsCheck
           <p className="mb-4">
             Check data before cleaning to see information of missing data, duplicate data, and outliers
           </p>
-          {formData?.dataset ? (
+          {{checkedDataset} ? (
             <Button
               disabled={isChecking}
               onClick={() => {
                 setIsChecking(true);
                 const check = async () => {
                   const res = await fetch(
-                    `${process.env.NEXT_PUBLIC_BASE_URL}/api/checkingAuto?filename=${formData?.dataset}&username=${username}&workspace=${workspace}&type=${type}`
+                    `${process.env.NEXT_PUBLIC_BASE_URL}/api/checkingAuto?filename=${checkedDataset}&username=${username}&workspace=${workspace}&type=${type}`
                   );
                   console.log(res)
                   const { missingData, duplicateData, categoricalData} = await res.json();

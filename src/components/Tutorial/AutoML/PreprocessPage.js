@@ -21,6 +21,7 @@ import { motion } from "framer-motion";
 import { useSearchParams } from "next/navigation";
 import CheckDataAuto from "../../CheckDataAuto";
 
+
 const CustomButton = ({ onClick }) => {
   return (
     <div className="w-full flex justify-between items-center" onClick={onClick}>
@@ -76,12 +77,12 @@ const PreprocessPage = () => {
   const router = useRouter();
   const [workspaceName, setWorkspaceName] = React.useState(null);
   React.useEffect(() => {
-    if (router.isReady && router.query!==null) {
-        const { workspaceName } = router.query;
-        setWorkspaceName(workspaceName);
+    if (router.isReady && router.query !== null) {
+      const { workspaceName } = router.query;
+      setWorkspaceName(workspaceName);
     }
   }, [router.isReady]);
-  
+
   console.log(workspaceName)
 
   const username = useCookie("username");
@@ -134,7 +135,7 @@ const PreprocessPage = () => {
         <FormModalContextProvider>
           <div className="mt-6">
             {/* Row 1 */}
-            <div className="flex gap-3 items-center">
+            {/* <div className="flex gap-3 items-center">
               <div className="flex flex-col gap-1 w-full">
                 <span className="font-semibold">Select Dataset</span>
                 <Select
@@ -145,7 +146,7 @@ const PreprocessPage = () => {
                   items={datasets?.map((dataset) => ({ value: dataset.name, label: dataset.name })) || []}
                 />
               </div>
-            </div>
+            </div> */}
 
             {/* Row 2 */}
             <CheckDataAuto workspace={workspaceName} setCheckedDataset={setCheckedDataset} setIsChecked={setIsChecked} />
@@ -170,8 +171,8 @@ const PreprocessPage = () => {
                       let columnsMissing =
                         typeof formData?.missing === "object"
                           ? Object.keys(formData.missing)
-                              .filter((key) => formData.missing[key] === true)
-                              .join(",")
+                            .filter((key) => formData.missing[key] === true)
+                            .join(",")
                           : undefined;
 
                       columnsMissing = formData?.missing === "all" ? "" : columnsMissing;
@@ -179,8 +180,8 @@ const PreprocessPage = () => {
                       let columnsDuplication =
                         typeof formData?.duplication === "object"
                           ? Object.keys(formData.duplication)
-                              .filter((key) => formData.duplication[key] === true)
-                              .join(",")
+                            .filter((key) => formData.duplication[key] === true)
+                            .join(",")
                           : undefined;
 
                       columnsDuplication = formData?.duplication === "all" ? "" : columnsDuplication;
@@ -190,8 +191,8 @@ const PreprocessPage = () => {
                       let columnsNormalize =
                         typeof formData?.columnsNormalize === "object"
                           ? Object.keys(formData.columnsNormalize)
-                              .filter((key) => formData.columnsNormalize[key] === true)
-                              .join(",")
+                            .filter((key) => formData.columnsNormalize[key] === true)
+                            .join(",")
                           : undefined;
 
                       columnsNormalize = formData?.columnsNormalize === "all" ? "" : columnsNormalize;
