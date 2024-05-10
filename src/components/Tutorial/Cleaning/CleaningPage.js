@@ -76,7 +76,7 @@ const CleaningPage = () => {
   const { workspaceName } = router.query;
 
   const username = useCookie("username");
-  const {datasets}  = useDatasets(workspaceName, username);
+  const { datasets } = useDatasets(workspaceName, username);
 
   const [checkedDataset, setCheckedDataset] = React.useState(null);
   const [columns, setColumns] = React.useState([]);
@@ -139,7 +139,7 @@ const CleaningPage = () => {
             </div>
 
             {/* Row 2 */}
-            <CheckData workspace={workspaceName}setCheckedDataset={setCheckedDataset} setIsChecked={setIsChecked} />
+            <CheckData workspace={workspaceName} setCheckedDataset={setCheckedDataset} setIsChecked={setIsChecked} />
 
             {/* Row 3 */}
             <div className="mt-8 pb-4 flex overflow-hidden">
@@ -161,8 +161,8 @@ const CleaningPage = () => {
                       let columnsMissing =
                         typeof formData?.missing === "object"
                           ? Object.keys(formData.missing)
-                              .filter((key) => formData.missing[key] === true)
-                              .join(",")
+                            .filter((key) => formData.missing[key] === true)
+                            .join(",")
                           : undefined;
 
                       columnsMissing = formData?.missing === "all" ? "" : columnsMissing;
@@ -170,8 +170,8 @@ const CleaningPage = () => {
                       let columnsDuplication =
                         typeof formData?.duplication === "object"
                           ? Object.keys(formData.duplication)
-                              .filter((key) => formData.duplication[key] === true)
-                              .join(",")
+                            .filter((key) => formData.duplication[key] === true)
+                            .join(",")
                           : undefined;
 
                       columnsDuplication = formData?.duplication === "all" ? "" : columnsDuplication;
@@ -181,8 +181,8 @@ const CleaningPage = () => {
                       let columnsNormalize =
                         typeof formData?.columnsNormalize === "object"
                           ? Object.keys(formData.columnsNormalize)
-                              .filter((key) => formData.columnsNormalize[key] === true)
-                              .join(",")
+                            .filter((key) => formData.columnsNormalize[key] === true)
+                            .join(",")
                           : undefined;
 
                       columnsNormalize = formData?.columnsNormalize === "all" ? "" : columnsNormalize;
@@ -226,7 +226,7 @@ const CleaningPage = () => {
 
                       setTimeout(() =>
                         axios
-                          .post(`${process.env.NEXT_PUBLIC_API_ROUTE}/preprocess/handle/`, body)
+                          .post(`${process.env.NEXT_PUBLIC_API_ROUTE}/preprocess/handle/?filename=${formData?.dataset}&username=${username}&workspace=${workspaceName}&type=${type}&missing=${missing}&duplication=${duplication}&outlier=${outlier}&normalize=${normalize}&convert=${convert}&oversampling=${oversampling}&columns_missing=${columnsMissing ?? ""}&columns_duplication=${columnsDuplication ?? ""}&columns_convert=${columnsConvert ?? ""}&columns_normalize=${columnsNormalize ?? ""}&columns_oversampling=${formData?.columnsOversampling ?? ""}&target_type_convert=${formData?.targetTypeConvert ?? ""}&method_normalize=${formData?.methodNormalize}`, body)
                           .then((res) => {
                             setDataset(res.data);
                             setIsCleaned(true);

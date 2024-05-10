@@ -39,11 +39,6 @@ export default function handler(req, res) {
                             method: 'GET'
                         }
                     );
-
-                    if (!response5.ok) {
-                        throw new Error('Failed to fetch categorical data: ' + response5.statusText);
-                    }
-
                     const categoricalData = await response5.json();
 
 

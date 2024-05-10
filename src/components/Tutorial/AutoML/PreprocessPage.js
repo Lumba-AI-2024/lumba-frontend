@@ -22,6 +22,7 @@ import { useSearchParams } from "next/navigation";
 import CheckDataAuto from "../../CheckDataAuto";
 import { useState } from "react";
 
+
 const CustomButton = ({ onClick }) => {
   return (
     <div className="w-full flex justify-between items-center" onClick={onClick}>
@@ -137,7 +138,7 @@ const PreprocessPage = ({ onFormDataChange }) => {
         <FormModalContextProvider>
           <div className="mt-6">
             {/* Row 1 */}
-            <div className="flex gap-3 items-center">
+            {/* <div className="flex gap-3 items-center">
               <div className="flex flex-col gap-1 w-full">
                 <span className="font-semibold">Select Dataset</span>
                 <Select
@@ -148,7 +149,7 @@ const PreprocessPage = ({ onFormDataChange }) => {
                   items={datasets?.map((dataset) => ({ value: dataset.name, label: dataset.name })) || []}
                 />
               </div>
-            </div>
+            </div> */}
 
             {/* Row 2 */}
             <CheckDataAuto workspace={workspaceName} setCheckedDataset={setCheckedDataset} setIsChecked={setIsChecked} />
@@ -205,7 +206,12 @@ const PreprocessPage = ({ onFormDataChange }) => {
                       //         .join(",")
                       //     : undefined;
 
-                      // columnsDuplication = formData?.duplication === "all" ? "" : columnsDuplication;
+                      // let columnsNormalize =
+                      //   typeof formData?.columnsNormalize === "object"
+                      //     ? Object.keys(formData.columnsNormalize)
+                      //       .filter((key) => formData.columnsNormalize[key] === true)
+                      //       .join(",")
+                      //     : undefined;
 
                       // const columnsConvert = formData?.columns?.join(",") || "";
 
