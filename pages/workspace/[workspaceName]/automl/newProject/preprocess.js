@@ -44,20 +44,23 @@ const preprocess = () => {
                 <SidebarAuto />
                 <div className="container">
                     <PreprocessPage />
-                    <div className="flex space-betweens">
-                        <Button onClick={back} className="flex items-center gap-1">
-                            <div className="flex font-semibold items-center gap-1">
-                                Back
-                            </div>
-                        </Button>
-                        <Button onClick={next} className="flex items-center gap-1">
-                            <div className="flex font-semibold items-center gap-1">
-                                Next
-                            </div>
-                        </Button>
+                    <div className="flex items-center">
+                        <div className="mr-4 flex items-center gap-1">
+                            <Button onClick={back} className="flex items-center gap-1">
+                                <div className="flex font-semibold items-center gap-1">
+                                    Back
+                                </div>
+                            </Button>
+                        </div>
+                        <div className="flex items-center gap-1">
+                            <Button onClick={next} className="flex items-center gap-1">
+                                <div className="flex font-semibold items-center gap-1">
+                                    Next
+                                </div>
+                            </Button>
+                        </div>
                     </div>
                 </div>
-
             </div>
         </>
     );
