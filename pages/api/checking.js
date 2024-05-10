@@ -48,26 +48,26 @@ export default function handler(req, res) {
           );
           const boxplotDatas = await response4.json();
 
-          const encodeQueryParam = (param) => encodeURIComponent(param);
+          // const encodeQueryParam = (param) => encodeURIComponent(param);
 
-          const response5 = await fetch(
-            `${API_ROUTE}/preprocess/categorical/?username=${encodeQueryParam(req.query.username)}&workspace=${encodeQueryParam(req.query.workspace)}&filename=${encodeQueryParam(req.query.filename)}&type=${encodeQueryParam(req.query.type)}`,
-            {
-              headers: {
-                Authorization: `Token ${token}`,
-              },
-              method: 'GET'
-            }
-          );
+          // const response5 = await fetch(
+          //   `${API_ROUTE}/preprocess/categorical/?username=${encodeQueryParam(req.query.username)}&workspace=${encodeQueryParam(req.query.workspace)}&filename=${encodeQueryParam(req.query.filename)}&type=${encodeQueryParam(req.query.type)}`,
+          //   {
+          //     headers: {
+          //       Authorization: `Token ${token}`,
+          //     },
+          //     method: 'GET'
+          //   }
+          // );
 
-          if (!response5.ok) {
-            throw new Error('Failed to fetch categorical data: ' + response5.statusText);
-          }
+          // if (!response5.ok) {
+          //   throw new Error('Failed to fetch categorical data: ' + response5.statusText);
+          // }
 
-          const categoricalData = await response5.json();
+          // const categoricalData = await response5.json();
 
 
-          return { missingData, duplicateData, outlierData, boxplotDatas, categoricalData };
+          return { missingData, duplicateData, outlierData, boxplotDatas };
         };
         checkDataset().then((data) => res.status(200).json(data));
         break;
