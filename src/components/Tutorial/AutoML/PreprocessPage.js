@@ -20,6 +20,7 @@ import ChevronDoubleLeft from "../../../../src/components/Icon/ChevronDoubleLeft
 import { motion } from "framer-motion";
 import { useSearchParams } from "next/navigation";
 import CheckDataAuto from "../../CheckDataAuto";
+import { useState } from "react";
 
 const CustomButton = ({ onClick }) => {
   return (
@@ -72,16 +73,16 @@ const getKeysValues = (dataset) => {
   return { keys, values };
 };
 
-const PreprocessPage = () => {
+const PreprocessPage = ({ onFormDataChange }) => {
   const router = useRouter();
   const [workspaceName, setWorkspaceName] = React.useState(null);
   React.useEffect(() => {
-    if (router.isReady && router.query!==null) {
-        const { workspaceName } = router.query;
-        setWorkspaceName(workspaceName);
+    if (router.isReady && router.query !== null) {
+      const { workspaceName } = router.query;
+      setWorkspaceName(workspaceName);
     }
   }, [router.isReady]);
-  
+
   console.log(workspaceName)
 
   const username = useCookie("username");
@@ -123,6 +124,8 @@ const PreprocessPage = () => {
 
   const { keys, values } = getKeysValues(dataset);
 
+  const [columnsOrdinal, setColumnsOrdinal] = useState({});
+
   return (
     <>
       <Seo title={`${workspaceName} - Cleaning`} />
@@ -159,42 +162,61 @@ const PreprocessPage = () => {
                   isDisabled={!checkedDataset || isCleaned}
                   handleSubmit={(formData, setIsSubmitting) => {
                     const submit = () => {
+                      console.log(formData)
                       setIsSubmitting(true);
-                      const missing = formData?.missing ? 1 : 0;
-                      const duplication = formData?.duplication ? 1 : 0;
-                      const outlier = formData?.outlier ? 1 : 0;
-                      const convert = formData?.targetTypeConvert && formData?.columns ? 1 : 0;
-                      const normalize = formData?.methodNormalize ? 1 : 0;
-                      const oversampling = formData?.columnsOversampling ? 1 : 0;
+                      // const missing = formData?.missing ? 1 : 0;
+                      // const duplication = formData?.duplication ? 1 : 0;
+                      // const outlier = formData?.outlier ? 1 : 0;
+                      // const convert = formData?.targetTypeConvert && formData?.columns ? 1 : 0;
+                      // const normalize = formData?.methodNormalize ? 1 : 0;
+                      // const oversampling = formData?.columnsOversampling ? 1 : 0;
+                      const ordinal = formData?.ordinal ? 1 : 0;
 
-                      let columnsMissing =
-                        typeof formData?.missing === "object"
-                          ? Object.keys(formData.missing)
-                              .filter((key) => formData.missing[key] === true)
-                              .join(",")
-                          : undefined;
+                      // let columnsMissing =
+                      //   typeof formData?.missing === "object"
+                      //     ? Object.keys(formData.missing)
+                      //         .filter((key) => formData.missing[key] === true)
+                      //         .join(",")
+                      //     : undefined;
 
-                      columnsMissing = formData?.missing === "all" ? "" : columnsMissing;
+                      // columnsMissing = formData?.missing === "all" ? "" : columnsMissing;
 
-                      let columnsDuplication =
-                        typeof formData?.duplication === "object"
-                          ? Object.keys(formData.duplication)
-                              .filter((key) => formData.duplication[key] === true)
-                              .join(",")
-                          : undefined;
+                    
+                      setColumnsOrdinal(typeof formData?.ordinal === "object" 
+                      ?
+                      Object.keys(formData.ordinal)
+                        .filter(key => formData.ordinal[key].checked)  // Filter out only checked items
+                        .reduce((acc, key) => {
+                          // Split the rank string by commas and create an object where each item is keyed by its name with its rank as the value
+                          const rankValues = formData.ordinal[key].rank.split(',').reduce((rankAcc, value, index) => {
+                            rankAcc[value] = index + 1;
+                            return rankAcc;
+                          }, {});
 
-                      columnsDuplication = formData?.duplication === "all" ? "" : columnsDuplication;
+                          acc[key] = rankValues;  // Assign the created object to the respective key
+                          return acc;
+                        }, {}) : {})
 
-                      const columnsConvert = formData?.columns?.join(",") || "";
+                      console.log(columnsOrdinal);
+                      // let columnsDuplication =
+                      //   typeof formData?.duplication === "object"
+                      //     ? Object.keys(formData.duplication)
+                      //         .filter((key) => formData.duplication[key] === true)
+                      //         .join(",")
+                      //     : undefined;
 
-                      let columnsNormalize =
-                        typeof formData?.columnsNormalize === "object"
-                          ? Object.keys(formData.columnsNormalize)
-                              .filter((key) => formData.columnsNormalize[key] === true)
-                              .join(",")
-                          : undefined;
+                      // columnsDuplication = formData?.duplication === "all" ? "" : columnsDuplication;
 
-                      columnsNormalize = formData?.columnsNormalize === "all" ? "" : columnsNormalize;
+                      // const columnsConvert = formData?.columns?.join(",") || "";
+
+                      // let columnsNormalize =
+                      //   typeof formData?.columnsNormalize === "object"
+                      //     ? Object.keys(formData.columnsNormalize)
+                      //         .filter((key) => formData.columnsNormalize[key] === true)
+                      //         .join(",")
+                      //     : undefined;
+
+                      // columnsNormalize = formData?.columnsNormalize === "all" ? "" : columnsNormalize;
 
                       // const body = {
                       //   filename: formData?.dataset,
@@ -218,37 +240,33 @@ const PreprocessPage = () => {
                       body.append("username", username);
                       body.append("workspace", workspaceName);
                       body.append("filename", formData?.dataset);
-                      body.append("missing", missing);
-                      body.append("duplication", duplication);
-                      body.append("outlier", outlier);
-                      body.append("normalize", normalize);
-                      body.append("convert", convert);
-                      body.append("oversampling", oversampling);
-                      body.append("columns_missing", columnsMissing ?? "");
-                      body.append("columns_duplication", columnsDuplication ?? "");
-                      body.append("columns_convert", columnsConvert ?? "");
-                      body.append("columns_normalize", columnsNormalize ?? "");
-                      body.append("columns_oversampling", formData?.columnsOversampling ?? "");
-                      body.append("target_type_convert", formData?.targetTypeConvert ?? "");
-                      body.append("method_normalize", formData?.methodNormalize);
+                      // body.append("missing", missing);
+                      // body.append("duplication", duplication);
+                      // body.append("outlier", outlier);
+                      // body.append("normalize", normalize);
+                      // body.append("convert", convert);
+                      // body.append("oversampling", oversampling);
+                      body.append("ordinal", ordinal)
+                      body.append("columnsOrdinal", columnsOrdinal ?? "")
+                      // body.append("columns_missing", columnsMissing ?? "");
+                      // body.append("columns_duplication", columnsDuplication ?? "");
+                      // body.append("columns_convert", columnsConvert ?? "");
+                      // body.append("columns_normalize", columnsNormalize ?? "");
+                      // body.append("columns_oversampling", formData?.columnsOversampling ?? "");
+                      // body.append("target_type_convert", formData?.targetTypeConvert ?? "");
+                      // body.append("method_normalize", formData?.methodNormalize); 
                       body.append("type", type);
+                      console.log("waah",body)
 
-                      setTimeout(() =>
-                        axios
-                          .post(`${process.env.NEXT_PUBLIC_API_ROUTE}/preprocess/handle/`, body)
-                          .then((res) => {
-                            setDataset(res.data);
-                            setIsCleaned(true);
-                          })
-                          .catch((err) => console.log(err))
-                          .finally(() => setIsSubmitting(false))
-                      );
+                      onFormDataChange(body);
+                      setIsSubmitting(false)
+
                     };
 
                     submit();
                   }}
                 >
-                  <AccordionSelect names={["missing", "missingMode"]} label="Clean Missing Data" top={true}>
+                  {/* <AccordionSelect names={["missing", "missingMode"]} label="Clean Missing Data" top={true}>
                     <p className="pb-1">Columns to be cleaned</p>
                     <Select
                       placeholder="Select column(s)"
@@ -280,9 +298,30 @@ const PreprocessPage = () => {
 												{ value: "entireRow", label: "Remove entire row" },
 												{ value: "entireColumn", label: "Remove entire column" },
 											]}
-										/> */}
+										/> 
+                    </AccordionSelect> */}
+                  <AccordionSelect names={["ordinal"]} label="Ordinal Columns">
+                    <p className="pb-1">Columns to be ranked</p>
+                    <Select
+                      placeholder="Select column(s)"
+                      name="ordinal"
+                      defaultSelected={""}
+                      items={[
+                        {
+                          value: "custom",
+                          label: {
+                            formLabel: "Select Columns",
+                            buttonLabel: "Select Columns",
+                            totalColumns: columns.length,
+                            CustomButton: CustomButton,
+                            name: "ordinal",
+                            values: columns,
+                          },
+                        },
+                      ]}
+                    />
                   </AccordionSelect>
-                  <AccordionSelect names={["duplication"]} label="Remove Duplicate Data">
+                  {/* <AccordionSelect names={["duplication"]} label="Ordinal Columns">
                     <p className="pb-1">Columns to be cleaned</p>
                     <Select
                       placeholder="Select column(s)"
@@ -356,8 +395,8 @@ const PreprocessPage = () => {
                         { value: "z-score", label: "Z-Score" },
                       ]}
                     />
-                  </AccordionSelect>
-                  <AccordionSelect names={["convertion"]} label="Convert Data Type">
+                  </AccordionSelect>*/}
+                  {/* <AccordionSelect names={["convertion"]} label="Convert Data Type">
                     <p className="pb-1">Columns to be converted</p>
                     <MultiSelect
                       variant="withBorder"
@@ -390,13 +429,30 @@ const PreprocessPage = () => {
                       items={columns?.map((column) => ({ value: column, label: column }))}
                       disabled={type === "forecasting"}
                     />
-                  </AccordionSelect>
+                  </AccordionSelect> */}
+
                 </AccordionForm>
               </motion.div>
               {/* )} */}
               {/* </AnimatePresence> */}
 
-              <div className="rounded-r-md shadow bg-white flex-1 min-h-[480px] overflow-auto">
+              {Object.keys(columnsOrdinal).length > 0 && (
+                <div className="mt-4 ml-4">
+                  <h3>Ordinal Data Rankings</h3>
+                  {Object.entries(columnsOrdinal).map(([key, values]) => (
+                    <div key={key}>
+                      <h4>{key}</h4>
+                      <ul>
+                        {Object.entries(values).map(([item, rank]) => (
+                          <li key={item}>{rank}. {item}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* <div className="rounded-r-md shadow bg-white flex-1 min-h-[480px] overflow-auto">
                 <div className="h-full flex flex-col w-full">
                   <div className="border-b-[1.5px] border-gray/30 py-3 px-4 flex gap-2 items-center">
                     <button onClick={() => setIsOpen((prev) => !prev)} className={`${!isOpen && "rotate-180"}`}>
@@ -442,7 +498,7 @@ const PreprocessPage = () => {
                     </div>
                   )}
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </FormModalContextProvider>

@@ -16,9 +16,13 @@ export default function SelectColumnsModal({
   const { isOpen, setIsOpen, setFormData, formData } = useContext(FormModalContext);
 
   const [checkedData, setCheckedData] = useState(() =>
-    formData[name] && typeof formData[name] != "string" ? formData[name] : {}
+    formData[name] && typeof formData[name] === "object"
+      ? formData[name]
+      : values.reduce((acc, value) => ({
+          ...acc,
+          [value]: { checked: false, rank: "" },
+        }), {})
   );
-
   return (
     <>
       {CustomButton ? (
@@ -63,10 +67,10 @@ export default function SelectColumnsModal({
 
           <div className="pb-2 mb-4">
             <div className="grid grid-cols-2 mb-2">
-              <h4 className="font-medium relative z-50 mb-2">Columns</h4>
+              <h4 className="font-medium relative z-50 mb-2">Choose Columns (exc. rank1,rank2,rank3)</h4>
             </div>
             <div className="h-full max-h-[calc(100vh-25rem)] overflow-y-auto">
-              {values.map((value) => (
+              {/* {values.map((value) => (
                 <div key={value} className="flex items-center gap-2 mb-4">
                   <div className="relative">
                     <input
@@ -101,7 +105,41 @@ export default function SelectColumnsModal({
                   </div>
                   <label htmlFor={value}>{value}</label>
                 </div>
-              ))}
+              ))} */}
+              {values.map((value) => (
+              <div key={value} className="flex items-center justify-between gap-4 mb-3">
+                <div className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    className="w-4 h-4"
+                    id={value}
+                    name={value}
+                    checked={checkedData[value].checked}
+                    onChange={() =>
+                      setCheckedData((prevData) => ({
+                        ...prevData,
+                        [value]: { ...prevData[value], checked: !prevData[value].checked },
+                      }))
+                    }
+                  />
+                  <label htmlFor={value} className="flex-1">{value}</label>
+                </div>
+                <input
+                  type="text"
+                  className="border border-gray-300 rounded px-2 py-1 w-1/4"
+                  placeholder="Rank"
+                  value={checkedData[value].rank}
+                  onChange={(e) =>
+                    setCheckedData((prevData) => ({
+                      ...prevData,
+                      [value]: { ...prevData[value], rank: e.target.value },
+                    }))
+                  }
+                  disabled={!checkedData[value].checked}
+                  required={checkedData[value].checked}
+                />
+              </div>
+            ))}
             </div>
           </div>
           <div className="mb-5 mt-2">
@@ -118,11 +156,19 @@ export default function SelectColumnsModal({
                 isLoading={false}
                 notButton={true}
                 onClick={() => {
+                  const allRanksFilled = Object.keys(checkedData).every(key => 
+                    !checkedData[key].checked || (checkedData[key].checked && checkedData[key].rank.trim() !== '')
+                  );
+              
+                  if (!allRanksFilled) {
+                    alert("Please enter ranks for all checked items.");
+                    return;
+                  }
+              
                   setIsOpen(false);
-                  //   onClickAddition();
-                  setFormData((previous) => ({
-                    ...previous,
-                    [name]: checkedData,
+                  setFormData(prevData => ({
+                    ...prevData,
+                    [name]: checkedData
                   }));
                 }}
               >
