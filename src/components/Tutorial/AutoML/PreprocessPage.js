@@ -258,7 +258,7 @@ const PreprocessPage = ({ onFormDataChange }) => {
                       // body.append("convert", convert);
                       // body.append("oversampling", oversampling);
                       body.append("ordinal", ordinal)
-                      body.append("columnsOrdinal", columnsOrdinal ?? "")
+                      body.append("dict_ordinal_encoding", columnsOrdinal ?? "")
                       // body.append("columns_missing", columnsMissing ?? "");
                       // body.append("columns_duplication", columnsDuplication ?? "");
                       // body.append("columns_convert", columnsConvert ?? "");
@@ -268,6 +268,7 @@ const PreprocessPage = ({ onFormDataChange }) => {
                       // body.append("method_normalize", formData?.methodNormalize); 
                       body.append("type", type);
                       onFormDataChange(body);
+                      console.log(body);
 
                       setTimeout(() =>
                         axios
