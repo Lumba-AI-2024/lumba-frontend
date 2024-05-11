@@ -44,12 +44,12 @@ const preprocess = () => {
     };
 
     const next = () => {
-        router.push(`/workspace/${workspaceName}/automl/newProject/target?type=${type}`);
-        axios
-            .post(`${process.env.NEXT_PUBLIC_API_ROUTE}/preprocess/handle/`, body)
-            .then((res) => {
-                setDataset(res.data);
-            })
+        // router.push(`/workspace/${workspaceName}/automl/newProject/target?type=${type}`);
+        // axios
+        //     .post(`${process.env.NEXT_PUBLIC_API_ROUTE}/preprocess/clean/`, formData)
+        //     .then((res) => {
+        //         setDataset(res.data);
+        //     })
     };
 
     return (

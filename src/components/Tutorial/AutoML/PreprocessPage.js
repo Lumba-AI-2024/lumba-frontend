@@ -166,10 +166,9 @@ const PreprocessPage = ({ onFormDataChange }) => {
               {/* {isOpen && ( */}
               <motion.div initial={false} animate={{ width: isOpen ? 280 : 0 }}>
                 <AccordionForm
-                  // isDisabled={!checkedDataset || isCleaned}
+                  isDisabled={!checkedDataset || isCleaned}
                   handleSubmit={(formData, setIsSubmitting) => {
                     const submit = () => {
-                      console.log(formData)
                       setIsSubmitting(true);
                       // const missing = formData?.missing ? 1 : 0;
                       // const duplication = formData?.duplication ? 1 : 0;
@@ -251,7 +250,7 @@ const PreprocessPage = ({ onFormDataChange }) => {
                       const body = new FormData();
                       body.append("username", username);
                       body.append("workspace", workspaceName);
-                      body.append("filename", formData?.dataset);
+                      body.append("filename", checkedDataset);
                       // body.append("missing", missing);
                       // body.append("duplication", duplication);
                       // body.append("outlier", outlier);
@@ -268,11 +267,18 @@ const PreprocessPage = ({ onFormDataChange }) => {
                       // body.append("target_type_convert", formData?.targetTypeConvert ?? "");
                       // body.append("method_normalize", formData?.methodNormalize); 
                       body.append("type", type);
-                      console.log("waah",body)
-
                       onFormDataChange(body);
-                      setIsSubmitting(false)
 
+                      setTimeout(() =>
+                        axios
+                          .post(`${process.env.NEXT_PUBLIC_API_ROUTE}/preprocess/clean/`, body)
+                          .then((res) => {
+                            setDataset(res.data);
+                            setIsCleaned(true);
+                          })
+                          .catch((err) => console.log(err))
+                          .finally(() => setIsSubmitting(false))
+                      );
                     };
 
                     submit();
@@ -464,7 +470,7 @@ const PreprocessPage = ({ onFormDataChange }) => {
                 </div>
               )}
 
-              {/* <div className="rounded-r-md shadow bg-white flex-1 min-h-[480px] overflow-auto">
+              <div className="rounded-r-md shadow bg-white flex-1 min-h-[480px] overflow-auto">
                 <div className="h-full flex flex-col w-full">
                   <div className="border-b-[1.5px] border-gray/30 py-3 px-4 flex gap-2 items-center">
                     <button onClick={() => setIsOpen((prev) => !prev)} className={`${!isOpen && "rotate-180"}`}>
@@ -510,7 +516,7 @@ const PreprocessPage = ({ onFormDataChange }) => {
                     </div>
                   )}
                 </div>
-              </div> */}
+              </div> 
             </div>
           </div>
         </FormModalContextProvider>
