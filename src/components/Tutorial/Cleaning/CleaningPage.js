@@ -226,7 +226,7 @@ const CleaningPage = () => {
 
                       setTimeout(() =>
                         axios
-                          .post(`${process.env.NEXT_PUBLIC_API_ROUTE}/preprocess/handle/?filename=${formData?.dataset}&username=${username}&workspace=${workspaceName}&type=${type}&missing=${missing}&duplication=${duplication}&outlier=${outlier}&normalize=${normalize}&convert=${convert}&oversampling=${oversampling}&columns_missing=${columnsMissing ?? ""}&columns_duplication=${columnsDuplication ?? ""}&columns_convert=${columnsConvert ?? ""}&columns_normalize=${columnsNormalize ?? ""}&columns_oversampling=${formData?.columnsOversampling ?? ""}&target_type_convert=${formData?.targetTypeConvert ?? ""}&method_normalize=${formData?.methodNormalize}`, body)
+                          .post(`${process.env.NEXT_PUBLIC_API_ROUTE}/preprocess/handle/`, body)
                           .then((res) => {
                             setDataset(res.data);
                             setIsCleaned(true);
