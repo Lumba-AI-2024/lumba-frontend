@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Breadcrumb from "../../../../../src/components/Breadcrumb";
 import FormModalContextProvider from "../../../../../src/context/FormModalContext";
@@ -17,6 +17,9 @@ import Input from "../../../../../src/components/Form/Input";
 import Select from "../../../../../src/components/Select/Select";
 import * as React from "react";
 import { FormModalContext } from "../../../../../src/context/FormModalContext";
+import axios from "axios";
+import { getCookie } from "../../../../../src/helper/cookies";
+
 
 
 const upload = () => {
@@ -25,7 +28,7 @@ const upload = () => {
     const { formData } = React.useContext(FormModalContext);
 
     let searchParams = useSearchParams();
-    let type = searchParams.get("type");
+    const type = searchParams.get("type");
 
     const { workspaceName } = router.query;
     const [file, setFile] = useState(null);
@@ -36,7 +39,9 @@ const upload = () => {
 
     const [isChecked, setIsChecked] = useState(false);
     const [dataset, setDataset] = useState(formData?.dataset);
-    
+    const [columns, setColumns] = useState([]);
+    const [selectedTrainingColumns, setSelectedTrainingColumns] = useState([]);
+    const [selectedTargetColumn, setSelectedTargetColumn] = useState('');
 
     const back = () => {
         router.push(`/workspace/${workspaceName}/automl?type=${type}`);
@@ -46,14 +51,51 @@ const upload = () => {
         router.push(`/workspace/${workspaceName}/automl/newProject/preprocess?type=${type}&checkedDataset=${dataset}`);
     };
 
-    React.useEffect(() => {
-        if (formData?.dataset) {
+    // Update dataset when formData changes
+    useEffect(() => {
+        if (formData?.dataset && formData?.dataset !== dataset) {
             setDataset(formData?.dataset);
-            // setIsChecked(true);
-            console.log(formData?.dataset); // Log the dataset if it changes
         }
-    }, [formData]); 
+    }, [formData, dataset]);
 
+    // Fetch dataset details
+    useEffect(() => {
+        if (dataset && workspaceName && username && type) {
+            fetchDataset();
+        }
+    }, [dataset, workspaceName, username, type]);
+
+    const fetchDataset = async () => {
+        const DATASET = `${process.env.NEXT_PUBLIC_API_ROUTE}/file/?filename=${dataset}&workspace=${workspaceName}&username=${username}&page=1&rowsperpage=15&type=${type}`;
+
+        const { data } = await axios.get(DATASET, {
+            headers: {
+                Authorization: `Token ${getCookie("token")}`,
+            },
+        });
+
+        const keys = [...Object.keys(data)];
+        if (keys[0] === "Unnamed: 0") {
+            keys.shift();
+        }
+        setColumns(keys);
+    };
+    console.log(columns)
+
+    const handleSelectTrainingColumn = (column) => {
+        if (selectedTrainingColumns.includes(column)) {
+          setSelectedTrainingColumns(selectedTrainingColumns.filter(item => item !== column));
+        } else {
+          setSelectedTrainingColumns([...selectedTrainingColumns, column]);
+        }
+      };
+    
+      const handleSelectTargetColumn = (column) => {
+        setSelectedTargetColumn(column);
+      };
+    
+    console.log(selectedTrainingColumns);
+    console.log(selectedTargetColumn);
     return (
         <>
             <Seo title={`${workspaceName} - AutoML`} />
@@ -144,6 +186,46 @@ const upload = () => {
                             </div>
                         </div>
                     </div>
+                    
+                    {columns.length > 0 && (
+                        <>
+                            <h2 className="mt-4 mb-2">Select Columns for AutoML Job</h2>
+                            <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                    <h4>Select Columns to be Trained</h4>
+                                    {columns.map(column => (
+                                        <div key={column}>
+                                            <input
+                                                className="mr-2"
+                                                type="checkbox"
+                                                checked={selectedTrainingColumns.includes(column)}
+                                                onChange={() => handleSelectTrainingColumn(column)}
+                                                disabled={column === selectedTargetColumn}
+                                            />
+                                              {column}
+                                        </div>
+                                    ))}
+                                </div>
+                                <div>
+                                    <h4>Select Target Column</h4>
+                                    {columns.map(column => (
+                                        <div key={column}>
+                                            <input
+                                                className="mr-2"
+                                                type="radio"
+                                                name="targetColumn"
+                                                checked={selectedTargetColumn === column}
+                                                onChange={() => handleSelectTargetColumn(column)}
+                                                disabled={selectedTrainingColumns.includes(column)}
+                                            />
+                                              {column}
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </>
+
+                    )}
 
                     <div className="flex items-center my-6">
                         <div className="mr-4 flex items-center gap-1">

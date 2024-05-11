@@ -94,6 +94,11 @@ const PreprocessPage = ({ onFormDataChange }) => {
 
   const [isChecked, setIsChecked] = React.useState(false);
   const [isCleaned, setIsCleaned] = React.useState(false);
+  const [categoricalColumn, setCategoricalColumn] =  React.useState([]);
+
+  const handleCategoricalData = (data) => {
+    setCategoricalColumn(data);
+};
 
   const [isOpen, setIsOpen] = React.useState(true);
 
@@ -126,6 +131,7 @@ const PreprocessPage = ({ onFormDataChange }) => {
   const { keys, values } = getKeysValues(dataset);
 
   const [columnsOrdinal, setColumnsOrdinal] = useState({});
+  console.log(checkedDataset,"dan",isCleaned)
 
   return (
     <>
@@ -152,7 +158,7 @@ const PreprocessPage = ({ onFormDataChange }) => {
             </div> */}
 
             {/* Row 2 */}
-            <CheckDataAuto workspace={workspaceName} setCheckedDataset={setCheckedDataset} setIsChecked={setIsChecked} />
+            <CheckDataAuto workspace={workspaceName} setCheckedDataset={setCheckedDataset} setIsChecked={setIsChecked} onColumnDataChange={handleCategoricalData}/>
 
             {/* Row 3 */}
             <div className="mt-8 pb-4 flex overflow-hidden">
@@ -160,7 +166,7 @@ const PreprocessPage = ({ onFormDataChange }) => {
               {/* {isOpen && ( */}
               <motion.div initial={false} animate={{ width: isOpen ? 280 : 0 }}>
                 <AccordionForm
-                  isDisabled={!checkedDataset || isCleaned}
+                  // isDisabled={!checkedDataset || isCleaned}
                   handleSubmit={(formData, setIsSubmitting) => {
                     const submit = () => {
                       console.log(formData)
@@ -318,10 +324,10 @@ const PreprocessPage = ({ onFormDataChange }) => {
                           label: {
                             formLabel: "Select Columns",
                             buttonLabel: "Select Columns",
-                            totalColumns: columns.length,
+                            totalColumns:  Object.keys(categoricalColumn).length,
                             CustomButton: CustomButton,
                             name: "ordinal",
-                            values: columns,
+                            values: Object.keys(categoricalColumn),
                           },
                         },
                       ]}

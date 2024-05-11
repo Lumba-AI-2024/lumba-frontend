@@ -70,7 +70,7 @@ const preprocess = () => {
                         <div className="flex items-center gap-1">
                             <Button onClick={next} className="flex items-center gap-1">
                                 <div className="flex font-semibold items-center gap-1">
-                                    Next
+                                    Start Training
                                 </div>
                             </Button>
                         </div>

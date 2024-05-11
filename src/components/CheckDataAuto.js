@@ -142,7 +142,7 @@ const CategoricalDataButton = ({ onClick, children }) => {
 
 
 
-export default function CheckDataAuto({ workspace, setCheckedDataset, setIsChecked }) {
+export default function CheckDataAuto({ workspace, setCheckedDataset, setIsChecked, onColumnDataChange }) {
   const router = useRouter();
   const { formData } = React.useContext(FormModalContext);
   const [missingData, setMissingData] = React.useState(null);
@@ -158,7 +158,7 @@ export default function CheckDataAuto({ workspace, setCheckedDataset, setIsCheck
 
   React.useEffect(() => {
     if (missingData != null && duplicateData != null && categoricalData != null) {
-      setCheckedDataset(formData?.dataset);
+      setCheckedDataset(checkedDataset);
       setIsChecked(true);
     }
   }, [missingData, duplicateData, categoricalData]);
@@ -221,6 +221,7 @@ export default function CheckDataAuto({ workspace, setCheckedDataset, setIsCheck
                   setMissingData(missingData);
                   setDuplicateData(duplicateData);
                   setCategoricalData(categoricalData);
+                  onColumnDataChange(categoricalData)
                 };
 
                 check();
