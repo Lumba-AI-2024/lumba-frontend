@@ -48,6 +48,14 @@ const upload = () => {
     };
 
     const next = () => {
+        if (!dataset) {
+            alert("Please select a dataset.");
+            return;
+        }
+        else if (!selectedTargetColumn) {
+            alert("Please select a target column.");
+            return;
+        }
         router.push(`/workspace/${workspaceName}/automl/newProject/preprocess?type=${type}&checkedDataset=${dataset}`);
     };
 
@@ -84,16 +92,16 @@ const upload = () => {
 
     const handleSelectTrainingColumn = (column) => {
         if (selectedTrainingColumns.includes(column)) {
-          setSelectedTrainingColumns(selectedTrainingColumns.filter(item => item !== column));
+            setSelectedTrainingColumns(selectedTrainingColumns.filter(item => item !== column));
         } else {
-          setSelectedTrainingColumns([...selectedTrainingColumns, column]);
+            setSelectedTrainingColumns([...selectedTrainingColumns, column]);
         }
-      };
-    
-      const handleSelectTargetColumn = (column) => {
+    };
+
+    const handleSelectTargetColumn = (column) => {
         setSelectedTargetColumn(column);
-      };
-    
+    };
+
     console.log(selectedTrainingColumns);
     console.log(selectedTargetColumn);
     return (
@@ -186,7 +194,7 @@ const upload = () => {
                             </div>
                         </div>
                     </div>
-                    
+
                     {columns.length > 0 && (
                         <>
                             <h2 className="mt-4 mb-2">Select Columns for AutoML Job</h2>
@@ -202,7 +210,7 @@ const upload = () => {
                                                 onChange={() => handleSelectTrainingColumn(column)}
                                                 disabled={column === selectedTargetColumn}
                                             />
-                                              {column}
+                                            {column}
                                         </div>
                                     ))}
                                 </div>
@@ -217,8 +225,9 @@ const upload = () => {
                                                 checked={selectedTargetColumn === column}
                                                 onChange={() => handleSelectTargetColumn(column)}
                                                 disabled={selectedTrainingColumns.includes(column)}
+                                                required={selectedTargetColumn === column}
                                             />
-                                              {column}
+                                            {column}
                                         </div>
                                     ))}
                                 </div>
@@ -227,7 +236,7 @@ const upload = () => {
 
                     )}
 
-                    <div className="flex items-center my-6">
+                    <div className="flex justify-between items-center my-6">
                         <div className="mr-4 flex items-center gap-1">
                             <Button onClick={back} className="flex items-center gap-1">
                                 <div className="flex font-semibold items-center gap-1">
