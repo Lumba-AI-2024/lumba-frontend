@@ -258,7 +258,7 @@ const PreprocessPage = ({ onFormDataChange }) => {
                       // body.append("convert", convert);
                       // body.append("oversampling", oversampling);
                       body.append("ordinal", ordinal)
-                      body.append("dict_ordinal_encoding", columnsOrdinal ?? "")
+                      body.append("dict_ordinal_encoding", JSON.stringify(columnsOrdinal) ?? "")
                       // body.append("columns_missing", columnsMissing ?? "");
                       // body.append("columns_duplication", columnsDuplication ?? "");
                       // body.append("columns_convert", columnsConvert ?? "");
@@ -280,9 +280,11 @@ const PreprocessPage = ({ onFormDataChange }) => {
                           .catch((err) => console.log(err))
                           .finally(() => setIsSubmitting(false))
                       );
+                      console.log(body);
                     };
 
                     submit();
+                    
                   }}
                 >
                   {/* <AccordionSelect names={["missing", "missingMode"]} label="Clean Missing Data" top={true}>
