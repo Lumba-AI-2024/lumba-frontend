@@ -48,7 +48,7 @@ export default function Dataset({
         <td className="py-2 rounded-l-md w-56 px-4 h-14 relative z-10 bg-white">
           <div className={`flex gap-2 items-center ${isLoading && "text-gray/50"}`}>
             <img src="/assets/CSVIcon.svg" alt="csv" />
-            {file}
+            {name}
           </div>
         </td>
         <td className={`h-14 relative z-10 bg-white px-4 ${isLoading && "text-gray/50"}`}>{size} MB</td>
