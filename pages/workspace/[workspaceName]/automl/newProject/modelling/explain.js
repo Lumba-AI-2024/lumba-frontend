@@ -17,7 +17,7 @@ import Breadcrumb from "../../../../../../src/components/Breadcrumb";
 
 
 
-const modelling = () => {
+const explain = () => {
     const router = useRouter();
     const { workspaceName } = router.query;
 
@@ -26,25 +26,6 @@ const modelling = () => {
 
     const username = useCookie("username");
     const { models, mutate } = useModels({ username, workspace: workspaceName, type });
-
-
-    // const handleFormData = (data) => {
-    //     setFormData(data);
-    // };
-
-    // const back = () => {
-    //     router.push(`/workspace/${workspaceName}/automl/newProject/upload?type=${type}`);
-    // };
-
-    // const next = () => {
-    //     router.push(`/workspace/${workspaceName}/automl/newProject/target?type=${type}`);
-    //     axios
-    //         .post(`${process.env.NEXT_PUBLIC_API_ROUTE}/preprocess/handle/`, body)
-    //         .then((res) => {
-    //             setDataset(res.data);
-    //         })
-    // };
-
     return (
         <>
             <Seo title={`${workspaceName} - AutoML`} />
@@ -54,15 +35,29 @@ const modelling = () => {
                         <Breadcrumb links={[
                             { label: workspaceName },
                             { label: "AutoML", href: "/workspace/" + workspaceName + "/automl" },
-                            { label: "Modelling", href: router.asPath },
-                        ]} active={"Modelling"} />
+                            { label: "Modelling", href: "/workspace/" + workspaceName + "/automl" + "/newProject" + "/modelling"},
+                            { label: "Explainability", href: router.asPath },
+                        ]} active={"Explainability"} />
                     </div>
                 </div>
                 <div className="flex flex-col gap-6 my-6">
                     <h1>AutoML Title Project</h1>
                 </div>
+                <div className="flex flex-col gap-6 my-6">
+                    <h2>Explainability</h2>
+                    <h3>Shapley Plot for Combination</h3>
+                    <p>
+                        [foto shapley]
+                    </p>
 
-                {models?.length > 0 ? (
+                    <h3>Top Important Features on Target</h3>
+                    <li>Feature 1</li>
+                    <li>Feature 2</li>
+                    <li>Feature 3</li>
+                    <li>Feature 4</li>
+                </div>
+
+                {/* {models?.length > 0 ? (
                     <table className="mt-4">
                         <thead>
                             <tr>
@@ -94,10 +89,10 @@ const modelling = () => {
                         </div>
                     </div>
 
-                )}
+                )} */}
             </div>
         </>
     );
 };
 
-export default modelling;
+export default explain;

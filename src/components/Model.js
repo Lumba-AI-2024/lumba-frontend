@@ -108,6 +108,7 @@ export default function Model({
   noShadow = false,
   username,
   workspace,
+  isAuto=false
 }) {
   const [isTesting, setIsTesting] = React.useState(false);
   const [result, setResult] = React.useState("-");
@@ -136,7 +137,7 @@ export default function Model({
       <tr>
         <td colSpan="100%" className={noActions ? "pt-2" : "pt-4"}></td>
       </tr>
-      <tr className="relative" onClick={() => {}}>
+      <tr className="relative" onClick={() => { }}>
         <td className="bg-white rounded-l-md pl-4 py-2 relative px-4">
           <div className={`flex flex-col ${isLoading && "text-gray/50"}`}>
             <span className="text-[10px] text-gray -mb-1">{file}</span>
@@ -192,7 +193,7 @@ export default function Model({
                             workspace: workspace,
                             type: type,
                           });
-                        } catch (err) {}
+                        } catch (err) { }
                       }}
                     >
                       <p>Are you sure you want to delete this model?</p>
@@ -277,8 +278,7 @@ export default function Model({
                           setIsTesting(true);
                           axios
                             .get(
-                              `${process.env.NEXT_PUBLIC_API_ROUTE}/modeling/predict/?modelname=${modelName}&feature=${
-                                formData[features[0].label]
+                              `${process.env.NEXT_PUBLIC_API_ROUTE}/modeling/predict/?modelname=${modelName}&feature=${formData[features[0].label]
                               }&username=${username}&workspace=${workspace}&type=${type}`,
                               {
                                 headers: {
@@ -313,6 +313,18 @@ export default function Model({
                 </>
               )}
             </div>
+          </td>
+        )}
+        {isAuto && (
+          <td className={`bg-white py-2 px-4`}>
+            <button
+              className="text-blue text-[10px]"
+              onClick={() =>{
+                router.push(`/workspace/${workspace}/automl/newProject/modelling/${modelName}`);
+              }}
+              >
+              Explain
+            </button>
           </td>
         )}
         {!noShadow && <td colSpan="100%" className="absolute inset-0 -z-[1] w-full h-full shadow rounded-md"></td>}
