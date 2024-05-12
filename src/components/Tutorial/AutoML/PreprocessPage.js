@@ -94,11 +94,11 @@ const PreprocessPage = ({ onFormDataChange }) => {
 
   const [isChecked, setIsChecked] = React.useState(false);
   const [isCleaned, setIsCleaned] = React.useState(false);
-  const [categoricalColumn, setCategoricalColumn] =  React.useState([]);
+  const [categoricalColumn, setCategoricalColumn] = React.useState([]);
 
   const handleCategoricalData = (data) => {
     setCategoricalColumn(data);
-};
+  };
 
   const [isOpen, setIsOpen] = React.useState(true);
 
@@ -131,16 +131,18 @@ const PreprocessPage = ({ onFormDataChange }) => {
   const { keys, values } = getKeysValues(dataset);
 
   const [columnsOrdinal, setColumnsOrdinal] = useState({});
-  console.log(checkedDataset,"dan",isCleaned)
+  console.log(checkedDataset, "dan", isCleaned)
 
   return (
     <>
       <Seo title={`${workspaceName} - Cleaning`} />
       <div className="h-full flex flex-col">
-        <Breadcrumb
-          links={[{ label: workspaceName }, { label: "Cleaning", href: "/workspace/" + workspaceName + "/cleaning" }]}
-          active={"Cleaning"}
-        />
+        <Breadcrumb links={[
+          { label: workspaceName },
+          { label: "AutoML", href: "/workspace/" + workspaceName + "/automl" },
+          { label: "New Project", href: "/workspace/" + workspaceName + "/automl"+ "/newProject"+ "/upload" },
+          { label: "Preprocess", href: router.asPath}
+        ]} active={"Preprocess"} />
         <FormModalContextProvider>
           <div className="mt-6">
             {/* Row 1 */}
@@ -158,7 +160,7 @@ const PreprocessPage = ({ onFormDataChange }) => {
             </div> */}
 
             {/* Row 2 */}
-            <CheckDataAuto workspace={workspaceName} setCheckedDataset={setCheckedDataset} setIsChecked={setIsChecked} onColumnDataChange={handleCategoricalData}/>
+            <CheckDataAuto workspace={workspaceName} setCheckedDataset={setCheckedDataset} setIsChecked={setIsChecked} onColumnDataChange={handleCategoricalData} />
 
             {/* Row 3 */}
             <div className="mt-8 pb-4 flex overflow-hidden">
@@ -188,21 +190,21 @@ const PreprocessPage = ({ onFormDataChange }) => {
 
                       // columnsMissing = formData?.missing === "all" ? "" : columnsMissing;
 
-                    
-                      setColumnsOrdinal(typeof formData?.ordinal === "object" 
-                      ?
-                      Object.keys(formData.ordinal)
-                        .filter(key => formData.ordinal[key].checked)  // Filter out only checked items
-                        .reduce((acc, key) => {
-                          // Split the rank string by commas and create an object where each item is keyed by its name with its rank as the value
-                          const rankValues = formData.ordinal[key].rank.split(',').reduce((rankAcc, value, index) => {
-                            rankAcc[value] = index + 1;
-                            return rankAcc;
-                          }, {});
 
-                          acc[key] = rankValues;  // Assign the created object to the respective key
-                          return acc;
-                        }, {}) : {})
+                      setColumnsOrdinal(typeof formData?.ordinal === "object"
+                        ?
+                        Object.keys(formData.ordinal)
+                          .filter(key => formData.ordinal[key].checked)  // Filter out only checked items
+                          .reduce((acc, key) => {
+                            // Split the rank string by commas and create an object where each item is keyed by its name with its rank as the value
+                            const rankValues = formData.ordinal[key].rank.split(',').reduce((rankAcc, value, index) => {
+                              rankAcc[value] = index + 1;
+                              return rankAcc;
+                            }, {});
+
+                            acc[key] = rankValues;  // Assign the created object to the respective key
+                            return acc;
+                          }, {}) : {})
 
                       console.log(columnsOrdinal);
                       // let columnsDuplication =
@@ -268,7 +270,7 @@ const PreprocessPage = ({ onFormDataChange }) => {
                       // body.append("target_type_convert", formData?.targetTypeConvert ?? "");
                       // body.append("method_normalize", formData?.methodNormalize); 
                       body.append("type", type);
-                      console.log("waah",body)
+                      console.log("waah", body)
 
                       onFormDataChange(body);
                       setIsSubmitting(false)
@@ -324,7 +326,7 @@ const PreprocessPage = ({ onFormDataChange }) => {
                           label: {
                             formLabel: "Select Columns",
                             buttonLabel: "Select Columns",
-                            totalColumns:  Object.keys(categoricalColumn).length,
+                            totalColumns: Object.keys(categoricalColumn).length,
                             CustomButton: CustomButton,
                             name: "ordinal",
                             values: Object.keys(categoricalColumn),

@@ -105,8 +105,8 @@ const upload = () => {
                     <Breadcrumb links={[
                         { label: workspaceName },
                         { label: "AutoML", href: "/workspace/" + workspaceName + "/automl" },
-                        { label: "new project", href: router.asPath }
-                    ]} active={"AutoML"} />
+                        { label: "New Project", href: router.asPath }
+                    ]} active={"New Project"} />
                     <div className="flex flex-col gap-6 my-6">
                         <h1>Create a new automated ML Job</h1>
                     </div>
