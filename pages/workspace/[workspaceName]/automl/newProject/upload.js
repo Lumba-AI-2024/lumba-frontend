@@ -40,7 +40,7 @@ const upload = () => {
     const [isChecked, setIsChecked] = useState(false);
     const [dataset, setDataset] = useState(formData?.dataset);
     const [columns, setColumns] = useState([]);
-    const [selectedTrainingColumns, setSelectedTrainingColumns] = useState([]);
+    const [selectedTrainingColumns, setSelectedTrainingColumns] = useState(columns);
     const [selectedTargetColumn, setSelectedTargetColumn] = useState('');
 
     const back = () => {
@@ -90,6 +90,13 @@ const upload = () => {
     };
     console.log(columns)
 
+    // Function to handle selection of target column
+    const handleSelectTargetColumn = (column) => {
+        setSelectedTargetColumn(column);
+        // Select all training columns except the target column
+        setSelectedTrainingColumns(columns.filter(item => item !== column));
+    };
+
     const handleSelectTrainingColumn = (column) => {
         if (selectedTrainingColumns.includes(column)) {
             setSelectedTrainingColumns(selectedTrainingColumns.filter(item => item !== column));
@@ -98,9 +105,9 @@ const upload = () => {
         }
     };
 
-    const handleSelectTargetColumn = (column) => {
-        setSelectedTargetColumn(column);
-    };
+    // const handleSelectTargetColumn = (column) => {
+    //     setSelectedTargetColumn(column);
+    // };
 
     console.log(selectedTrainingColumns);
     console.log(selectedTargetColumn);
@@ -200,21 +207,6 @@ const upload = () => {
                             <h2 className="mt-4 mb-2">Select Columns for AutoML Job</h2>
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                    <h4>Select Columns to be Trained</h4>
-                                    {columns.map(column => (
-                                        <div key={column}>
-                                            <input
-                                                className="mr-2"
-                                                type="checkbox"
-                                                checked={selectedTrainingColumns.includes(column)}
-                                                onChange={() => handleSelectTrainingColumn(column)}
-                                                disabled={column === selectedTargetColumn}
-                                            />
-                                            {column}
-                                        </div>
-                                    ))}
-                                </div>
-                                <div>
                                     <h4>Select Target Column</h4>
                                     {columns.map(column => (
                                         <div key={column}>
@@ -231,10 +223,28 @@ const upload = () => {
                                         </div>
                                     ))}
                                 </div>
+                                <div>
+                                    <h4>Select Columns to be Trained</h4>
+                                    {columns.map(column => (
+                                        <div key={column}>
+                                            <input
+                                                className="mr-2"
+                                                type="checkbox"
+                                                checked={
+                                                    selectedTargetColumn === null ||
+                                                    (selectedTargetColumn !== column && selectedTrainingColumns.includes(column))
+                                                }
+                                                onChange={() => handleSelectTrainingColumn(column)}
+                                                disabled={selectedTargetColumn === column}
+                                            />
+                                            {column}
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
                         </>
-
                     )}
+
 
                     <div className="flex justify-between items-center my-6">
                         <div className="mr-4 flex items-center gap-1">
