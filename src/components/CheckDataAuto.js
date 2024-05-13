@@ -145,6 +145,10 @@ const CategoricalDataButton = ({ onClick, children }) => {
 export default function CheckDataAuto({ workspace, setCheckedDataset, setIsChecked, onColumnDataChange }) {
   const router = useRouter();
   const { formData } = React.useContext(FormModalContext);
+  const { selectedTargetColumn } = router.query;
+  const { selectedTrainingColumns } = router.query;
+  console.log(selectedTargetColumn)
+  console.log(selectedTrainingColumns)
   const [missingData, setMissingData] = React.useState(null);
   const [duplicateData, setDuplicateData] = React.useState(null);
   const [categoricalData, setCategoricalData] = React.useState(null);
@@ -207,14 +211,14 @@ export default function CheckDataAuto({ workspace, setCheckedDataset, setIsCheck
           <p className="mb-4">
             Check data before cleaning to see information of missing data, duplicate data, and outliers
           </p>
-          {{checkedDataset} ? (
+          {{ checkedDataset } ? (
             <Button
               disabled={isChecking}
               onClick={() => {
                 setIsChecking(true);
                 const check = async () => {
                   const res = await fetch(
-                    `${process.env.NEXT_PUBLIC_BASE_URL}/api/checkingAuto?filename=${checkedDataset}&username=${username}&workspace=${workspace}&type=${type}`
+                    `${process.env.NEXT_PUBLIC_BASE_URL}/api/checkingAuto?filename=${checkedDataset}&username=${username}&workspace=${workspace}&type=${type}&selectedTargetColumn=${selectedTargetColumn}&selectedTrainingColumns=${selectedTrainingColumns}`
                   );
                   console.log(res)
                   const { missingData, duplicateData, categoricalData} = await res.json();

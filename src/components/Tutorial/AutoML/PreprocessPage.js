@@ -77,9 +77,12 @@ const getKeysValues = (dataset) => {
 const PreprocessPage = ({ onFormDataChange }) => {
   const router = useRouter();
   const [workspaceName, setWorkspaceName] = React.useState(null);
+  const { selectedTargetColumn } = router.query;
+  const { selectedTrainingColumns } = router.query;
   React.useEffect(() => {
     if (router.isReady && router.query !== null) {
       const { workspaceName } = router.query;
+      
       setWorkspaceName(workspaceName);
     }
   }, [router.isReady]);
@@ -269,6 +272,11 @@ const PreprocessPage = ({ onFormDataChange }) => {
                       // body.append("target_type_convert", formData?.targetTypeConvert ?? "");
                       // body.append("method_normalize", formData?.methodNormalize); 
                       body.append("type", type);
+                      body.append("selectedTargetColumn", selectedTargetColumn);
+                      body.append("selectedTrainingColumns", selectedTrainingColumns);
+
+                      
+                      
                       onFormDataChange(body);
                       console.log(body);
 
