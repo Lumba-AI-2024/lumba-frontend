@@ -40,9 +40,11 @@ export default function Recent({ title, data, workspaceName, workspacePage, type
             <tbody>
               {workspacePage === "datasets"
                 ? data?.map((dataset, index) => (
+                  console.log(dataset.name),
                     <Dataset
                       key={dataset.file}
                       file={dataset.file}
+                      name={dataset.name}
                       size={dataset.size}
                       createdOn={dataset.created_time}
                       modifiedOn={dataset.updated_time}
