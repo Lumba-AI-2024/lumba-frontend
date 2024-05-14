@@ -56,7 +56,7 @@ const upload = () => {
             alert("Please select a target column.");
             return;
         }
-        router.push(`/workspace/${workspaceName}/automl/newProject/preprocess?type=${type}&checkedDataset=${dataset}`);
+        router.push(`/workspace/${workspaceName}/automl/newProject/preprocess?type=${type}&checkedDataset=${dataset}&selectedTargetColumn=${selectedTargetColumn}&selectedTrainingColumns=${selectedTrainingColumns}`);
     };
 
     // Update dataset when formData changes
