@@ -82,7 +82,7 @@ const PreprocessPage = ({ onFormDataChange }) => {
   React.useEffect(() => {
     if (router.isReady && router.query !== null) {
       const { workspaceName } = router.query;
-      
+
       setWorkspaceName(workspaceName);
     }
   }, [router.isReady]);
@@ -132,8 +132,9 @@ const PreprocessPage = ({ onFormDataChange }) => {
   const [dataset, setDataset] = React.useState(null);
 
   const { keys, values } = getKeysValues(dataset);
-
-  const [columnsOrdinal, setColumnsOrdinal] = useState({});
+  
+  let columnsOrdinal = {};
+  // const [columnsOrdinal, setColumnsOrdinal] = useState({});
   console.log(checkedDataset, "dan", isCleaned)
 
   return (
@@ -143,8 +144,8 @@ const PreprocessPage = ({ onFormDataChange }) => {
         <Breadcrumb links={[
           { label: workspaceName },
           { label: "AutoML", href: "/workspace/" + workspaceName + "/automl" },
-          { label: "New Project", href: "/workspace/" + workspaceName + "/automl"+ "/newProject"+ "/upload" },
-          { label: "Preprocess", href: router.asPath}
+          { label: "New Project", href: "/workspace/" + workspaceName + "/automl" + "/newProject" + "/upload" },
+          { label: "Preprocess", href: router.asPath }
         ]} active={"Preprocess"} />
         <FormModalContextProvider>
           <div className="mt-6">
@@ -193,22 +194,24 @@ const PreprocessPage = ({ onFormDataChange }) => {
                       // columnsMissing = formData?.missing === "all" ? "" : columnsMissing;
 
 
-                      setColumnsOrdinal(typeof formData?.ordinal === "object"
-                        ?
-                        Object.keys(formData.ordinal)
-                          .filter(key => formData.ordinal[key].checked)  // Filter out only checked items
-                          .reduce((acc, key) => {
-                            // Split the rank string by commas and create an object where each item is keyed by its name with its rank as the value
-                            const rankValues = formData.ordinal[key].rank.split(',').reduce((rankAcc, value, index) => {
-                              rankAcc[value] = index + 1;
-                              return rankAcc;
-                            }, {});
+                      columnsOrdinal =
+                        typeof formData?.ordinal === "object"
+                          ?
+                          Object.keys(formData.ordinal)
+                            .filter(key => formData.ordinal[key].checked)  // Filter out only checked items
+                            .reduce((acc, key) => {
+                              // Split the rank string by commas and create an object where each item is keyed by its name with its rank as the value
+                              const rankValues = formData.ordinal[key].rank.split(',').reduce((rankAcc, value, index) => {
+                                rankAcc[value] = index + 1;
+                                return rankAcc;
+                              }, {});
 
-                            acc[key] = rankValues;  // Assign the created object to the respective key
-                            return acc;
-                          }, {}) : {})
+                              acc[key] = rankValues;  // Assign the created object to the respective key
+                              return acc;
+                            }, {}) : {};
 
-                      console.log(columnsOrdinal);
+                console.log(columnsOrdinal);
+                console.log(formData?.ordinal);
                       // let columnsDuplication =
                       //   typeof formData?.duplication === "object"
                       //     ? Object.keys(formData.duplication)
@@ -253,51 +256,52 @@ const PreprocessPage = ({ onFormDataChange }) => {
                       //   columnsOversampling: formData?.columnsOversampling,
                       // };
                       const body = new FormData();
-                      body.append("username", username);
-                      body.append("workspace", workspaceName);
-                      body.append("filename", checkedDataset);
-                      // body.append("missing", missing);
-                      // body.append("duplication", duplication);
-                      // body.append("outlier", outlier);
-                      // body.append("normalize", normalize);
-                      // body.append("convert", convert);
-                      // body.append("oversampling", oversampling);
-                      body.append("ordinal", ordinal)
-                      body.append("dict_ordinal_encoding", JSON.stringify(columnsOrdinal) ?? "")
-                      // body.append("columns_missing", columnsMissing ?? "");
-                      // body.append("columns_duplication", columnsDuplication ?? "");
-                      // body.append("columns_convert", columnsConvert ?? "");
-                      // body.append("columns_normalize", columnsNormalize ?? "");
-                      // body.append("columns_oversampling", formData?.columnsOversampling ?? "");
-                      // body.append("target_type_convert", formData?.targetTypeConvert ?? "");
-                      // body.append("method_normalize", formData?.methodNormalize); 
-                      body.append("type", type);
-                      body.append("selectedTargetColumn", selectedTargetColumn);
-                      body.append("selectedTrainingColumns", selectedTrainingColumns);
+                body.append("username", username);
+                body.append("workspace", workspaceName);
+                body.append("filename", checkedDataset);
+                // body.append("missing", missing);
+                // body.append("duplication", duplication);
+                // body.append("outlier", outlier);
+                // body.append("normalize", normalize);
+                // body.append("convert", convert);
+                // body.append("oversampling", oversampling);
+                body.append("ordinal", ordinal)
+                body.append("dict_ordinal_encoding", JSON.stringify(columnsOrdinal) ?? "")
+                // body.append("columns_missing", columnsMissing ?? "");
+                // body.append("columns_duplication", columnsDuplication ?? "");
+                // body.append("columns_convert", columnsConvert ?? "");
+                // body.append("columns_normalize", columnsNormalize ?? "");
+                // body.append("columns_oversampling", formData?.columnsOversampling ?? "");
+                // body.append("target_type_convert", formData?.targetTypeConvert ?? "");
+                // body.append("method_normalize", formData?.methodNormalize); 
+                body.append("type", type);
+                body.append("selectedTargetColumn", selectedTargetColumn);
+                body.append("selectedTrainingColumns", selectedTrainingColumns);
 
-                      
-                      
-                      onFormDataChange(body);
-                      console.log(body);
+
+
+                onFormDataChange(body);
+                console.log("body", body.get("dict_ordinal_encoding"));
+                console.log(columnsOrdinal)
 
                       setTimeout(() =>
-                        axios
-                          .post(`${process.env.NEXT_PUBLIC_API_ROUTE}/preprocess/clean/`, body)
+                axios
+                .post(`${process.env.NEXT_PUBLIC_API_ROUTE}/preprocess/clean/`, body)
                           .then((res) => {
-                            setDataset(res.data);
-                            setIsCleaned(true);
+                  setDataset(res.data);
+                setIsCleaned(true);
                           })
                           .catch((err) => console.log(err))
                           .finally(() => setIsSubmitting(false))
-                      );
-                      console.log(body);
+                );
+                console.log(body);
                     };
 
-                    submit();
-                    
+                submit();
+
                   }}
                 >
-                  {/* <AccordionSelect names={["missing", "missingMode"]} label="Clean Missing Data" top={true}>
+                {/* <AccordionSelect names={["missing", "missingMode"]} label="Clean Missing Data" top={true}>
                     <p className="pb-1">Columns to be cleaned</p>
                     <Select
                       placeholder="Select column(s)"
@@ -331,28 +335,28 @@ const PreprocessPage = ({ onFormDataChange }) => {
 											]}
 										/> 
                     </AccordionSelect> */}
-                  <AccordionSelect names={["ordinal"]} label="Ordinal Columns">
-                    <p className="pb-1">Columns to be ranked</p>
-                    <Select
-                      placeholder="Select column(s)"
-                      name="ordinal"
-                      defaultSelected={""}
-                      items={[
-                        {
-                          value: "custom",
-                          label: {
-                            formLabel: "Select Columns",
-                            buttonLabel: "Select Columns",
-                            totalColumns: Object.keys(categoricalColumn).length,
-                            CustomButton: CustomButton,
-                            name: "ordinal",
-                            values: Object.keys(categoricalColumn),
-                          },
+                <AccordionSelect names={["ordinal"]} label="Ordinal Columns">
+                  <p className="pb-1">Columns to be ranked</p>
+                  <Select
+                    placeholder="Select column(s)"
+                    name="ordinal"
+                    defaultSelected={""}
+                    items={[
+                      {
+                        value: "custom",
+                        label: {
+                          formLabel: "Select Columns",
+                          buttonLabel: "Select Columns",
+                          totalColumns: Object.keys(categoricalColumn).length,
+                          CustomButton: CustomButton,
+                          name: "ordinal",
+                          values: Object.keys(categoricalColumn),
                         },
-                      ]}
-                    />
-                  </AccordionSelect>
-                  {/* <AccordionSelect names={["duplication"]} label="Ordinal Columns">
+                      },
+                    ]}
+                  />
+                </AccordionSelect>
+                {/* <AccordionSelect names={["duplication"]} label="Ordinal Columns">
                     <p className="pb-1">Columns to be cleaned</p>
                     <Select
                       placeholder="Select column(s)"
@@ -427,7 +431,7 @@ const PreprocessPage = ({ onFormDataChange }) => {
                       ]}
                     />
                   </AccordionSelect>*/}
-                  {/* <AccordionSelect names={["convertion"]} label="Convert Data Type">
+                {/* <AccordionSelect names={["convertion"]} label="Convert Data Type">
                     <p className="pb-1">Columns to be converted</p>
                     <MultiSelect
                       variant="withBorder"
@@ -462,78 +466,79 @@ const PreprocessPage = ({ onFormDataChange }) => {
                     />
                   </AccordionSelect> */}
 
-                </AccordionForm>
-              </motion.div>
-              {/* )} */}
-              {/* </AnimatePresence> */}
+              </AccordionForm>
+            </motion.div>
+            {/* )} */}
+            {/* </AnimatePresence> */}
 
-              {Object.keys(columnsOrdinal).length > 0 && (
-                <div className="mt-4 ml-4">
-                  <h3>Ordinal Data Rankings</h3>
-                  {Object.entries(columnsOrdinal).map(([key, values]) => (
-                    <div key={key}>
-                      <h4>{key}</h4>
-                      <ul>
-                        {Object.entries(values).map(([item, rank]) => (
-                          <li key={item}>{rank}. {item}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  ))}
-                </div>
-              )}
-
-              <div className="rounded-r-md shadow bg-white flex-1 min-h-[480px] overflow-auto">
-                <div className="h-full flex flex-col w-full">
-                  <div className="border-b-[1.5px] border-gray/30 py-3 px-4 flex gap-2 items-center">
-                    <button onClick={() => setIsOpen((prev) => !prev)} className={`${!isOpen && "rotate-180"}`}>
-                      <ChevronDoubleLeft />
-                    </button>
-                    <h3>Data Clean Result</h3>
+            {Object.keys(columnsOrdinal).length > 0 && (
+              <div className="mt-4 ml-4">
+                <h3>Ordinal Data Rankings</h3>
+                {Object.entries(columnsOrdinal).map(([key, values]) => (
+                  <div key={key}>
+                    <h4>{key}</h4>
+                    <ul>
+                      {Object.entries(values).map(([item, rank]) => (
+                        <li key={item}>{rank}. {item}</li>
+                      ))}
+                    </ul>
                   </div>
-                  {isCleaned ? (
-                    <>
-                      <div className="w-full h-full flex flex-col">
-                        <div className="flex-1 px-4">
-                          <div className="flex gap-48 mt-4">
-                            <span className="text-xs">
-                              Number of columns: <span className="font-bold text-sm">{columns.length}</span>
-                            </span>
-                            <span className="text-xs">
-                              Number of rows: <span className="font-bold text-sm">10</span>
-                            </span>
-                          </div>
-                          <div className="py-2 w-full overflow-auto">
-                            <Table>
-                              <TableHead cols={keys} />
-                              <TableBody data={values} cols={keys} />
-                            </Table>
-                          </div>
+                ))}
+              </div>
+
+            )}{console.log("disini 486", columnsOrdinal)}
+
+            <div className="rounded-r-md shadow bg-white flex-1 min-h-[480px] overflow-auto">
+              <div className="h-full flex flex-col w-full">
+                <div className="border-b-[1.5px] border-gray/30 py-3 px-4 flex gap-2 items-center">
+                  <button onClick={() => setIsOpen((prev) => !prev)} className={`${!isOpen && "rotate-180"}`}>
+                    <ChevronDoubleLeft />
+                  </button>
+                  <h3>Data Clean Result</h3>
+                </div>
+                {isCleaned ? (
+                  <>
+                    <div className="w-full h-full flex flex-col">
+                      <div className="flex-1 px-4">
+                        <div className="flex gap-48 mt-4">
+                          <span className="text-xs">
+                            Number of columns: <span className="font-bold text-sm">{columns.length}</span>
+                          </span>
+                          <span className="text-xs">
+                            Number of rows: <span className="font-bold text-sm">10</span>
+                          </span>
                         </div>
-                        <div className="text-end mb-2 mr-2 mt-3 pt-4 border-t-[1.5px] border-gray/30">
-                          <div className="px-4">
-                            <Button
-                              onClick={() => {
-                                router.push("/workspace/" + workspaceName + "/datasets?type=" + type);
-                              }}
-                            >
-                              Save Data
-                            </Button>
-                          </div>
+                        <div className="py-2 w-full overflow-auto">
+                          <Table>
+                            <TableHead cols={keys} />
+                            <TableBody data={values} cols={keys} />
+                          </Table>
                         </div>
                       </div>
-                    </>
-                  ) : (
-                    <div className="flex items-center justify-center flex-1">
-                      <span>No Output</span>
+                      <div className="text-end mb-2 mr-2 mt-3 pt-4 border-t-[1.5px] border-gray/30">
+                        <div className="px-4">
+                          <Button
+                            onClick={() => {
+                              router.push("/workspace/" + workspaceName + "/datasets?type=" + type);
+                            }}
+                          >
+                            Save Data
+                          </Button>
+                        </div>
+                      </div>
                     </div>
-                  )}
-                </div>
-              </div> 
+                  </>
+                ) : (
+                  <div className="flex items-center justify-center flex-1">
+                    <span>No Output</span>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
-        </FormModalContextProvider>
       </div>
+    </FormModalContextProvider >
+      </div >
     </>
   );
 };
