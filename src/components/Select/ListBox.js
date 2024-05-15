@@ -8,6 +8,8 @@ export default function ListBox({ name, onChange, items, placeholder, variant, i
 
   const label = items?.filter((item) => item.value === formData[name])[0]?.label || null;
 
+  console.log("label", label)
+
   const isObject = typeof formData[name] === "object";
   const [isOpen, setIsOpen] = useState(false);
 

@@ -70,42 +70,6 @@ export default function SelectColumnsModal({
               <h4 className="font-medium relative z-50 mb-2">Choose Columns (exc. rank1,rank2,rank3)</h4>
             </div>
             <div className="h-full max-h-[calc(100vh-25rem)] overflow-y-auto">
-              {/* {values.map((value) => (
-                <div key={value} className="flex items-center gap-2 mb-4">
-                  <div className="relative">
-                    <input
-                      type="checkbox"
-                      className="absolute peer inset-0 w-full h-full opacity-0"
-                      id={value}
-                      name={value}
-                      checked={checkedData[value] ? true : false}
-                      onChange={() =>
-                        setCheckedData((checkedData) => {
-                          return {
-                            ...checkedData,
-                            [value]: checkedData[value] ? false : true,
-                          };
-                        })
-                      }
-                    />
-                    <div className="w-4 h-4 peer-checked:bg-gradient-to-r from-lightblue to-blue rounded-sm border-lightblue border-[1.5px] ring-offset-0 flex items-center justify-center">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="12"
-                        height="12"
-                        fill="currentColor"
-                        className="bi bi-check2"
-                        viewBox="0 0 16 16"
-                        stroke="white"
-                        strokeWidth="1.5"
-                      >
-                        <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z" />
-                      </svg>
-                    </div>
-                  </div>
-                  <label htmlFor={value}>{value}</label>
-                </div>
-              ))} */}
               {values.map((value) => (
               <div key={value} className="flex items-center justify-between gap-4 mb-3">
                 <div className="flex items-center gap-2">
@@ -160,10 +124,18 @@ export default function SelectColumnsModal({
                     !checkedData[key].checked || (checkedData[key].checked && checkedData[key].rank.trim() !== '')
                   );
               
+                  const anyChecked = Object.keys(checkedData).some(key => checkedData[key].checked);
+              
+                  if (!anyChecked) {
+                    alert("Please select at least one column.");
+                    return;
+                  }
+              
                   if (!allRanksFilled) {
                     alert("Please enter ranks for all checked items.");
                     return;
                   }
+              
               
                   setIsOpen(false);
                   setFormData(prevData => ({
