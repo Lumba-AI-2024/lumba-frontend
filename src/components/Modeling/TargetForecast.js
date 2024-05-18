@@ -22,7 +22,7 @@ export default function TargetForecast({ username, workspace }) {
 
           const fetchDataset = async () => {
             const res = await fetch(
-              `${process.env.NEXT_PUBLIC_API_ROUTE}/modeling/columns/?filename=${dataset}&username=${username}&workspace=${workspace}&method=REGRESSION`
+              `${process.env.NEXT_PUBLIC_API_ROUTE}/modeling/columns/?datasetname=${dataset}&username=${username}&workspace=${workspace}&method=REGRESSION`
             );
             const { columns } = await res.json();
             const keys = columns;

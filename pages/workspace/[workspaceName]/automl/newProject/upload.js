@@ -74,7 +74,7 @@ const upload = () => {
     }, [dataset, workspaceName, username, type]);
 
     const fetchDataset = async () => {
-        const DATASET = `${process.env.NEXT_PUBLIC_API_ROUTE}/file/?filename=${dataset}&workspace=${workspaceName}&username=${username}&page=1&rowsperpage=15&type=${type}`;
+        const DATASET = `${process.env.NEXT_PUBLIC_API_ROUTE}/file/?datasetname=${dataset}&workspace=${workspaceName}&username=${username}&page=1&rowsperpage=15&type=${type}`;
 
         const { data } = await axios.get(DATASET, {
             headers: {

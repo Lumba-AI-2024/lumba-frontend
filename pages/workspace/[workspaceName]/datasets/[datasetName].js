@@ -222,7 +222,7 @@ export async function getServerSideProps({ query, req, params, resolvedUrl }) {
 
   const type = query.type;
 
-  const DATASET = `${process.env.NEXT_PUBLIC_API_ROUTE}/file/?filename=${datasetName}&workspace=${workspace}&username=${username}&page=1&rowsperpage=15&type=${type}`;
+  const DATASET = `${process.env.NEXT_PUBLIC_API_ROUTE}/file/?datasetname=${datasetName}&workspace=${workspace}&username=${username}&page=1&rowsperpage=15&type=${type}`;
 
   const { data } = await axios.get(DATASET, {
     headers: {

@@ -75,9 +75,9 @@ const useDatasets = (workspace, username, type) => {
         throw new Error("Dataset name already exist");
       }
 
-      const UPDATE_DATASET = `${API_ROUTE}/file/?oldfilename=${oldName}&username=${username}&workspace=${workspace}&type=${type}`;
+      const UPDATE_DATASET = `${API_ROUTE}/file/?olddatasetname=${oldName}&username=${username}&workspace=${workspace}&type=${type}`;
       const formData = new FormData();
-      formData.append("newfilename", newName);
+      formData.append("newdatasetname", newName);
       const response = await axios.put(UPDATE_DATASET, formData, {
         headers: {
           Authorization: `Token ${getCookie("token")}`,
@@ -108,7 +108,7 @@ const useDatasets = (workspace, username, type) => {
       });
 
       const filteredDatasets = datasets.filter((ds) => {
-        return ds.file !== dataset.get("filename");
+        return ds.file !== dataset.get("datasetname");
       });
 
       await mutate(() => [...filteredDatasets]);

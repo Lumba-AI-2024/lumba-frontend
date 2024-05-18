@@ -9,7 +9,7 @@ export default function handler(req, res) {
         const { token } = req.cookies;
         const checkDataset = async () => {
           const response1 = await fetch(
-            `${API_ROUTE}/preprocess/null/?username=${req.query.username}&workspace=${req.query.workspace}&filename=${req.query.filename}&type=${req.query.type}`,
+            `${API_ROUTE}/preprocess/null/?username=${req.query.username}&workspace=${req.query.workspace}&datasetname=${req.query.filename}&type=${req.query.type}`,
             {
               headers: {
                 Authorization: `Token ${token}`,
@@ -19,7 +19,7 @@ export default function handler(req, res) {
           const missingData = await response1.json();
 
           const response2 = await fetch(
-            `${API_ROUTE}/preprocess/duplication/?username=${req.query.username}&workspace=${req.query.workspace}&filename=${req.query.filename}&type=${req.query.type}`,
+            `${API_ROUTE}/preprocess/duplication/?username=${req.query.username}&workspace=${req.query.workspace}&datasetname=${req.query.filename}&type=${req.query.type}`,
             {
               headers: {
                 Authorization: `Token ${token}`,
@@ -29,7 +29,7 @@ export default function handler(req, res) {
           const duplicateData = await response2.json();
 
           const response3 = await fetch(
-            `${API_ROUTE}/preprocess/outlier/?username=${req.query.username}&workspace=${req.query.workspace}&filename=${req.query.filename}&type=${req.query.type}`,
+            `${API_ROUTE}/preprocess/outlier/?username=${req.query.username}&workspace=${req.query.workspace}&datasetname=${req.query.filename}&type=${req.query.type}`,
             {
               headers: {
                 Authorization: `Token ${token}`,
@@ -39,7 +39,7 @@ export default function handler(req, res) {
           const outlierData = await response3.json();
 
           const response4 = await fetch(
-            `${API_ROUTE}/preprocess/boxplot/?username=${req.query.username}&workspace=${req.query.workspace}&filename=${req.query.filename}&type=${req.query.type}`,
+            `${API_ROUTE}/preprocess/boxplot/?username=${req.query.username}&workspace=${req.query.workspace}&datasetname=${req.query.filename}&type=${req.query.type}`,
             {
               headers: {
                 Authorization: `Token ${token}`,

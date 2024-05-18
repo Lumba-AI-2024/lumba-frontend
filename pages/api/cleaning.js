@@ -32,7 +32,7 @@ export default async function handler(req, res) {
         const formData = new FormData();
         formData.append("username", username);
         formData.append("workspace", workspace);
-        formData.append("filename", filename);
+        formData.append("datasetname", filename);
         formData.append("missing", missing);
         formData.append("duplication", duplication);
         formData.append("outlier", outlier);

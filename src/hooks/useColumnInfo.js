@@ -18,7 +18,7 @@ const clientFetch = async (url) => {
 
 export const useBarChart = (filename, workspace, username) => {
   const BAR_CHART_URL =
-    API_ROUTE + `/profiling/barchart/?filename=${filename}&username=${username}&workspace=${workspace}`;
+    API_ROUTE + `/profiling/barchart/?datasetname=${filename}&username=${username}&workspace=${workspace}`;
   const { data: barChartData, error } = useFetch(BAR_CHART_URL, clientFetch);
 
   return { barChartData, error };
@@ -26,7 +26,7 @@ export const useBarChart = (filename, workspace, username) => {
 
 export const useDescribe = (filename, workspace, username) => {
   const DESCRIBE_URL =
-    API_ROUTE + `/profiling/describe/?filename=${filename}&username=${username}&workspace=${workspace}`;
+    API_ROUTE + `/profiling/describe/?datasetname=${filename}&username=${username}&workspace=${workspace}`;
   const { data: describeData, error } = useFetch(DESCRIBE_URL, clientFetch);
 
   return { describeData, error };
@@ -34,7 +34,7 @@ export const useDescribe = (filename, workspace, username) => {
 
 export const useColumnInfo = (filename, workspace, username, type) => {
   const DESCRIBE_URL =
-    API_ROUTE + `/profiling/columninfo/?filename=${filename}&username=${username}&workspace=${workspace}&type=${type}`;
+    API_ROUTE + `/profiling/columninfo/?datasetname=${filename}&username=${username}&workspace=${workspace}&type=${type}`;
   const { data: columnInfo, error } = useFetch(DESCRIBE_URL, clientFetch);
 
   return { columnInfo, error };

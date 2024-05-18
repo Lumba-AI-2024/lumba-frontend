@@ -111,7 +111,7 @@ const PreprocessPage = ({ onFormDataChange }) => {
   React.useEffect(() => {
     if (checkedDataset && type) {
       const fetchDataset = async () => {
-        const DATASET = `${process.env.NEXT_PUBLIC_API_ROUTE}/file/?filename=${checkedDataset}&workspace=${workspaceName}&username=${username}&page=1&rowsperpage=15&type=${type}`;
+        const DATASET = `${process.env.NEXT_PUBLIC_API_ROUTE}/file/?datasetname=${checkedDataset}&workspace=${workspaceName}&username=${username}&page=1&rowsperpage=15&type=${type}`;
 
         const { data } = await axios.get(DATASET, {
           headers: {
@@ -258,7 +258,7 @@ const PreprocessPage = ({ onFormDataChange }) => {
                       const body = new FormData();
                 body.append("username", username);
                 body.append("workspace", workspaceName);
-                body.append("filename", checkedDataset);
+                body.append("datasetname", checkedDataset);
                 // body.append("missing", missing);
                 // body.append("duplication", duplication);
                 // body.append("outlier", outlier);
