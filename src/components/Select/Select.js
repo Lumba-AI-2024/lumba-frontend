@@ -49,6 +49,8 @@ export default function Select({
     setOptions(items);
   }, [items]);
 
+  console.log("options", options)
+
   return (
     <ListBox
       variant={variant}
