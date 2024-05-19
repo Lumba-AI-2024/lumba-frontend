@@ -44,6 +44,7 @@ const upload = () => {
     const [selectedTrainingColumns, setSelectedTrainingColumns] = useState(columns);
     const [selectedTargetColumn, setSelectedTargetColumn] = useState('');
     const [selectedMethod, setSelectedMethod] = useState('');
+    const [autoMLName, setAutoMLName] = useState('');
 
     const back = () => {
         router.push(`/workspace/${workspaceName}/automl?type=${type}`);
@@ -62,6 +63,7 @@ const upload = () => {
         autoML.append("username", username);
         autoML.append("workspace", workspaceName);
         autoML.append("datasetname", dataset);
+        autoML.append("automlname", autoMLName);
         autoML.append("method", selectedMethod);
         autoML.append("feature", selectedTrainingColumns);
         autoML.append("target", selectedTargetColumn);
@@ -147,7 +149,7 @@ const upload = () => {
                         <HiddenInput name="username" defaultValue={username} />
 
                         <div className="form-field">
-                            <Input label={"Name"} name={"name"} placeholder="AutoML job name" required />
+                            <Input label={"Name"} name={"name"} placeholder="AutoML job name" onChange={(e) => {setAutoMLName(e.target.value)}} required />
                         </div>
 
                         <div className="form-field">
@@ -170,6 +172,7 @@ const upload = () => {
                                     { label: "Regression", value: "regression" },
                                     { label: "Clustering", value: "clustering" },
                                 ]}
+                                onChange={(e) => {setSelectedMethod(e.target.value)}}
                             />
                         </div>
                         <h4 className="mt-4">Please choose one either to upload or select dataset</h4>
@@ -215,7 +218,7 @@ const upload = () => {
                                     placeholder="Select dataset..."
                                     name="dataset"
                                     items={datasets?.map((dataset) => ({ value: dataset.name, label: dataset.name })) || []}
-                                    onChange={(e) => {setSelectedMethod(e.target.value)}}
+                                    
                                 />
                             </div>
                         </div>
