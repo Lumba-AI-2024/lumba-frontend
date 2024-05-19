@@ -6,8 +6,8 @@ import { DetailsModalContext } from "../context/DetailsModalContext";
 
 const API_ROUTE = process.env.NEXT_PUBLIC_API_ROUTE;
 
-const ADD_AUTOML = API_ROUTE + "/file/";
-const DELETE_AUTOML = API_ROUTE + "/file/";
+const ADD_AUTOML = API_ROUTE + "/automl/";
+const DELETE_AUTOML = API_ROUTE + "/automl/";
 
 export const getAllAutoML = async (url, token) => {
     try {
@@ -27,9 +27,8 @@ export const getAllAutoML = async (url, token) => {
     }
 };
 
-const useAutoML = (workspace, username, method) => {
-    const method = method;
-    const AUTOML_URL = API_ROUTE + `/file/automl/?workspace=${workspace}&username=${username}`;
+const useAutoML = (workspace, username) => {
+    const AUTOML_URL = API_ROUTE + `/automl/list/?workspace=${workspace}&username=${username}`;
     const { setIsLoading, setVariant, setCustomMessage } = React.useContext(DetailsModalContext);
     const {
         data: autoMLs,
@@ -113,7 +112,7 @@ const useAutoML = (workspace, username, method) => {
         }
     };
 
-    return { autoMLs, error, method, updateAutoML, addAutoML, deleteAutoML };
+    return { autoMLs, error, updateAutoML, addAutoML, deleteAutoML };
 };
 
 export default useAutoML;

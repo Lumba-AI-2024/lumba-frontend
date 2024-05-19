@@ -12,7 +12,8 @@ import { generateTime } from "../helper/generateTime";
 import useDatasets from "../hooks/useDatasets";
 import useCookie from "../hooks/useCookie";
 import { useSearchParams } from "next/navigation";
-import { useAutoML } from "../hooks/useAutoML";
+import  useAutoML  from "../hooks/useAutoML";
+
 
 export default function AutoML({
   automlname,
@@ -35,7 +36,7 @@ export default function AutoML({
 
   const username = useCookie("username");
   const { updateDataset, deleteDataset } = useDatasets(workspaceName, username, type);
-  const { updataAutoML, deleteAutoML } = useAutoML(workspaceName, username, type);
+  const { updateAutoML, deleteAutoML } = useAutoML(workspaceName, username);
 
   const [realPath, params] = asPath.split("?");
   const isHome = !realPath.split("/").includes("datasets");
@@ -55,11 +56,11 @@ export default function AutoML({
             {automlname}
           </div>
         </td>
-        <td className={`h-14 relative z-10 bg-white px-4 ${isLoading && "text-gray/50"}`}>{size} MB</td>
+        {/* <td className={`h-14 relative z-10 bg-white px-4 ${isLoading && "text-gray/50"}`}>{size} MB</td> */}
         <td className="h-14 relative z-10 bg-white">{isLoading ? "Uploading..." : generateTime(createdOn)}</td>
         <td className="h-14 relative z-10 bg-white">{isLoading ? "-" : generateTime(modifiedOn)}</td>
         <td className="h-14 relative z-10 bg-white">{method}</td>
-        <td className="h-14 relative z-10 bg-white">{feature}</td>
+        {/* <td className="h-14 relative z-10 bg-white">{feature}</td> */}
         <td className="h-14 relative z-10 bg-white">{target}</td>
         {!noActions && (
           <td className="py-2 rounded-r-md pr-8 h-14 relative bg-white w-[160px]">
@@ -75,8 +76,8 @@ export default function AutoML({
                       formLabel="Edit AutoML"
                       CustomButton={Pencil}
                       submitLabel="Save Changes"
-                      handleSubmit={(formData) => {
-                        updateDataset(dataset, formData.filename, type);
+                      handleSubmit={(autoML) => {
+                        updateAutoML(autoML, formData.filename, type);
                       }}
                     >
                       <Input label={"Name"} name={"filename"} placeholder="New dataset name" required />
@@ -97,7 +98,7 @@ export default function AutoML({
                         autoML.append("datasetname", datasetname);
                         autoML.append("workspace", workspaceName);
 
-                        await deleteDataset(dataset);
+                        await deleteAutoML(autoML);
                       }}
                     >
                       <p>Are you sure you want to delete this dataset?</p>

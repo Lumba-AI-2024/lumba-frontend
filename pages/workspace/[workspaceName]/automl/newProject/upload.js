@@ -19,6 +19,7 @@ import * as React from "react";
 import { FormModalContext } from "../../../../../src/context/FormModalContext";
 import axios from "axios";
 import { getCookie } from "../../../../../src/helper/cookies";
+import useAutoML from "../../../../../src/hooks/useAutoML";
 
 
 
@@ -46,6 +47,7 @@ const upload = () => {
     const [selectedMethod, setSelectedMethod] = useState('');
     const [autoMLName, setAutoMLName] = useState('');
 
+
     const back = () => {
         router.push(`/workspace/${workspaceName}/automl?type=${type}`);
     };
@@ -64,9 +66,11 @@ const upload = () => {
         autoML.append("workspace", workspaceName);
         autoML.append("datasetname", dataset);
         autoML.append("automlname", autoMLName);
-        autoML.append("method", selectedMethod);
+        autoML.append("method", formData?.autoMlType);
         autoML.append("feature", selectedTrainingColumns);
         autoML.append("target", selectedTargetColumn);
+        autoML.append("automlname",formData?.name)
+        console.log(autoML)
         try {
             await addAutoML(autoML);
             setIsUploading(false);
@@ -149,10 +153,15 @@ const upload = () => {
                         <HiddenInput name="username" defaultValue={username} />
 
                         <div className="form-field">
-                            <Input label={"Name"} name={"name"} placeholder="AutoML job name" onChange={(e) => {setAutoMLName(e.target.value)}} required />
+                            <Input 
+                                label={"Name"} 
+                                name={"name"} 
+                                placeholder="AutoML job name" 
+                                // onChange={(e) => setAutoMLName(e.target.value)}
+                                required />
                         </div>
 
-                        <div className="form-field">
+                        {/* <div className="form-field">
                             <Input
                                 label={"Description"}
                                 name={"description"}
@@ -160,7 +169,7 @@ const upload = () => {
                                 textarea={true}
                                 required
                             />
-                        </div>
+                        </div> */}
 
                         <div className="form-field">
                             <p className="form-label">Will Be Used For</p>

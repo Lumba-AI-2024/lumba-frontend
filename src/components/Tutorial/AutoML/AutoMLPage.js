@@ -81,11 +81,13 @@ export default function AutoMLPage() {
         <table className="mt-4">
           <thead>
             <tr>
-              <th>File Name</th>
-              <th className="px-4">Size</th>
+              <th>AutoML Name</th>
               <th>Created on</th>
               <th>Modified on</th>
-              <th className="text-center">Actions</th>
+              {/* <th className="text-center">Train Feature</th> */}
+              <th>Method</th>
+              <th>Target</th>
+              <th>Actions</th>
             </tr>
             <tr className="border-b border-gray/50">
               <td colSpan="100%" className="pt-4"></td>
