@@ -35,6 +35,7 @@ const upload = () => {
     const username = useCookie("username");
 
     const { datasets, addDataset } = useDatasets(workspaceName, username, type);
+    const { autoMLs, addAutoML } = useAutoML(workspaceName, username, type);
     const [isUploading, setIsUploading] = useState(false);
 
     const [isChecked, setIsChecked] = useState(false);
@@ -42,12 +43,13 @@ const upload = () => {
     const [columns, setColumns] = useState([]);
     const [selectedTrainingColumns, setSelectedTrainingColumns] = useState(columns);
     const [selectedTargetColumn, setSelectedTargetColumn] = useState('');
+    const [selectedMethod, setSelectedMethod] = useState('');
 
     const back = () => {
         router.push(`/workspace/${workspaceName}/automl?type=${type}`);
     };
 
-    const next = () => {
+    const next = async () => {
         if (!dataset) {
             alert("Please select a dataset.");
             return;
@@ -55,6 +57,22 @@ const upload = () => {
         else if (!selectedTargetColumn) {
             alert("Please select a target column.");
             return;
+        }
+        const autoML = new FormData();
+        autoML.append("username", username);
+        autoML.append("workspace", workspaceName);
+        autoML.append("datasetname", dataset);
+        autoML.append("method", selectedMethod);
+        autoML.append("feature", selectedTrainingColumns);
+        autoML.append("target", selectedTargetColumn);
+        try {
+            await addAutoML(autoML);
+            setIsUploading(false);
+            setIsChecked(true);
+            // router.push(`/workspace/${workspaceName}/automl/newProject/preprocess?type=${type}`);
+        } catch (error) {
+            console.error('Upload failed:', error);
+            setIsUploading(false);
         }
         router.push(`/workspace/${workspaceName}/automl/newProject/preprocess?type=${type}&checkedDataset=${dataset}&selectedTargetColumn=${selectedTargetColumn}&selectedTrainingColumns=${selectedTrainingColumns}`);
     };
@@ -197,6 +215,7 @@ const upload = () => {
                                     placeholder="Select dataset..."
                                     name="dataset"
                                     items={datasets?.map((dataset) => ({ value: dataset.name, label: dataset.name })) || []}
+                                    onChange={(e) => {setSelectedMethod(e.target.value)}}
                                 />
                             </div>
                         </div>
@@ -206,7 +225,7 @@ const upload = () => {
                         <>
                             <h2 className="mt-4 mb-2">Select Columns for AutoML Job</h2>
                             <div className="grid grid-cols-2 gap-4">
-                                <div>
+                                {type != "clustering" && (<div>
                                     <h4>Select Target Column</h4>
                                     {columns.map(column => (
                                         <div key={column}>
@@ -222,7 +241,7 @@ const upload = () => {
                                             {column}
                                         </div>
                                     ))}
-                                </div>
+                                </div>)}
                                 <div>
                                     <h4>Select Columns to be Trained</h4>
                                     {columns.map(column => (
