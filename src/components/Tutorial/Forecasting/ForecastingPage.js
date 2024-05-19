@@ -107,7 +107,7 @@ export default function ForecastingPage({ datasets }) {
                   }
                   const model = {
                     modelname: formData?.modelName,
-                    filename: formData?.dataset,
+                    datasetname: formData?.dataset,
                     username: username,
                     workspace: workspaceName,
                     // method: "CLASSIFICATION",
@@ -228,7 +228,7 @@ export default function ForecastingPage({ datasets }) {
 
                   const model = {
                     modelname: formData?.modelName,
-                    filename: formData?.dataset,
+                    datasetname: formData?.dataset,
                     username: username,
                     workspace: workspaceName,
                     algorithm: formData?.algorithm,

@@ -208,7 +208,7 @@ const CleaningPage = () => {
                       const body = new FormData();
                       body.append("username", username);
                       body.append("workspace", workspaceName);
-                      body.append("filename", formData?.dataset);
+                      body.append("datasetname", formData?.dataset);
                       body.append("missing", missing);
                       body.append("duplication", duplication);
                       body.append("outlier", outlier);

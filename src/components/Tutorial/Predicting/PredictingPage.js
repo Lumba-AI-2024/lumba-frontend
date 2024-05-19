@@ -107,7 +107,7 @@ export default function PredictingPage({ datasets }) {
                   }
                   const model = {
                     modelname: formData?.modelName,
-                    filename: formData?.dataset,
+                    datasetname: formData?.dataset,
                     username: username,
                     workspace: workspaceName,
                     // method: "CLASSIFICATION",

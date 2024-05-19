@@ -93,13 +93,13 @@ const Dataset = ({ fetchedDataset }) => {
                   submitLabel="Save Changes"
                   handleSubmit={(formData) => {
                     const newFormData = new FormData();
-                    newFormData.append("newfilename", formData.filename);
-                    updateDataset(details.file, formData.filename).then(() =>
+                    newFormData.append("newfilename", formData.datasetname);
+                    updateDataset(details.file, formData.datasetname).then(() =>
                       router.replace(`/workspace/${workspaceName}/datasets`)
                     );
                   }}
                 >
-                  <Input label={"Name"} name={"filename"} placeholder="Workspace name" required />
+                  <Input label={"Name"} name={"datasetname"} placeholder="Workspace name" required />
                 </FormModal>
               </FormModalContextProvider>
               <FormModalContextProvider>
@@ -112,7 +112,7 @@ const Dataset = ({ fetchedDataset }) => {
                   submitLabel="Delete"
                   handleSubmit={(formData) => {
                     const newFormData = new FormData();
-                    newFormData.append("filename", datasetName);
+                    newFormData.append("datasetname", datasetName);
                     newFormData.append("workspace", workspaceName);
                     newFormData.append("username", username);
                     newFormData.append("type", type);

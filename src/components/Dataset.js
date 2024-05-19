@@ -69,10 +69,10 @@ export default function Dataset({
                       CustomButton={Pencil}
                       submitLabel="Save Changes"
                       handleSubmit={(formData) => {
-                        updateDataset(file, formData.filename, type);
+                        updateDataset(file, formData.datasetname, type);
                       }}
                     >
-                      <Input label={"Name"} name={"filename"} placeholder="New dataset name" required />
+                      <Input label={"Name"} name={"datasetname"} placeholder="New dataset name" required />
                     </FormModal>
                   </FormModalContextProvider>
                   <FormModalContextProvider>
@@ -85,7 +85,7 @@ export default function Dataset({
                       submitLabel="Delete"
                       handleSubmit={async () => {
                         const dataset = new FormData();
-                        dataset.append("filename", name);
+                        dataset.append("datasetname", name);
                         dataset.append("workspace", workspaceName);
                         dataset.append("username", username);
                         dataset.append("type", type);
