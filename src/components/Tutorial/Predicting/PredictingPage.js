@@ -276,7 +276,7 @@ export default function PredictingPage({ datasets }) {
                   <Select
                     placeholder="Select dataset"
                     name="dataset"
-                    items={datasets?.map((dataset) => ({ value: dataset.file, label: dataset.file })) || []}
+                    items={datasets?.map((dataset) => ({ value: dataset.name, label: dataset.name })) || []}
                     // items={[{value: 1, label: "fixed"}]}
                     // isDisabled={true}
                   />
@@ -338,7 +338,7 @@ export default function PredictingPage({ datasets }) {
                 <Model username={username} workspace={workspaceName} {...newModel} isLoading={true} />
               )}
               {models.map((model) => (
-                <Model username={username} workspace={workspaceName} key={model.id} {...model} />
+                <Model username={username} workspace={workspaceName} key={model.id} {...model}  />
               ))}
             </tbody>
           </table>

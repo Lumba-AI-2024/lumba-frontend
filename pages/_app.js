@@ -1,8 +1,10 @@
+// pages/_app.js
 import Layout from "../src/components/Layout";
 import NextNProgress from "nextjs-progressbar";
 import "../styles/globals.css";
 import DetailsModalProvider from "../src/context/DetailsModalContext";
 import FormModalContextProvider from "../src/context/FormModalContext";
+import { AutoMLProvider } from "../src/context/AutoMLContext";
 import dynamic from "next/dynamic";
 
 const UserProvider = dynamic(() => import("../src/context/UserContext"), {
@@ -22,9 +24,11 @@ function MyApp({ Component, pageProps }) {
           showOnShallow={true}
         />
         <DetailsModalProvider>
-        <FormModalContextProvider>
-          <Component {...pageProps} />
-        </FormModalContextProvider>
+          <FormModalContextProvider>
+            <AutoMLProvider>
+              <Component {...pageProps} />
+            </AutoMLProvider>
+          </FormModalContextProvider>
         </DetailsModalProvider>
       </Layout>
     </UserProvider>

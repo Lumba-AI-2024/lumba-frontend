@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useRouter } from "next/router";
 import Breadcrumb from "../../../../../src/components/Breadcrumb";
 import FormModalContextProvider from "../../../../../src/context/FormModalContext";
@@ -14,6 +14,9 @@ import SidebarAuto from "../../../../../src/components/SidebarAuto";
 import CheckData from "../../../../../src/components/CheckData";
 import PreprocessPage from "../../../../../src/components/Tutorial/AutoML/PreprocessPage";
 import axios from "axios";
+import { AutoMLContext } from "../../../../../src/context/AutoMLContext";
+import useAutoML from "../../../../../src/hooks/useAutoML";
+
 
 
 
@@ -32,6 +35,9 @@ const preprocess = () => {
     const [isUploading, setIsUploading] = useState(false);
     const [formData, setFormData] = useState(null);
     const [dataset, setDataset] = useState(null);
+    const { autoMLData, appendAutoMLData } = useContext(AutoMLContext);
+    const { autoMLs, addAutoML } = useAutoML(workspaceName, username, type);
+
 
 
     const handleFormData = (data) => {
@@ -43,13 +49,29 @@ const preprocess = () => {
         router.push(`/workspace/${workspaceName}/automl/newProject/upload?type=${type}`);
     };
 
-    const next = () => {
+    const next = async () => {
+  
+
+        // Log the contents of autoMLData
+        console.log("autoMLData contents:");
+        for (let pair of autoMLData.entries()) {
+            console.log(`${pair[0]}: ${pair[1]}`);
+        }
         // router.push(`/workspace/${workspaceName}/automl/newProject/target?type=${type}`);
         // axios
         //     .post(`${process.env.NEXT_PUBLIC_API_ROUTE}/preprocess/clean/`, formData)
         //     .then((res) => {
         //         setDataset(res.data);
         //     })
+        try {
+            await addAutoML(autoMLData);
+            // setIsUploading(false);
+            // setIsChecked(true);
+            // router.push(`/workspace/${workspaceName}/automl/newProject/preprocess?type=${type}`);
+        } catch (error) {
+            console.error('Upload failed:', error);
+            setIsUploading(false);
+        }
     };
 
     return (

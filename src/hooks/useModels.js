@@ -102,7 +102,7 @@ export const addModel = async (model) => {
 
 const useModels = ({ username, workspace, type }) => {
   const MODELS =
-    process.env.NEXT_PUBLIC_API_ROUTE + `/modeling/listmodel/?username=${username}&workspace=${workspace}&type=${type}`;
+    process.env.NEXT_PUBLIC_API_ROUTE + `/modeling/list/?username=${username}&workspace=${workspace}&type=${type}`;
   const { data: models, mutate } = useFetch(MODELS, () => getAllModels({ url: MODELS, username, workspace, type }), {
     fallbackData: [],
   });
