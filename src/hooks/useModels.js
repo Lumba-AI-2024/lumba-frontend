@@ -10,7 +10,7 @@ const API_ROUTE = process.env.NEXT_PUBLIC_API_ROUTE;
 export const getAllModels = async ({ token, username, workspace, type }) => {
   let { data: models } = await axios.get(
     `${
-      process.env.NEXT_PUBLIC_API_ROUTE + `/modeling/listmodel/`
+      process.env.NEXT_PUBLIC_API_ROUTE + `/modeling/list/`
     }?username=${username}&workspace=${workspace}&type=${type}`,
     {
       headers: {
@@ -67,7 +67,7 @@ export const addModel = async (model) => {
 
 const useModels = ({ username, workspace, type }) => {
   const MODELS =
-    process.env.NEXT_PUBLIC_API_ROUTE + `/modeling/listmodel/?username=${username}&workspace=${workspace}&type=${type}`;
+    process.env.NEXT_PUBLIC_API_ROUTE + `/modeling/list/?username=${username}&workspace=${workspace}&type=${type}`;
   const { data: models, mutate } = useFetch(MODELS, () => getAllModels({ url: MODELS, username, workspace, type }), {
     fallbackData: [],
   });
