@@ -81,7 +81,7 @@ const Dataset = ({ fetchedDataset }) => {
           <div className="flex justify-between items-center">
             <div className="flex gap-3 items-center">
               <img className="w-6 h-6" src="/assets/CSVIcon.svg" alt="csv" />
-              <h1 className="text-2xl">{details.file}</h1>
+              <h1 className="text-2xl">{details.name}</h1>
             </div>
             <div className="flex gap-6">
               <Download />

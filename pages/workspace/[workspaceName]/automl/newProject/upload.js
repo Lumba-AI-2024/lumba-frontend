@@ -20,6 +20,8 @@ import { FormModalContext } from "../../../../../src/context/FormModalContext";
 import axios from "axios";
 import { getCookie } from "../../../../../src/helper/cookies";
 import useAutoML from "../../../../../src/hooks/useAutoML";
+import { AutoMLContext } from '../../../../../src/context/AutoMLContext';
+
 
 
 
@@ -46,6 +48,8 @@ const upload = () => {
     const [selectedTargetColumn, setSelectedTargetColumn] = useState('');
     const [selectedMethod, setSelectedMethod] = useState('');
     const [autoMLName, setAutoMLName] = useState('');
+    const { appendAutoMLData } = useContext(AutoMLContext);
+
 
 
     const back = () => {
@@ -61,18 +65,21 @@ const upload = () => {
             alert("Please select a target column.");
             return;
         }
-        const autoML = new FormData();
-        autoML.append("username", username);
-        autoML.append("workspace", workspaceName);
-        autoML.append("datasetname", dataset);
-        autoML.append("automlname", autoMLName);
-        autoML.append("method", formData?.autoMlType);
-        autoML.append("feature", selectedTrainingColumns);
-        autoML.append("target", selectedTargetColumn);
-        autoML.append("automlname",formData?.name)
-        console.log(autoML)
+        const autoML = {
+            username,
+            workspace: workspaceName,
+            datasetname: dataset,
+            automlname: autoMLName,
+            method: formData?.autoMlType,
+            feature: selectedTrainingColumns,
+            target: selectedTargetColumn,
+            automlname: formData?.name,
+          };
+      
+
+        appendAutoMLData(autoML);
         try {
-            await addAutoML(autoML);
+            // await addAutoML(autoML);
             setIsUploading(false);
             setIsChecked(true);
             // router.push(`/workspace/${workspaceName}/automl/newProject/preprocess?type=${type}`);
@@ -177,9 +184,9 @@ const upload = () => {
                                 name="autoMlType"
                                 placeholder="- Select -"
                                 items={[
-                                    { label: "Classification", value: "classification" },
-                                    { label: "Regression", value: "regression" },
-                                    { label: "Clustering", value: "clustering" },
+                                    { label: "Classification", value: "CLASSIFICATION" },
+                                    { label: "Regression", value: "REGRESSION" },
+                                    { label: "Clustering", value: "CLUSTERING" },
                                 ]}
                                 onChange={(e) => {setSelectedMethod(e.target.value)}}
                             />
