@@ -10,7 +10,7 @@ const API_ROUTE = process.env.NEXT_PUBLIC_API_ROUTE;
 export const getAllModels = async ({ token, username, workspace, type }) => {
   let { data: models } = await axios.get(
     `${
-      process.env.NEXT_PUBLIC_API_ROUTE + `/modeling/listmodel/`
+      process.env.NEXT_PUBLIC_API_ROUTE + `/modeling/list/`
     }?username=${username}&workspace=${workspace}&type=${type}`,
     {
       headers: {
@@ -26,13 +26,48 @@ export const getAllModels = async ({ token, username, workspace, type }) => {
       modelName: model.name,
       file: model.file_name,
       // metrics: model.metrics,
-      // score: model.score,
-      metrics_scores: model.metrics_scores,
+      score: model.score,
+      // metrics_scores: model.metrics_scores,
       method: model.method,
       algorithm: model.algorithm,
       trainDate: model.updated_time,
       features: model.feature.split(",").map((f) => ({ label: f, isNumeric: true })),
       predict: model.target,
+      metrics: model.metrics,
+      isDuplicate,
+    };
+  });
+
+  return models.reverse();
+};
+
+export const getAllAutoModels = async ({ token, username, workspace, type }) => {
+  let { data: models } = await axios.get(
+    `${
+      process.env.NEXT_PUBLIC_API_ROUTE + `/modeling/listauto/`
+    }?username=${username}&workspace=${workspace}&type=${type}`,
+    {
+      headers: {
+        Authorization: `Token ${token || getCookie("token")}`,
+      },
+    }
+  );
+
+  models = models.map((model) => {
+    const isDuplicate = models.some((m, i) => m.name === model.name && i !== model.id);
+    return {
+      id: model.id,
+      modelName: model.name,
+      file: model.file_name,
+      // metrics: model.metrics,
+      score: model.score,
+      // metrics_scores: model.metrics_scores,
+      method: model.method,
+      algorithm: model.algorithm,
+      trainDate: model.updated_time,
+      features: model.feature.split(",").map((f) => ({ label: f, isNumeric: true })),
+      predict: model.target,
+      metrics: model.metrics,
       isDuplicate,
     };
   });
@@ -72,6 +107,12 @@ const useModels = ({ username, workspace, type }) => {
     fallbackData: [],
   });
 
+  const AUTO_MODELS = 
+    process.env.NEXT_PUBLIC_API_ROUTE + `/modeling/listauto/?username=${username}&workspace=${workspace}&type=${type}`;
+  const { data: autoModels } = useFetch(AUTO_MODELS, () => getAllModels({ url: AUTO_MODELS, username, workspace, type }), {
+    fallbackData: [],
+  });
+
   const deleteModel = async (model) => {
     axios
       .post(`${process.env.NEXT_PUBLIC_API_ROUTE}/modeling/deletemodel/`, model, {
@@ -83,7 +124,7 @@ const useModels = ({ username, workspace, type }) => {
       .catch(() => toast.error("Failed to delete model."));
   };
 
-  return { models, deleteModel, mutate };
+  return { models, autoModels, deleteModel, mutate };
 };
 
 export default useModels;

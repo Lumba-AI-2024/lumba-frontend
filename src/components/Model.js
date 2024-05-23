@@ -94,9 +94,9 @@ export default function Model({
   id,
   modelName,
   file,
-  // metrics,
-  // score,
-  metrics_scores,
+  metrics,
+  score,
+  // metrics_score,
   method,
   algorithm,
   trainDate,
@@ -122,8 +122,8 @@ export default function Model({
       : useForecastingModel({ workspace, username, type });
   const apiKey = type === "predicting" && useApiKey(id);
 
-  const metrics = metrics_scores?.charAt(0) === "{" ? Object.keys(JSON.parse(metrics_scores)) : [];
-  const scores = metrics_scores?.charAt(0) === "{" ? Object.values(JSON.parse(metrics_scores)) : [];
+  // const metrics = metrics_scores?.charAt(0) === "{" ? Object.keys(JSON.parse(metrics_scores)) : [];
+  // const scores = metrics_scores?.charAt(0) === "{" ? Object.values(JSON.parse(metrics_scores)) : [];
 
   const [selectedMetrics, setSelectedMetrics] = useState(0);
 
@@ -146,16 +146,9 @@ export default function Model({
         </td>
         <td className={`bg-white py-2 relative  ${isLoading && "text-gray/50"} px-4`}>
           <div className="flex flex-col">
-            {metrics.length === 1 ? (
-              <span className="flex items-center gap-1 text-[10px] text-gray -mb-1">
-                {metrics ? metricsName[metrics] : metricsNameByMethod[method]}
-              </span>
-            ) : metrics.length > 1 ? (
-              <MetricsDropdown setSelectedMetrics={setSelectedMetrics} metrics={metrics} method={method} />
-            ) : (
-              <span className="flex items-center gap-1 text-[10px] -mb-1">-</span>
-            )}
-            <span>{isLoading ? "-" : scores[selectedMetrics]}</span>
+            <span className="flex items-center gap-1 text-[10px] -mb-1">{metrics}</span>
+            
+            <span>{score}</span>
           </div>
         </td>
         <td className={`bg-white py-2 relative ${isLoading && "text-gray/50"} px-4`}>
