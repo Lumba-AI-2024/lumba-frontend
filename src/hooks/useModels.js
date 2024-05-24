@@ -109,7 +109,7 @@ const useModels = ({ username, workspace, type }) => {
 
   const AUTO_MODELS = 
     process.env.NEXT_PUBLIC_API_ROUTE + `/modeling/listauto/?username=${username}&workspace=${workspace}&type=${type}`;
-  const { data: autoModels } = useFetch(AUTO_MODELS, () => getAllModels({ url: AUTO_MODELS, username, workspace, type }), {
+  const { data: autoModels } = useFetch(AUTO_MODELS, () => getAllAutoModels({ url: AUTO_MODELS, username, workspace, type }), {
     fallbackData: [],
   });
 

@@ -5,6 +5,7 @@ import Breadcrumb from "../../../../src/components/Breadcrumb";
 import Button from "../../../../src/components/Button/Button";
 import Plus from "../../../../src/components/Icon/Plus";
 import AutoMLPage from "../../../../src/components/Tutorial/AutoML/AutoMLPage";
+
 const AutoML = () => {
     const router = useRouter();
     const { workspaceName } = router.query;

@@ -5,29 +5,30 @@ import { useRouter } from "next/router";
 // import Plus from "../../../../../src/components/Icon/Plus";
 // import UploadFile from "../../../../../src/components/Form/UploadFile";
 // import Dataset from "../../../../../src/components/Dataset";
-import useDatasets from "../../../../../../src/hooks/useDatasets";
+import useDatasets from "../../../../../../../src/hooks/useDatasets";
 import { useSearchParams } from "next/navigation";
-import Seo from "../../../../../../src/components/Seo";
+import Seo from "../../../../../../../src/components/Seo";
 // import CheckData from "../../../../../src/components/CheckData";
-import useCookie from "../../../../../../src/hooks/useCookie";
-import Model from "../../../../../../src/components/Model";
-import useModels from "../../../../../../src/hooks/useModels";
-import Breadcrumb from "../../../../../../src/components/Breadcrumb";
+import useCookie from "../../../../../../../src/hooks/useCookie";
+import Model from "../../../../../../../src/components/Model";
+import useModels from "../../../../../../../src/hooks/useModels";
+import Breadcrumb from "../../../../../../../src/components/Breadcrumb";
 // import axios from "axios";
 
 
 
-const modelling = () => {
+const modelling = ({fetchedAutoML}) => {
     const router = useRouter();
-    const { workspaceName } = router.query;
+    const { autoMLName, workspaceName } = router.query;
 
     const searchParams = useSearchParams();
     const type = searchParams.get("type");
 
     const username = useCookie("username");
-    const { models, mutate } = useModels({ username, workspace: workspaceName, type });
+    const {autoModels} = useModels({ username, workspace: workspaceName, type });
 
-
+    const projectTitle = autoMLName ? `${autoMLName} Project` : "AutoML Project";
+    const sortedModels = autoModels?.sort((a, b) => b.score - a.score) || [];
     // const handleFormData = (data) => {
     //     setFormData(data);
     // };
@@ -54,15 +55,15 @@ const modelling = () => {
                         <Breadcrumb links={[
                             { label: workspaceName },
                             { label: "AutoML", href: "/workspace/" + workspaceName + "/automl" },
-                            { label: "Modelling", href: router.asPath },
-                        ]} active={"Modelling"} />
+                            { label: projectTitle, href: router.asPath },
+                        ]} active={projectTitle} />
                     </div>
                 </div>
                 <div className="flex flex-col gap-6 my-6">
-                    <h1>AutoML Title Project</h1>
+                    <h1>{projectTitle}</h1>
                 </div>
 
-                {models?.length > 0 ? (
+                {autoModels?.length > 0 ? (
                     <table className="mt-4">
                         <thead>
                             <tr>
@@ -78,7 +79,7 @@ const modelling = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {models.map((model) => (
+                            {sortedModels.map((model) => (
                                 <Model username={username} workspace={workspaceName} key={model.id} isAuto={true} {...model} />
                             ))}
                         </tbody>

@@ -48,7 +48,7 @@ export default function AutoML({
       </tr>
       <tr
         className="relative cursor-pointer"
-        onClick={() => router.push(realPath + (isHome ? "/datasets/" : "/") + name + "?" + params)}
+        onClick={() => router.push(realPath + "/newProject" + (isHome ? "/modelling/" : "/") + automlname)}
       >
         <td className="py-2 rounded-l-md w-56 px-4 h-14 relative z-10 bg-white">
           <div className={`flex gap-2 items-center ${isLoading && "text-gray/50"}`}>

@@ -36,7 +36,6 @@ const methodName = {
   REGRESSION: "Regression",
   CLASSIFICATION: "Classification",
   CLUSTERING: "Clustering",
-  FORECASTING: "Forecasting",
 };
 
 const algorithmName = {
@@ -44,8 +43,9 @@ const algorithmName = {
   DECISION_TREE: "Decision Tree",
   RANDOM_FOREST: "Random Forest",
   KMEANS: "K-Means",
-  ARIMA: "ARIMA",
-  LSTM: "LSTM",
+  XG_BOOST: "XGBoost",
+  NEURAL_NETWORK: "Neural Network",
+  DBSCAN: "DBSCAN",
 };
 
 const TestButton = ({ onClick, type }) => {
@@ -110,8 +110,10 @@ export default function Model({
   workspace,
   isAuto=false
 }) {
+  
   const [isTesting, setIsTesting] = React.useState(false);
   const [result, setResult] = React.useState("-");
+  
 
   const searchParams = useSearchParams();
   const type = searchParams.get("type");
@@ -130,6 +132,7 @@ export default function Model({
   const router = useRouter();
 
   const [realPath, params] = router.asPath.split("?");
+  const { autoMLName, workspaceName } = router.query;
   const isHome = !realPath.split("/").includes("modeling");
 
   return (
@@ -146,7 +149,7 @@ export default function Model({
         </td>
         <td className={`bg-white py-2 relative  ${isLoading && "text-gray/50"} px-4`}>
           <div className="flex flex-col">
-            <span className="flex items-center gap-1 text-[10px] -mb-1">{metrics}</span>
+            <span className="flex items-center gap-1 text-[10px] -mb-1">{metricsName[metrics]}</span>
             
             <span>{score}</span>
           </div>
@@ -227,7 +230,7 @@ export default function Model({
                         }}
                       />
                     )}
-                    {["DECISION_TREE", "RANDOM_FOREST"].includes(algorithm) && (
+                    {["DECISION_TREE", "RANDOM_FOREST","NEURAL_NETWORK","XG_BOOST"].includes(algorithm) && (
                       <TestModal
                         CustomButton={TestButton}
                         isTesting={isTesting}
@@ -313,7 +316,7 @@ export default function Model({
             <button
               className="text-blue text-[10px]"
               onClick={() =>{
-                router.push(`/workspace/${workspace}/automl/newProject/modelling/${modelName}`);
+                router.push(`/workspace/${workspaceName}/automl/newProject/modelling/${autoMLName}/explain`);
               }}
               >
               Explain
