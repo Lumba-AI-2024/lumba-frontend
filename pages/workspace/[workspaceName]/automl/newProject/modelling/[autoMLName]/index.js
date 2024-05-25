@@ -13,22 +13,36 @@ import useCookie from "../../../../../../../src/hooks/useCookie";
 import Model from "../../../../../../../src/components/Model";
 import useModels from "../../../../../../../src/hooks/useModels";
 import Breadcrumb from "../../../../../../../src/components/Breadcrumb";
+import { useContext } from "react";
+import { AutoMLContext } from "../../../../../../../src/context/AutoMLContext";
+import useAutoML from "../../../../../../../src/hooks/useAutoML";
 // import axios from "axios";
 
 
 
 const modelling = ({fetchedAutoML}) => {
+    
     const router = useRouter();
     const { autoMLName, workspaceName } = router.query;
-
     const searchParams = useSearchParams();
-    const type = searchParams.get("type");
-
     const username = useCookie("username");
-    const {autoModels} = useModels({ username, workspace: workspaceName, type });
+    const type = searchParams.get("type");
+    const { autoMLData, appendAutoMLData } = useContext(AutoMLContext);
+    const { autoMLs, addAutoML } = useAutoML(workspaceName, username, type);
+    // get autoMLs with the same name as autoMLName
+    const selectedAutoML = autoMLs.find((autoML) => autoML.name === autoMLName);
+    console.log("testyaa",selectedAutoML)
+    const selectedModels = selectedAutoML?.automlmodels || [];
+
+    const {autoModels} = useModels({ username, workspace: workspaceName, type, automlname: autoMLName, datasetname: selectedAutoML?.datasetname});
+    console.log("111",autoMLName, autoModels)
+    for (let [key,value] of autoMLData.entries()) {
+        console.log("test",key,value)
+    }
+    console.log("222",autoMLData)
 
     const projectTitle = autoMLName ? `${autoMLName} Project` : "AutoML Project";
-    const sortedModels = autoModels?.sort((a, b) => b.score - a.score) || [];
+    const sortedModels = selectedModels?.sort((a, b) => b.score - a.score) || [];
     // const handleFormData = (data) => {
     //     setFormData(data);
     // };
@@ -63,7 +77,7 @@ const modelling = ({fetchedAutoML}) => {
                     <h1>{projectTitle}</h1>
                 </div>
 
-                {autoModels?.length > 0 ? (
+                {selectedModels?.length > 0 ? (
                     <table className="mt-4">
                         <thead>
                             <tr>

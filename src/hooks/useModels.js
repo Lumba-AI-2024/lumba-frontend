@@ -41,11 +41,11 @@ export const getAllModels = async ({ token, username, workspace, type }) => {
   return models.reverse();
 };
 
-export const getAllAutoModels = async ({ token, username, workspace, type }) => {
+export const getAllAutoModels = async ({ token, username, workspace , automlname,datasetname}) => {
   let { data: models } = await axios.get(
     `${
       process.env.NEXT_PUBLIC_API_ROUTE + `/modeling/listauto/`
-    }?username=${username}&workspace=${workspace}&type=${type}`,
+    }?username=${username}&workspace=${workspace}&datasetname=${datasetname}&automlname=${automlname}}`,
     {
       headers: {
         Authorization: `Token ${token || getCookie("token")}`,
@@ -100,7 +100,8 @@ export const addModel = async (model) => {
   return data;
 };
 
-const useModels = ({ username, workspace, type }) => {
+const useModels = ({ username, workspace, type,datasetname, automlname }) => {
+  console.log(automlname)
   const MODELS =
     process.env.NEXT_PUBLIC_API_ROUTE + `/modeling/list/?username=${username}&workspace=${workspace}&type=${type}`;
   const { data: models, mutate } = useFetch(MODELS, () => getAllModels({ url: MODELS, username, workspace, type }), {
@@ -108,8 +109,8 @@ const useModels = ({ username, workspace, type }) => {
   });
 
   const AUTO_MODELS = 
-    process.env.NEXT_PUBLIC_API_ROUTE + `/modeling/listauto/?username=${username}&workspace=${workspace}&type=${type}`;
-  const { data: autoModels } = useFetch(AUTO_MODELS, () => getAllAutoModels({ url: AUTO_MODELS, username, workspace, type }), {
+    process.env.NEXT_PUBLIC_API_ROUTE + `/modeling/listauto/?username=${username}&workspace=${workspace}&datasetname=${datasetname}&automlname=${automlname}`;
+  const { data: autoModels } = useFetch(AUTO_MODELS, () => getAllAutoModels({ url: AUTO_MODELS, username, workspace, automlname, datasetname }), {
     fallbackData: [],
   });
 

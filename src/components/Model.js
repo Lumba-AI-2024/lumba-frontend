@@ -92,7 +92,7 @@ const MetricsDropdown = ({ setSelectedMetrics, metrics = [], method }) => {
 
 export default function Model({
   id,
-  modelName,
+  name,
   file,
   metrics,
   score,
@@ -144,7 +144,7 @@ export default function Model({
         <td className="bg-white rounded-l-md pl-4 py-2 relative px-4">
           <div className={`flex flex-col ${isLoading && "text-gray/50"}`}>
             <span className="text-[10px] text-gray -mb-1">{file}</span>
-            <span>{modelName}</span>
+            <span>{name}</span>
           </div>
         </td>
         <td className={`bg-white py-2 relative  ${isLoading && "text-gray/50"} px-4`}>
@@ -184,7 +184,7 @@ export default function Model({
                       handleSubmit={(formData) => {
                         try {
                           deleteModel({
-                            model_name: modelName.split(".")[0],
+                            model_name: name.split(".")[0],
                             username: username,
                             workspace: workspace,
                             type: type,
@@ -199,7 +199,7 @@ export default function Model({
                   <FormModalContextProvider>
                     {algorithm === "KMEANS" && (
                       <KMeansTestModal
-                        modelName={modelName}
+                        name={name}
                         CustomButton={TestButton}
                         isTesting={isTesting}
                         features={features}
@@ -211,7 +211,7 @@ export default function Model({
                             .join("");
                           axios
                             .get(
-                              `${process.env.NEXT_PUBLIC_API_ROUTE}/modeling/predict/?modelname=${modelName}&${featureQueryString}username=${username}&workspace=${workspace}&type=${type}`,
+                              `${process.env.NEXT_PUBLIC_API_ROUTE}/modeling/predict/?name=${name}&${featureQueryString}username=${username}&workspace=${workspace}&type=${type}`,
                               {
                                 headers: {
                                   Authorization: `Token ${getCookie("token")}`,
@@ -244,7 +244,7 @@ export default function Model({
                             .join("");
                           axios
                             .get(
-                              `${process.env.NEXT_PUBLIC_API_ROUTE}/modeling/predict/?modelname=${modelName}&${featureQueryString}username=${username}&workspace=${workspace}&type=${type}`,
+                              `${process.env.NEXT_PUBLIC_API_ROUTE}/modeling/predict/?name=${name}&${featureQueryString}username=${username}&workspace=${workspace}&type=${type}`,
                               {
                                 headers: {
                                   Authorization: `Token ${getCookie("token")}`,
@@ -274,7 +274,7 @@ export default function Model({
                           setIsTesting(true);
                           axios
                             .get(
-                              `${process.env.NEXT_PUBLIC_API_ROUTE}/modeling/predict/?modelname=${modelName}&feature=${formData[features[0].label]
+                              `${process.env.NEXT_PUBLIC_API_ROUTE}/modeling/predict/?name=${name}&feature=${formData[features[0].label]
                               }&username=${username}&workspace=${workspace}&type=${type}`,
                               {
                                 headers: {
@@ -299,7 +299,7 @@ export default function Model({
                   {method === "FORECASTING" && (
                     <Button
                       size="small"
-                      onClick={() => router.push(realPath + (isHome ? "/modeling/" : "/") + modelName + "?" + params)}
+                      onClick={() => router.push(realPath + (isHome ? "/modeling/" : "/") + name + "?" + params)}
                       type="button"
                       testModel
                     >

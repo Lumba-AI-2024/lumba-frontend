@@ -39,7 +39,6 @@ const preprocess = () => {
     const { autoMLs, addAutoML } = useAutoML(workspaceName, username, type);
 
 
-
     const handleFormData = (data) => {
         setFormData(data);
     };
