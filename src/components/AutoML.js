@@ -56,11 +56,9 @@ export default function AutoML({
             {automlname}
           </div>
         </td>
-        {/* <td className={`h-14 relative z-10 bg-white px-4 ${isLoading && "text-gray/50"}`}>{size} MB</td> */}
         <td className="h-14 relative z-10 bg-white">{isLoading ? "Uploading..." : generateTime(createdOn)}</td>
         <td className="h-14 relative z-10 bg-white">{isLoading ? "-" : generateTime(modifiedOn)}</td>
         <td className="h-14 relative z-10 bg-white">{method}</td>
-        {/* <td className="h-14 relative z-10 bg-white">{feature}</td> */}
         <td className="h-14 relative z-10 bg-white">{target}</td>
         {!noActions && (
           <td className="py-2 rounded-r-md pr-8 h-14 relative bg-white w-[160px]">

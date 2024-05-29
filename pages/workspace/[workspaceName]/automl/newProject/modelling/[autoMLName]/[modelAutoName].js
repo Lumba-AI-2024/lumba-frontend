@@ -1,0 +1,80 @@
+import { useState } from "react";
+import { useRouter } from "next/router";
+// import Breadcrumb from "../../../../../src/components/Breadcrumb";
+// import FormModalContextProvider from "../../../../../src/context/FormModalContext";
+// import Plus from "../../../../../src/components/Icon/Plus";
+// import UploadFile from "../../../../../src/components/Form/UploadFile";
+// import Dataset from "../../../../../src/components/Dataset";
+import useDatasets from "../../../../../../../src/hooks/useDatasets";
+import { useSearchParams } from "next/navigation";
+import Seo from "../../../../../../../src/components/Seo";
+// import CheckData from "../../../../../src/components/CheckData";
+import useCookie from "../../../../../../../src/hooks/useCookie";
+import Model from "../../../../../../../src/components/Model";
+import useModels from "../../../../../../../src/hooks/useModels";
+import Breadcrumb from "../../../../../../../src/components/Breadcrumb";
+import { useContext } from "react";
+import { AutoMLContext } from "../../../../../../../src/context/AutoMLContext";
+import useAutoML from "../../../../../../../src/hooks/useAutoML";
+
+// import axios from "axios";
+
+
+const explain = () => {
+    const router = useRouter();
+    const { workspaceName, autoMLName, modelAutoName } = router.query;
+
+    const searchParams = useSearchParams();
+    const type = searchParams.get("type");
+
+    const username = useCookie("username");
+    const projectTitle = autoMLName ? `${autoMLName} Project` : "AutoML Project";
+    const { autoMLs, addAutoML } = useAutoML(workspaceName, username, type);
+    const selectedAutoML = autoMLs.find((autoML) => autoML.name === autoMLName);
+    const selectedModels = selectedAutoML?.automlmodels || [];
+    const selectedModel = selectedModels.find((model) => model.name === modelAutoName);
+    console.log(selectedModel);
+    const foto = selectedModel?.shap_values;
+    // split name selected model but only the first two words
+    const name = selectedModel?.name.split('_').slice(0, 2).join(' & ');
+
+    return (
+        <>
+            <Seo title={`${workspaceName} - AutoML`} />
+            <div className="h-full flex flex-col">
+                <div className="flex items-center">
+                    <div className="flex-1">
+                        <Breadcrumb links={[
+                            { label: workspaceName },
+                            { label: "AutoML", href: "/workspace/" + workspaceName + "/automl" },
+                            { label: autoMLName, href: "/workspace/" + workspaceName + "/automl" + "/newProject" + "/modelling/" + autoMLName},
+                            { label: "Explainability", href: router.asPath },
+                        ]} active={"Explainability"} />
+                    </div>
+                </div>
+                <div className="flex flex-col gap-6 my-5">
+                    <h1>{projectTitle}</h1>
+                </div>
+                <div className="flex flex-col gap-6">
+                    <h2>Explainability for {name}</h2>
+                    <p>
+                        <div>
+                            <p className="my-3">Shapley Plot</p>
+                            <img src={`data:image/png;base64,${foto}`} alt="SHAP Summary Plot" />
+                        </div>
+                    </p>
+
+                    <h3>Top Important Features on Target</h3>
+                    <li>Feature 1</li>
+                    <li>Feature 2</li>
+                    <li>Feature 3</li>
+                    <li>Feature 4</li>
+                </div>
+
+              
+            </div>
+        </>
+    );
+};
+
+export default explain;

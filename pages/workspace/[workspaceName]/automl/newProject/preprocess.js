@@ -51,22 +51,13 @@ const preprocess = () => {
     const next = async () => {
   
 
-        // Log the contents of autoMLData
         console.log("autoMLData contents:");
         for (let pair of autoMLData.entries()) {
             console.log(`${pair[0]}: ${pair[1]}`);
         }
-        // router.push(`/workspace/${workspaceName}/automl/newProject/target?type=${type}`);
-        // axios
-        //     .post(`${process.env.NEXT_PUBLIC_API_ROUTE}/preprocess/clean/`, formData)
-        //     .then((res) => {
-        //         setDataset(res.data);
-        //     })
+     
         try {
             await addAutoML(autoMLData);
-            // setIsUploading(false);
-            // setIsChecked(true);
-            // router.push(`/workspace/${workspaceName}/automl/newProject/preprocess?type=${type}`);
         } catch (error) {
             console.error('Upload failed:', error);
             setIsUploading(false);

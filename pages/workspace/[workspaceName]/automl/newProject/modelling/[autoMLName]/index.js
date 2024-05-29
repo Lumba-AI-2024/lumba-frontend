@@ -20,45 +20,26 @@ import useAutoML from "../../../../../../../src/hooks/useAutoML";
 
 
 
-const modelling = ({fetchedAutoML}) => {
+const modelling = () => {
     
     const router = useRouter();
     const { autoMLName, workspaceName } = router.query;
     const searchParams = useSearchParams();
     const username = useCookie("username");
     const type = searchParams.get("type");
-    const { autoMLData, appendAutoMLData } = useContext(AutoMLContext);
     const { autoMLs, addAutoML } = useAutoML(workspaceName, username, type);
-    // get autoMLs with the same name as autoMLName
     const selectedAutoML = autoMLs.find((autoML) => autoML.name === autoMLName);
-    console.log("testyaa",selectedAutoML)
-    const selectedModels = selectedAutoML?.automlmodels || [];
-
-    const {autoModels} = useModels({ username, workspace: workspaceName, type, automlname: autoMLName, datasetname: selectedAutoML?.datasetname});
-    console.log("111",autoMLName, autoModels)
-    for (let [key,value] of autoMLData.entries()) {
-        console.log("test",key,value)
-    }
-    console.log("222",autoMLData)
-
+    const selectedModels = selectedAutoML?.automlmodels || [];    
+    console.log(selectedModels)
     const projectTitle = autoMLName ? `${autoMLName} Project` : "AutoML Project";
-    const sortedModels = selectedModels?.sort((a, b) => b.score - a.score) || [];
-    // const handleFormData = (data) => {
-    //     setFormData(data);
-    // };
+    const sortedModels = selectedModels?.sort((a, b) => {
+        if (selectedAutoML.method === 'REGRESSION') {
+            return parseFloat(b.score.r2_score) - parseFloat(a.score.r2_score);
+        }
+        // You can add more conditions for other methods if needed
+        return parseFloat(b.score) - parseFloat(a.score);
+    }) || [];
 
-    // const back = () => {
-    //     router.push(`/workspace/${workspaceName}/automl/newProject/upload?type=${type}`);
-    // };
-
-    // const next = () => {
-    //     router.push(`/workspace/${workspaceName}/automl/newProject/target?type=${type}`);
-    //     axios
-    //         .post(`${process.env.NEXT_PUBLIC_API_ROUTE}/preprocess/handle/`, body)
-    //         .then((res) => {
-    //             setDataset(res.data);
-    //         })
-    // };
 
     return (
         <>
@@ -76,7 +57,9 @@ const modelling = ({fetchedAutoML}) => {
                 <div className="flex flex-col gap-6 my-6">
                     <h1>{projectTitle}</h1>
                 </div>
-
+                <div className="flex flex-col my-1">
+                    <h2>Leaderboard Model Result</h2>
+                </div>
                 {selectedModels?.length > 0 ? (
                     <table className="mt-4">
                         <thead>
@@ -86,7 +69,8 @@ const modelling = ({fetchedAutoML}) => {
                                 <th className="px-4">Method & Algorithm</th>
                                 <th className="px-4">Train Date</th>
                                 <th className="px-4">Actions</th>
-                                <th className="px-4">Explainability</th>
+                                <th className="px-4">Explain</th>
+                                <th className="px-4">Status</th>
                             </tr>
                             <tr className="border-b border-gray/50">
                                 <td colSpan="100%" className="pt-4"></td>
