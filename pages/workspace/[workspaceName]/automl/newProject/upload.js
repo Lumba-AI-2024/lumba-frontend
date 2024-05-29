@@ -61,7 +61,7 @@ const upload = () => {
             alert("Please select a dataset.");
             return;
         }
-        else if (!selectedTargetColumn) {
+        else if (!selectedTargetColumn && selectedMethod !== "CLUSTERING") {
             alert("Please select a target column.");
             return;
         }
@@ -103,6 +103,12 @@ const upload = () => {
             fetchDataset();
         }
     }, [dataset, workspaceName, username, type]);
+
+    useEffect(() => {
+        if (formData.autoMlType) {
+            setSelectedMethod(formData.autoMlType);
+        }
+    }, [formData.autoMlType]);
 
     const fetchDataset = async () => {
         const DATASET = `${process.env.NEXT_PUBLIC_API_ROUTE}/file/?datasetname=${dataset}&workspace=${workspaceName}&username=${username}&page=1&rowsperpage=15&type=${type}`;
@@ -186,10 +192,13 @@ const upload = () => {
                                 items={[
                                     { label: "Classification", value: "CLASSIFICATION" },
                                     { label: "Regression", value: "REGRESSION" },
-                                    { label: "Clustering", value: "CLUSTERING" },
+                                    { label: "Clustering", value: "CLUSTERING", },
                                 ]}
-                                onChange={(e) => {setSelectedMethod(e.target.value)}}
+                                onChange={(e) => {
+                                    setSelectedMethod(e.target.value); 
+                                }}
                             />
+                            {console.log(selectedMethod)}
                         </div>
                         <h4 className="mt-4">Please choose one either to upload or select dataset</h4>
                         <FormModalContextProvider>
@@ -244,7 +253,7 @@ const upload = () => {
                         <>
                             <h2 className="mt-4 mb-2">Select Columns for AutoML Job</h2>
                             <div className="grid grid-cols-2 gap-4">
-                                {type != "clustering" && (<div>
+                                {selectedMethod != "CLUSTERING" && (<div>
                                     <h4>Select Target Column</h4>
                                     {columns.map(column => (
                                         <div key={column}>
