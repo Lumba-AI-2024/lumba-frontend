@@ -79,10 +79,8 @@ const upload = () => {
 
         appendAutoMLData(autoML);
         try {
-            // await addAutoML(autoML);
             setIsUploading(false);
             setIsChecked(true);
-            // router.push(`/workspace/${workspaceName}/automl/newProject/preprocess?type=${type}`);
         } catch (error) {
             console.error('Upload failed:', error);
             setIsUploading(false);
@@ -142,18 +140,12 @@ const upload = () => {
         }
     };
 
-    // const handleSelectTargetColumn = (column) => {
-    //     setSelectedTargetColumn(column);
-    // };
-
-    console.log(selectedTrainingColumns);
-    console.log(selectedTargetColumn);
     return (
         <>
             <Seo title={`${workspaceName} - AutoML`} />
             <div className="flex">
                 <SidebarAuto />
-                <div className="flex-1 p-8">  {/* Adjusted padding and flex-grow */}
+                <div className="flex-1 p-8">  
                     <Breadcrumb links={[
                         { label: workspaceName },
                         { label: "AutoML", href: "/workspace/" + workspaceName + "/automl" },
@@ -170,19 +162,8 @@ const upload = () => {
                                 label={"Name"} 
                                 name={"name"} 
                                 placeholder="AutoML job name" 
-                                // onChange={(e) => setAutoMLName(e.target.value)}
                                 required />
                         </div>
-
-                        {/* <div className="form-field">
-                            <Input
-                                label={"Description"}
-                                name={"description"}
-                                placeholder="Write description here"
-                                textarea={true}
-                                required
-                            />
-                        </div> */}
 
                         <div className="form-field">
                             <p className="form-label">Will Be Used For</p>
@@ -224,7 +205,6 @@ const upload = () => {
                                             setIsChecked(true);
                                             setDataset(formData?.file["name"]);
                                             console.log(formData?.file["name"]);
-                                            // router.push(`/workspace/${workspaceName}/automl/newProject/preprocess?type=${type}`);
                                         } catch (error) {
                                             console.error('Upload failed:', error);
                                             setIsUploading(false);

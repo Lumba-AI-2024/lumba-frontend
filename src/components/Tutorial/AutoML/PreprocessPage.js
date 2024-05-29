@@ -215,68 +215,13 @@ const PreprocessPage = ({ onFormDataChange }) => {
 
                       console.log(columnsOrdinal);
                       console.log(formData?.ordinal);
-                      // let columnsDuplication =
-                      //   typeof formData?.duplication === "object"
-                      //     ? Object.keys(formData.duplication)
-                      //         .filter((key) => formData.duplication[key] === true)
-                      //         .join(",")
-                      //     : undefined;
-
-                      // let columnsNormalize =
-                      //   typeof formData?.columnsNormalize === "object"
-                      //     ? Object.keys(formData.columnsNormalize)
-                      //       .filter((key) => formData.columnsNormalize[key] === true)
-                      //       .join(",")
-                      //     : undefined;
-
-                      // const columnsConvert = formData?.columns?.join(",") || "";
-
-                      // let columnsNormalize =
-                      //   typeof formData?.columnsNormalize === "object"
-                      //     ? Object.keys(formData.columnsNormalize)
-                      //         .filter((key) => formData.columnsNormalize[key] === true)
-                      //         .join(",")
-                      //     : undefined;
-
-                      // columnsNormalize = formData?.columnsNormalize === "all" ? "" : columnsNormalize;
-
-                      // const body = {
-                      //   filename: formData?.dataset,
-                      //   missing,
-                      //   duplication,
-                      //   outlier,
-                      //   columnsMissing,
-                      //   columnsDuplication,
-                      //   convert,
-                      //   columnsConvert,
-                      //   targetTypeConvert: formData?.targetTypeConvert,
-                      //   username: username,
-                      //   workspace: workspaceName,
-                      //   normalize,
-                      //   methodNormalize: formData?.methodNormalize,
-                      //   columnsNormalize,
-                      //   oversampling,
-                      //   columnsOversampling: formData?.columnsOversampling,
-                      // };
+                      
                       const body = new FormData();
                       body.append("username", username);
                       body.append("workspace", workspaceName);
                       body.append("datasetname", checkedDataset);
-                      // body.append("missing", missing);
-                      // body.append("duplication", duplication);
-                      // body.append("outlier", outlier);
-                      // body.append("normalize", normalize);
-                      // body.append("convert", convert);
-                      // body.append("oversampling", oversampling);
                       body.append("ordinal", ordinal)
                       body.append("dict_ordinal_encoding", JSON.stringify(columnsOrdinal) ?? "")
-                      // body.append("columns_missing", columnsMissing ?? "");
-                      // body.append("columns_duplication", columnsDuplication ?? "");
-                      // body.append("columns_convert", columnsConvert ?? "");
-                      // body.append("columns_normalize", columnsNormalize ?? "");
-                      // body.append("columns_oversampling", formData?.columnsOversampling ?? "");
-                      // body.append("target_type_convert", formData?.targetTypeConvert ?? "");
-                      // body.append("method_normalize", formData?.methodNormalize); 
                       body.append("type", type);
                       body.append("selectedTargetColumn", selectedTargetColumn);
                       body.append("selectedTrainingColumns", selectedTrainingColumns);
@@ -304,40 +249,6 @@ const PreprocessPage = ({ onFormDataChange }) => {
 
                   }}
                 >
-                  {/* <AccordionSelect names={["missing", "missingMode"]} label="Clean Missing Data" top={true}>
-                    <p className="pb-1">Columns to be cleaned</p>
-                    <Select
-                      placeholder="Select column(s)"
-                      name="missing"
-                      defaultSelected={"all"}
-                      items={[
-                        { value: "all", label: "All Columns" },
-                        {
-                          value: "custom",
-                          label: {
-                            formLabel: "Select Columns",
-                            buttonLabel: "Select Columns",
-                            totalColumns: columns.length,
-                            CustomButton: CustomButton,
-                            name: "missing",
-                            values: columns,
-                          },
-                        },
-                      ]}
-                    />
-                    {/* <p className="mt-4 pb-1">Cleaning Mode</p>
-										<Select
-											placeholder="Select mode"
-											name="missingMode"
-											items={[
-												{ value: "mean", label: "Replace with mean" },
-												{ value: "median", label: "Replace with median" },
-												{ value: "mode", label: "Replace with mode" },
-												{ value: "entireRow", label: "Remove entire row" },
-												{ value: "entireColumn", label: "Remove entire column" },
-											]}
-										/> 
-                    </AccordionSelect> */}
                   <AccordionSelect names={["ordinal"]} label="Ordinal Columns">
                     <p className="pb-1">Columns to be ranked</p>
                     <Select
@@ -359,121 +270,8 @@ const PreprocessPage = ({ onFormDataChange }) => {
                       ]}
                     />
                   </AccordionSelect>
-                  {/* <AccordionSelect names={["duplication"]} label="Ordinal Columns">
-                    <p className="pb-1">Columns to be cleaned</p>
-                    <Select
-                      placeholder="Select column(s)"
-                      name="duplication"
-                      defaultSelected={"all"}
-                      items={[
-                        { value: "all", label: "All Columns" },
-                        {
-                          value: "custom",
-                          label: {
-                            formLabel: "Select Columns",
-                            buttonLabel: "Select Columns",
-                            totalColumns: columns.length,
-                            CustomButton: CustomButton,
-                            name: "duplication",
-                            values: columns,
-                          },
-                        },
-                      ]}
-                    />
-                  </AccordionSelect>
-                  <AccordionSelect names={["outlier", "outlierMode"]} label="Handle Outlier Data">
-                    <p className="pb-1">Columns to be cleaned</p>
-                    <Select
-                      placeholder="Select column(s)"
-                      name="outlier"
-                      defaultSelected={"all"}
-                      items={[
-                        { value: "all", label: "All Columns" },
-                        {
-                          value: "custom",
-                          label: {
-                            formLabel: "Select Columns",
-                            buttonLabel: "Select Columns",
-                            totalColumns: columns.length,
-                            CustomButton: CustomButton,
-                            name: "outlier",
-                            values: columns,
-                          },
-                        },
-                      ]}
-                    />
-                  </AccordionSelect>
-                  <AccordionSelect names={["columnsNormalize", "methodNormalize"]} label="Normalize Data">
-                    <p className="pb-1">Columns to be cleaned</p>
-                    <Select
-                      placeholder="Select column(s)"
-                      name="columnsNormalize"
-                      defaultSelected={"all"}
-                      items={[
-                        { value: "all", label: "All Columns" },
-                        {
-                          value: "custom",
-                          label: {
-                            formLabel: "Select Numerical Columns",
-                            buttonLabel: "Select Columns",
-                            totalColumns: columns.length,
-                            CustomButton: CustomButton,
-                            name: "columnsNormalize",
-                            values: columns,
-                          },
-                        },
-                      ]}
-                    />
-                    <p className="pb-1 mt-3">Normalize method</p>
-                    <Select
-                      placeholder="Select method"
-                      name="methodNormalize"
-                      items={[
-                        { value: "min_max_scaling", label: "Min Max Scaling" },
-                        { value: "z-score", label: "Z-Score" },
-                      ]}
-                    />
-                  </AccordionSelect>*/}
-                  {/* <AccordionSelect names={["convertion"]} label="Convert Data Type">
-                    <p className="pb-1">Columns to be converted</p>
-                    <MultiSelect
-                      variant="withBorder"
-                      instanceId="select-multiple"
-                      placeholder={"Select column(s)"}
-                      name="columns"
-                      defaultOptions={columns?.map((column) => ({ value: column, label: column }))}
-                    />
-                    <p className="pb-1 mt-3">Convertion</p>
-                    <Select
-                      placeholder="Select data type"
-                      name="targetTypeConvert"
-                      items={[
-                        { value: "integer", label: "Integer" },
-                        { value: "float", label: "Float" },
-                        { value: "string", label: "String" },
-                      ]}
-                    />
-                  </AccordionSelect>
-                  <AccordionSelect
-                    names={["columnsOversampling"]}
-                    label="SMOTE"
-                    bottom={true}
-                    disabled={type === "forecasting"}
-                  >
-                    <p className="pb-1">Columns to be transformed</p>
-                    <Select
-                      placeholder="Select a column"
-                      name="columnsOversampling"
-                      items={columns?.map((column) => ({ value: column, label: column }))}
-                      disabled={type === "forecasting"}
-                    />
-                  </AccordionSelect> */}
-
                 </AccordionForm>
               </motion.div>
-              {/* )} */}
-              {/* </AnimatePresence> */}
-
               {Object.keys(columnsOrdinal).length > 0 && (
                 <div className="mt-4 ml-4">
                   <h3>Ordinal Data Rankings</h3>

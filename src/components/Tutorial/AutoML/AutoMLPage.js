@@ -60,21 +60,6 @@ export default function AutoMLPage() {
             Add Automated ML Job
           </div>
         </Button>
-        {/* <FormModalContextProvider>
-          <UploadFile
-            buttonLabel={
-              <div className="flex font-semibold items-center gap-1">
-                <Plus />
-                New Automated ML Job
-              </div>
-            }
-            formLabel="Upload File Datasets"
-            handleSubmit={() => {
-              handleNewProject();
-            }}
-            workspaceType={type}
-          />
-        </FormModalContextProvider> */}
       </div>
 
       {autoMLs.length > 0 || isUploading ? (
@@ -84,7 +69,6 @@ export default function AutoMLPage() {
               <th>AutoML Name</th>
               <th>Created on</th>
               <th>Modified on</th>
-              {/* <th className="text-center">Train Feature</th> */}
               <th>Method</th>
               <th>Target</th>
               <th>Actions</th>

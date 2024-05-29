@@ -99,7 +99,7 @@ export default function Model({
   // metrics_score,
   method,
   algorithm,
-  trainDate,
+  updated_time,
   features,
   predict,
   isDuplicate,
@@ -108,7 +108,8 @@ export default function Model({
   noShadow = false,
   username,
   workspace,
-  isAuto=false
+  isAuto=false,
+  status
 }) {
   
   const [isTesting, setIsTesting] = React.useState(false);
@@ -123,10 +124,6 @@ export default function Model({
       ? useModels({ username, workspace, type })
       : useForecastingModel({ workspace, username, type });
   const apiKey = type === "predicting" && useApiKey(id);
-
-  // const metrics = metrics_scores?.charAt(0) === "{" ? Object.keys(JSON.parse(metrics_scores)) : [];
-  // const scores = metrics_scores?.charAt(0) === "{" ? Object.values(JSON.parse(metrics_scores)) : [];
-
   const [selectedMetrics, setSelectedMetrics] = useState(0);
 
   const router = useRouter();
@@ -161,7 +158,7 @@ export default function Model({
           </div>
         </td>
         <td className={`bg-white py-2 relative ${isLoading && "text-gray/50"} px-4`}>
-          {isLoading ? "On Training..." : generateTime(trainDate)}
+          {isLoading ? "On Training..." : generateTime(updated_time)}
         </td>
         {!noActions && (
           <td
@@ -316,13 +313,18 @@ export default function Model({
             <button
               className="text-blue text-[10px]"
               onClick={() =>{
-                router.push(`/workspace/${workspaceName}/automl/newProject/modelling/${autoMLName}/explain`);
+                router.push(`/workspace/${workspaceName}/automl/newProject/modelling/${autoMLName}/${name}`);
               }}
               >
               Explain
             </button>
           </td>
         )}
+         <td className="bg-white rounded-l-md pl-4 py-2 relative px-4">
+          <div className={`flex flex-col ${isLoading && "text-gray/50"}`}>
+            <span>{status}</span>
+          </div>
+        </td>
         {!noShadow && <td colSpan="100%" className="absolute inset-0 -z-[1] w-full h-full shadow rounded-md"></td>}
       </tr>
     </>
