@@ -194,7 +194,7 @@ export default function Model({
                   </FormModalContextProvider>
 
                   <FormModalContextProvider>
-                    {algorithm === "KMEANS" && (
+                    {/* {algorithm === "KMEANS" && (
                       <KMeansTestModal
                         name={name}
                         CustomButton={TestButton}
@@ -226,8 +226,8 @@ export default function Model({
                             });
                         }}
                       />
-                    )}
-                    {["DECISION_TREE", "RANDOM_FOREST","NEURAL_NETWORK","XG_BOOST"].includes(algorithm) && (
+                    )} */}
+                    {["DECISION_TREE", "RANDOM_FOREST","NEURAL_NETWORK","XG_BOOST","KMEANS","DBSCAN"].includes(algorithm) && (
                       <TestModal
                         CustomButton={TestButton}
                         isTesting={isTesting}
