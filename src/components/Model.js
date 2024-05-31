@@ -131,7 +131,7 @@ export default function Model({
   const [realPath, params] = router.asPath.split("?");
   const { autoMLName, workspaceName } = router.query;
   const isHome = !realPath.split("/").includes("modeling");
-
+  const parsedScore = JSON.parse(score)
   return (
     <>
       <tr>
@@ -148,7 +148,9 @@ export default function Model({
           <div className="flex flex-col">
             <span className="flex items-center gap-1 text-[10px] -mb-1">{metricsName[metrics]}</span>
             
-            <span>{score}</span>
+            {method=="REGRESSION" && <span>{parsedScore.r2_score}</span>}
+            {method=="CLASSIFICATION" && <span>{parsedScore.accuracy_score}</span>}
+            {method=="CLUSTERING" && <span>{parsedScore.silhoutte_score}</span>}
           </div>
         </td>
         <td className={`bg-white py-2 relative ${isLoading && "text-gray/50"} px-4`}>
