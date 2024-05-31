@@ -33,13 +33,17 @@ const explain = () => {
     const selectedAutoML = autoMLs.find((autoML) => autoML.name === autoMLName);
     const selectedModels = selectedAutoML?.automlmodels || [];
     const selectedModel = selectedModels.find((model) => model.name === modelAutoName);
+    console.log("model",selectedModel)
     console.log("mode",selectedModel?.score);
     const score = selectedModel?.score;
-    const foto = selectedModel?.shap_values;
+    const shap = selectedModel?.shap_values;
     // split name selected model but only the first two words
     const name = selectedModel?.name.split('_').slice(0, 2).join(' & ');
     // const score = selectedModel?.score;
     let metrics = null;
+    let shapVal = null;
+    let foto = null;
+    let FeatureImportance = null;
     if (score) {
         try {
             metrics = JSON.parse(score);
@@ -47,8 +51,19 @@ const explain = () => {
             console.error("Failed to parse score:", e);
         }
     }
+    if (shap) {
+        try {
+            shapVal = JSON.parse(shap);
+            console.log("shapVal",shapVal);
+            foto = shapVal.img_str;
+            FeatureImportance = shapVal.feature_importance;
+
+        } catch (e) {
+            console.error("Failed to parse score:", e);
+        }
+    }
     // console.log("metrics",metrics);
-    console.log("foto",score);
+    // console.log("foto",importance);
     return (
         <>
             <Seo title={`${workspaceName} - AutoML`} />
@@ -97,10 +112,25 @@ const explain = () => {
                     </p>
 
                     <h3>Top Important Features on Target</h3>
-                    <li>Feature 1</li>
-                    <li>Feature 2</li>
-                    <li>Feature 3</li>
-                    <li>Feature 4</li>
+                    
+                    <div className="overflow-x-auto">
+                        <table className="min-w-full bg-white rounded-lg shadow-md">
+                            <thead>
+                                <tr>
+                                    <th className="px-4 py-2 border-b">Feature</th>
+                                    <th className="px-4 py-2 border-b">Importance</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {FeatureImportance && Object.entries(FeatureImportance).map(([key, value]) => (
+                                    <tr key={key}>
+                                        <td className="px-4 py-2 border-b">{key}</td>
+                                        <td className="px-4 py-2 border-b">{value}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
 
               
