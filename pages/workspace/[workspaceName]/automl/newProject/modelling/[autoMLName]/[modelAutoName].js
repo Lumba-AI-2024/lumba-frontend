@@ -44,9 +44,11 @@ const explain = () => {
     let shapVal = null;
     let foto = null;
     let FeatureImportance = null;
+    let parameter = null;
     if (score) {
         try {
             metrics = JSON.parse(score);
+            parameter = metrics.best_hyperparams;
         } catch (e) {
             console.error("Failed to parse score:", e);
         }
@@ -104,6 +106,28 @@ const explain = () => {
                             </tbody>
                         </table>
                     </div>
+
+                    <h3>Used Parameter</h3>
+                    
+                    <div className="overflow-x-auto">
+                        <table className="min-w-full bg-white rounded-lg shadow-md">
+                            <thead>
+                                <tr>
+                                    <th className="px-4 py-2 border-b">Parameter</th>
+                                    <th className="px-4 py-2 border-b">Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {parameter && Object.entries(parameter).map(([key, value]) => (
+                                    <tr key={key}>
+                                        <td className="px-4 py-2 border-b">{key}</td>
+                                        <td className="px-4 py-2 border-b">{value}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                
                     <p>
                         <div>
                             <h3 className="my-3">Shapley Plot</h3>

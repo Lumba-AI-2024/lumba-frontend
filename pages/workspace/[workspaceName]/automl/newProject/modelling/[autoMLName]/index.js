@@ -32,13 +32,32 @@ const modelling = () => {
     const selectedModels = selectedAutoML?.automlmodels || [];    
     console.log(selectedModels)
     const projectTitle = autoMLName ? `${autoMLName} Project` : "AutoML Project";
-    const sortedModels = selectedModels?.sort((a, b) => {
-        if (selectedAutoML.method === 'REGRESSION') {
-            return parseFloat(b.score.r2_score) - parseFloat(a.score.r2_score);
-        }
-        // You can add more conditions for other methods if needed
-        return parseFloat(b.score) - parseFloat(a.score);
-    }) || [];
+    
+    const parseAndSortModels = (models) => {
+        return models.map((model) => {
+            let parsedScore = null;
+            try {
+                parsedScore = JSON.parse(model.score);
+            } catch (error) {
+                console.error(`Failed to parse score for model ${model.name}:`, error);
+            }
+            return {
+                ...model,
+                parsedScore,
+            };
+        }).sort((a, b) => {
+            if (selectedAutoML.method === 'REGRESSION') {
+                console.log(a)
+                return parseFloat(b.parsedScore.r2_score) - parseFloat(a.parsedScore.r2_score);
+            } else if (selectedAutoML.method === 'CLASSIFICATION') {
+            return parseFloat(b.parsedScore.accuracy_score) - parseFloat(a.parsedScore.accuracy_score);
+            } else if (selectedAutoML.method === 'CLUSTERING') {
+                return parseFloat(b.parsedScore.silhouette_score) - parseFloat(a.parsedScore.silhouette_score);
+            }
+        });
+    };
+
+    const sortedModels = parseAndSortModels(selectedModels);
 
 
     return (
