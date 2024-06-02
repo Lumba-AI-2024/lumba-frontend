@@ -131,7 +131,9 @@ export default function Model({
   const [realPath, params] = router.asPath.split("?");
   const { autoMLName, workspaceName } = router.query;
   const isHome = !realPath.split("/").includes("modeling");
-  const parsedScore = JSON.parse(score)
+  if (method !== "CLUSTERING") {
+    const parsedScore = JSON.parse(score)
+  }
   return (
     <>
       <tr>
@@ -150,7 +152,7 @@ export default function Model({
             
             {method=="REGRESSION" && <span>{parsedScore.r2_score}</span>}
             {method=="CLASSIFICATION" && <span>{parsedScore.accuracy_score}</span>}
-            {method=="CLUSTERING" && <span>{parsedScore.silhoutte_score}</span>}
+            {method=="CLUSTERING" && <span>{score}</span>}
           </div>
         </td>
         <td className={`bg-white py-2 relative ${isLoading && "text-gray/50"} px-4`}>

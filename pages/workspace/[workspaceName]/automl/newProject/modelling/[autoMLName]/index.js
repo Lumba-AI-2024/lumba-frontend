@@ -38,6 +38,9 @@ const modelling = () => {
             let parsedScore = null;
             try {
                 parsedScore = JSON.parse(model.score);
+                if (selectedAutoML.method === 'CLUSTERING') {
+                    parsedScore = parseFloat(parsedScore)
+                }
             } catch (error) {
                 console.error(`Failed to parse score for model ${model.name}:`, error);
             }
@@ -52,7 +55,8 @@ const modelling = () => {
             } else if (selectedAutoML.method === 'CLASSIFICATION') {
             return parseFloat(b.parsedScore.accuracy_score) - parseFloat(a.parsedScore.accuracy_score);
             } else if (selectedAutoML.method === 'CLUSTERING') {
-                return parseFloat(b.parsedScore.silhouette_score) - parseFloat(a.parsedScore.silhouette_score);
+                console.log("bbb",b)
+                return parseFloat(b.parsedScore) - parseFloat(a.parsedScore);
             }
         });
     };

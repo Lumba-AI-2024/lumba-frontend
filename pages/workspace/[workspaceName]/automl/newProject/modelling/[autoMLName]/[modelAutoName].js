@@ -48,7 +48,10 @@ const explain = () => {
     if (score) {
         try {
             metrics = JSON.parse(score);
-            parameter = metrics.best_hyperparams;
+            console.log("metrics",metrics)
+            if (selectedModel?.method !== "CLUSTERING"){
+                parameter = metrics.best_hyperparams;
+            }
         } catch (e) {
             console.error("Failed to parse score:", e);
         }
@@ -96,7 +99,16 @@ const explain = () => {
                                     <th className="px-4 py-2 border-b">Score</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            {selectedModel?.method === "CLUSTERING" ?(
+                                <tbody>
+                                
+                                    <tr >
+                                        <td className="px-4 py-2 border-b">Silhoutte Score</td>
+                                        <td className="px-4 py-2 border-b">{score}</td>
+                                    </tr>
+                                    </tbody>
+                            ):(
+                                <tbody>
                                 {metrics && Object.entries(metrics).map(([key, value]) => (
                                     <tr key={key}>
                                         <td className="px-4 py-2 border-b">{key}</td>
@@ -104,6 +116,7 @@ const explain = () => {
                                     </tr>
                                 ))}
                             </tbody>
+                            )}
                         </table>
                     </div>
 
