@@ -236,6 +236,7 @@ const PreprocessPage = ({ onFormDataChange }) => {
                         axios
                           .post(`${process.env.NEXT_PUBLIC_API_ROUTE}/preprocess/clean/`, body)
                           .then((res) => {
+                            console.log("response hasil",res.data)
                             setDataset(res.data);
                             setIsCleaned(true);
                           })

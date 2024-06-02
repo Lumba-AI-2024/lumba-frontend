@@ -68,6 +68,24 @@ const explain = () => {
             console.error("Failed to parse score:", e);
         }
     }
+
+    const displayMetrics = (metrics) => {
+        const keys = Object.keys(metrics);
+        let displayKeys = null;
+        if (selectedModel?.method === "CLUSTERING") {
+            displayKeys = keys;
+        } else if (selectedModel?.method === "CLASSIFICATION") {
+            displayKeys = keys.slice(0, 4);
+        } else {
+            displayKeys = keys.slice(0, 3);
+        }
+        return displayKeys.map(key => (
+            <tr key={key}>
+                <td className="px-4 py-2 border-b">{key}</td>
+                <td className="px-4 py-2 border-b">{metrics[key]}</td>
+            </tr>
+        ));
+    };
     // console.log("metrics",metrics);
     // console.log("foto",importance);
     return (
@@ -110,12 +128,7 @@ const explain = () => {
                                 </tbody>
                             ) : (
                                 <tbody>
-                                {parameter && Object.entries(parameter).map(([key, value]) => (
-                                    <tr key={key}>
-                                        <td className="px-4 py-2 border-b">{key}</td>
-                                        <td className="px-4 py-2 border-b">{value}</td>
-                                    </tr>
-                                ))}
+                                {metrics && displayMetrics(metrics)}
                             </tbody>
                             )}
                         </table>
@@ -132,10 +145,10 @@ const explain = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {parameter && Object.entries(parameter).map((key, value) => (
+                                {parameter && Object.entries(parameter).map(([key, value]) => (
                                     <tr key={key}>
-                                        <td>{key}</td>
-                                        <td>{value}</td>
+                                        <td className="px-4 py-2 border-b">{key}</td>
+                                        <td className="px-4 py-2 border-b">{value}</td>
                                     </tr>
                                 ))}
                             </tbody>
