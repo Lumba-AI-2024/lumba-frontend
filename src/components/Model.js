@@ -131,8 +131,9 @@ export default function Model({
   const [realPath, params] = router.asPath.split("?");
   const { autoMLName, workspaceName } = router.query;
   const isHome = !realPath.split("/").includes("modeling");
+  let parsedScore = null;
   if (method !== "CLUSTERING") {
-    const parsedScore = JSON.parse(score)
+    parsedScore = JSON.parse(score)
   }
   return (
     <>

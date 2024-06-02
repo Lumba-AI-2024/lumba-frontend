@@ -33,8 +33,8 @@ const explain = () => {
     const selectedAutoML = autoMLs.find((autoML) => autoML.name === autoMLName);
     const selectedModels = selectedAutoML?.automlmodels || [];
     const selectedModel = selectedModels.find((model) => model.name === modelAutoName);
-    console.log("model",selectedModel)
-    console.log("mode",selectedModel?.score);
+    console.log("model", selectedModel)
+    console.log("mode", selectedModel?.score);
     const score = selectedModel?.score;
     const shap = selectedModel?.shap_values;
     // split name selected model but only the first two words
@@ -48,9 +48,10 @@ const explain = () => {
     if (score) {
         try {
             metrics = JSON.parse(score);
-            console.log("metrics",metrics)
-            if (selectedModel?.method !== "CLUSTERING"){
+            console.log("metrics", metrics)
+            if (selectedModel?.method !== "CLUSTERING") {
                 parameter = metrics.best_hyperparams;
+                console.log("parameter", parameter)
             }
         } catch (e) {
             console.error("Failed to parse score:", e);
@@ -59,7 +60,7 @@ const explain = () => {
     if (shap) {
         try {
             shapVal = JSON.parse(shap);
-            console.log("shapVal",shapVal);
+            console.log("shapVal", shapVal);
             foto = shapVal.img_str;
             FeatureImportance = shapVal.feature_importance;
 
@@ -78,7 +79,7 @@ const explain = () => {
                         <Breadcrumb links={[
                             { label: workspaceName },
                             { label: "AutoML", href: "/workspace/" + workspaceName + "/automl" },
-                            { label: autoMLName, href: "/workspace/" + workspaceName + "/automl" + "/newProject" + "/modelling/" + autoMLName},
+                            { label: autoMLName, href: "/workspace/" + workspaceName + "/automl" + "/newProject" + "/modelling/" + autoMLName },
                             { label: "Explainability", href: router.asPath },
                         ]} active={"Explainability"} />
                     </div>
@@ -90,7 +91,7 @@ const explain = () => {
                     <h2>Explainability for {name}</h2>
 
                     <h3>Model Metrics</h3>
-                    
+
                     <div className="overflow-x-auto">
                         <table className="min-w-full bg-white rounded-lg shadow-md">
                             <thead>
@@ -99,17 +100,17 @@ const explain = () => {
                                     <th className="px-4 py-2 border-b">Score</th>
                                 </tr>
                             </thead>
-                            {selectedModel?.method === "CLUSTERING" ?(
+                            {selectedModel?.method === "CLUSTERING" ? (
                                 <tbody>
-                                
+
                                     <tr >
                                         <td className="px-4 py-2 border-b">Silhoutte Score</td>
                                         <td className="px-4 py-2 border-b">{score}</td>
                                     </tr>
-                                    </tbody>
-                            ):(
+                                </tbody>
+                            ) : (
                                 <tbody>
-                                {metrics && Object.entries(metrics).map(([key, value]) => (
+                                {parameter && Object.entries(parameter).map(([key, value]) => (
                                     <tr key={key}>
                                         <td className="px-4 py-2 border-b">{key}</td>
                                         <td className="px-4 py-2 border-b">{value}</td>
@@ -121,7 +122,7 @@ const explain = () => {
                     </div>
 
                     <h3>Used Parameter</h3>
-                    
+
                     <div className="overflow-x-auto">
                         <table className="min-w-full bg-white rounded-lg shadow-md">
                             <thead>
@@ -131,16 +132,16 @@ const explain = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {parameter && Object.entries(parameter).map(([key, value]) => (
+                                {parameter && Object.entries(parameter).map((key, value) => (
                                     <tr key={key}>
-                                        <td className="px-4 py-2 border-b">{key}</td>
-                                        <td className="px-4 py-2 border-b">{value}</td>
+                                        <td>{key}</td>
+                                        <td>{value}</td>
                                     </tr>
                                 ))}
                             </tbody>
                         </table>
                     </div>
-                
+
                     <p>
                         <div>
                             <h3 className="my-3">Shapley Plot</h3>
@@ -149,7 +150,7 @@ const explain = () => {
                     </p>
 
                     <h3>Top Important Features on Target</h3>
-                    
+
                     <div className="overflow-x-auto">
                         <table className="min-w-full bg-white rounded-lg shadow-md">
                             <thead>
@@ -170,7 +171,7 @@ const explain = () => {
                     </div>
                 </div>
 
-              
+
             </div>
         </>
     );
