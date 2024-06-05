@@ -95,6 +95,7 @@ const PreprocessPage = ({ onFormDataChange }) => {
 
   const [checkedDataset, setCheckedDataset] = React.useState(null);
   const [columns, setColumns] = React.useState([]);
+  const [row,setRow] = React.useState(null)
 
   const [isChecked, setIsChecked] = React.useState(false);
   const [isCleaned, setIsCleaned] = React.useState(false);
@@ -121,8 +122,9 @@ const PreprocessPage = ({ onFormDataChange }) => {
             Authorization: `Token ${getCookie("token")}`,
           },
         });
-
+        console.log("data",data)
         const keys = [...Object.keys(data)];
+        console.log("keys",keys)
         if (keys[0] === "Unnamed: 0") {
           keys.shift();
         }
@@ -237,7 +239,11 @@ const PreprocessPage = ({ onFormDataChange }) => {
                           .post(`${process.env.NEXT_PUBLIC_API_ROUTE}/preprocess/clean/`, body)
                           .then((res) => {
                             console.log("response hasil",res.data)
-                            setDataset(res.data);
+                            const datasetWithoutRow = { ...res.data };
+                            setRow(datasetWithoutRow.row)
+                            delete datasetWithoutRow["row"]; // Remove the 'row' attribute
+                            console.log("cobaa",datasetWithoutRow)
+                            setDataset(datasetWithoutRow.preview);
                             setIsCleaned(true);
                           })
                           .catch((err) => console.log(err))
@@ -307,7 +313,7 @@ const PreprocessPage = ({ onFormDataChange }) => {
                               Number of columns: <span className="font-bold text-sm">{columns.length}</span>
                             </span>
                             <span className="text-xs">
-                              Number of rows: <span className="font-bold text-sm">10</span>
+                              Number of rows: <span className="font-bold text-sm">{row}</span>
                             </span>
                           </div>
                           <div className="py-2 w-full overflow-auto">
