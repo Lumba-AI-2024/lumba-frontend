@@ -62,7 +62,7 @@ const modelling = () => {
     };
 
     const sortedModels = parseAndSortModels(selectedModels);
-
+    console.log(sortedModels)
 
     return (
         <>
@@ -89,6 +89,7 @@ const modelling = () => {
                             <tr>
                                 <th className="px-4">Dataset & Model Name</th>
                                 <th className="px-4">Metric & Score</th>
+                                <th className="px-4">Prediction Time</th>
                                 <th className="px-4">Method & Algorithm</th>
                                 <th className="px-4">Train Date</th>
                                 <th className="px-4">Actions</th>

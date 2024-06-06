@@ -58,6 +58,7 @@ const preprocess = () => {
      
         try {
             await addAutoML(autoMLData);
+            router.push(`/workspace/${workspaceName}/automl/newProject/modelling/${autoMLData.get("name")}`);
         } catch (error) {
             console.error('Upload failed:', error);
             setIsUploading(false);

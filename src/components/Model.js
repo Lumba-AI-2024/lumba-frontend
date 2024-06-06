@@ -108,13 +108,13 @@ export default function Model({
   noShadow = false,
   username,
   workspace,
-  isAuto=false,
+  isAuto = false,
   status
 }) {
-  
+
   const [isTesting, setIsTesting] = React.useState(false);
   const [result, setResult] = React.useState("-");
-  
+
 
   const searchParams = useSearchParams();
   const type = searchParams.get("type");
@@ -135,6 +135,7 @@ export default function Model({
   if (method !== "CLUSTERING") {
     parsedScore = JSON.parse(score)
   }
+  console.log(parsedScore)
   return (
     <>
       <tr>
@@ -150,10 +151,15 @@ export default function Model({
         <td className={`bg-white py-2 relative  ${isLoading && "text-gray/50"} px-4`}>
           <div className="flex flex-col">
             <span className="flex items-center gap-1 text-[10px] -mb-1">{metricsName[metrics]}</span>
-            
-            {method=="REGRESSION" && <span>{parsedScore.r2_score}</span>}
-            {method=="CLASSIFICATION" && <span>{parsedScore.accuracy_score}</span>}
-            {method=="CLUSTERING" && <span>{score}</span>}
+
+            {method == "REGRESSION" && <span>{parsedScore.r2_score}</span>}
+            {method == "CLASSIFICATION" && <span>{parsedScore.accuracy_score}</span>}
+            {method == "CLUSTERING" && <span>{score}</span>}
+          </div>
+        </td>
+        <td className="bg-white rounded-l-md pl-4 py-2 relative px-4">
+          <div className={`flex flex-col ${isLoading && "text-gray/50"}`}>
+            <span>{parsedScore.time}</span>
           </div>
         </td>
         <td className={`bg-white py-2 relative ${isLoading && "text-gray/50"} px-4`}>
@@ -232,7 +238,7 @@ export default function Model({
                         }}
                       />
                     )} */}
-                    {["DECISION_TREE", "RANDOM_FOREST","NEURAL_NETWORK","XG_BOOST","KMEANS","DBSCAN"].includes(algorithm) && (
+                    {["DECISION_TREE", "RANDOM_FOREST", "NEURAL_NETWORK", "XG_BOOST", "KMEANS", "DBSCAN"].includes(algorithm) && (
                       <TestModal
                         CustomButton={TestButton}
                         isTesting={isTesting}
@@ -317,15 +323,15 @@ export default function Model({
           <td className={`bg-white py-2 px-4`}>
             <button
               className="text-blue text-[10px]"
-              onClick={() =>{
+              onClick={() => {
                 router.push(`/workspace/${workspaceName}/automl/newProject/modelling/${autoMLName}/${name}`);
               }}
-              >
+            >
               Explain
             </button>
           </td>
         )}
-         <td className="bg-white rounded-l-md pl-4 py-2 relative px-4">
+        <td className="bg-white rounded-l-md pl-4 py-2 relative px-4">
           <div className={`flex flex-col ${isLoading && "text-gray/50"}`}>
             <span>{status}</span>
           </div>
