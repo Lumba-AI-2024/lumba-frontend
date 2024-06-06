@@ -49,10 +49,8 @@ const explain = () => {
         try {
             metrics = JSON.parse(score);
             console.log("metrics", metrics)
-            if (selectedModel?.method !== "CLUSTERING") {
-                parameter = metrics.best_hyperparams;
-                console.log("parameter", parameter)
-            }
+            parameter = metrics.best_hyperparams;
+            console.log("parameter", parameter)
         } catch (e) {
             console.error("Failed to parse score:", e);
         }
@@ -63,7 +61,6 @@ const explain = () => {
             console.log("shapVal", shapVal);
             foto = shapVal.img_str;
             FeatureImportance = shapVal.feature_importance;
-
         } catch (e) {
             console.error("Failed to parse score:", e);
         }
@@ -73,7 +70,7 @@ const explain = () => {
         const keys = Object.keys(metrics);
         let displayKeys = null;
         if (selectedModel?.method === "CLUSTERING") {
-            displayKeys = keys;
+            displayKeys = keys.slice(0, 1);
         } else if (selectedModel?.method === "CLASSIFICATION") {
             displayKeys = keys.slice(0, 4);
         } else {
@@ -118,19 +115,10 @@ const explain = () => {
                                     <th className="px-4 py-2 border-b">Score</th>
                                 </tr>
                             </thead>
-                            {selectedModel?.method === "CLUSTERING" ? (
-                                <tbody>
 
-                                    <tr >
-                                        <td className="px-4 py-2 border-b">Silhoutte Score</td>
-                                        <td className="px-4 py-2 border-b">{score}</td>
-                                    </tr>
-                                </tbody>
-                            ) : (
-                                <tbody>
+                            <tbody>
                                 {metrics && displayMetrics(metrics)}
                             </tbody>
-                            )}
                         </table>
                     </div>
 
