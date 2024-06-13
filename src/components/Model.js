@@ -217,7 +217,7 @@ export default function Model({
                   </FormModalContextProvider>
 
                   <FormModalContextProvider>
-                    {["DECISION_TREE", "RANDOM_FOREST", "NEURAL_NETWORK", "XG_BOOST", "KMEANS", "DBSCAN","LINEAR"].includes(algorithm) && (
+                    {["DECISION_TREE", "RANDOM_FOREST", "NEURAL_NETWORK", "XG_BOOST", "LINEAR"].includes(algorithm) && (
                       <TestModal
                         CustomButton={TestButton}
                         isTesting={isTesting}
