@@ -30,7 +30,7 @@ export default function TestModal({ handleSubmit, CustomButton, features, predic
       >
         <form
           action=""
-          className="rounded-md shadow px-4 py-3 w-[450px] mx-auto flex flex-col transition duration-300 overflow-x-hidden relative bg-white z-40"
+          className="rounded-md shadow px-4 py-3 w-[600px] h-[70vh] mx-auto flex flex-col transition duration-300 overflow-hidden relative bg-white z-40"
           onSubmit={(e) => {
             e.stopPropagation();
             e.preventDefault();
@@ -50,7 +50,7 @@ export default function TestModal({ handleSubmit, CustomButton, features, predic
             </div>
             <div className="h-[1px] bg-gray/30 w-full absolute left-0 mt-2"></div>
           </div>
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2 overflow-y-auto">
             <div className="flex items-center gap-2">
               <span className="font-semibold">Feature to be trained</span> <Question label="predictor variable" />
             </div>
@@ -73,26 +73,26 @@ export default function TestModal({ handleSubmit, CustomButton, features, predic
               ) : (
                 <p>No features to be displayed</p>
               );
-                })()}
-            < div className="text-center">
-            <Button disabled={isTesting} variant={isTesting ? "disabled" : "primary"}>
-              Test
-            </Button>
+            })()}
+            <div className="text-center">
+              <Button disabled={isTesting} variant={isTesting ? "disabled" : "primary"}>
+                Test
+              </Button>
+            </div>
           </div>
-      </div>
-      <div className="mb-5 mt-2">
-        <div className="h-[1px] bg-gray/30 w-full absolute left-0 mt-2"></div>
-      </div>
-      <div className="flex flex-col gap-2">
-        <div className="flex items-center gap-2">
-          <span className="font-semibold">Target Predict Result</span> <Question label="outcome variable" />
-        </div>
-        <div className="w-full grid grid-cols-2">
-          <p>{predict}</p>
-          {result}
-        </div>
-      </div>
-    </form >
+          <div className="mb-5 mt-2">
+            <div className="h-[1px] bg-gray/30 w-full absolute left-0 mt-2"></div>
+          </div>
+          <div className="flex flex-col gap-2">
+            <div className="flex items-center gap-2">
+              <span className="font-semibold">Target Predict Result</span> <Question label="outcome variable" />
+            </div>
+            <div className="w-full grid grid-cols-2">
+              <p>{predict}</p>
+              {result}
+            </div>
+          </div>
+        </form >
       </div >
     </>
   );
