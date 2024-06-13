@@ -98,6 +98,7 @@ export default function Model({
   metrics,
   datasetname,
   score,
+  scaler,
   // metrics_score,
   method,
   algorithm,
@@ -136,6 +137,14 @@ export default function Model({
   console.log(parsedScore);
 
   // Define the download URL
+  const handleDownload = () => {
+    const link = document.createElement("a");
+    link.href = file; // Use the `file` prop as the URL
+    link.download = name; // Use the `name` prop as the file name
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   return (
     <>
@@ -183,7 +192,7 @@ export default function Model({
                 <>
                   {type === "predicting" && <ApiKey apiKey={apiKey} />}
                   {/* Download button */}
-                  <Download onClick={() => {file}} />
+                  <Download onClick={handleDownload} />
                   <FormModalContextProvider>
                     <FormModal
                       variant="deleteModel"
@@ -208,7 +217,7 @@ export default function Model({
                   </FormModalContextProvider>
 
                   <FormModalContextProvider>
-                    {["DECISION_TREE", "RANDOM_FOREST", "NEURAL_NETWORK", "XG_BOOST"].includes(algorithm) && (
+                    {["DECISION_TREE", "RANDOM_FOREST", "NEURAL_NETWORK", "XG_BOOST", "LINEAR"].includes(algorithm) && (
                       <TestModal
                         CustomButton={TestButton}
                         isTesting={isTesting}
@@ -243,37 +252,37 @@ export default function Model({
                             });
                         }}
                       />
-                    )}
-                    {algorithm === "LINEAR" && (
-                      <TestModal
-                        CustomButton={TestButton}
-                        isTesting={isTesting}
-                        features={feature}
-                        predict={predict}
-                        result={isTesting ? <Spinner /> : result}
-                        handleSubmit={(formData) => {
-                          setIsTesting(true);
-                          axios
-                            .get(
-                              `${process.env.NEXT_PUBLIC_API_ROUTE}/modeling/predict/?name=${name}&feature=${formData[features[0].label]
-                              }&username=${username}&workspace=${workspace}&type=${type}`,
-                              {
-                                headers: {
-                                  Authorization: `Token ${getCookie("token")}`,
-                                },
-                              }
-                            )
-                            .then((res) => {
-                              const { result } = res.data;
-                              setResult(result);
-                              setIsTesting(false);
-                            })
-                            .catch((error) => {
-                              setResult(<span className="text-pink">An error occurred.</span>);
-                              setIsTesting(false);
-                            });
-                        }}
-                      />
+                    // )}
+                    // {algorithm === "LINEAR" && (
+                    //   <TestModal
+                    //     CustomButton={TestButton}
+                    //     isTesting={isTesting}
+                    //     features={feature}
+                    //     predict={predict}
+                    //     result={isTesting ? <Spinner /> : result}
+                    //     handleSubmit={(formData) => {
+                    //       setIsTesting(true);
+                    //       axios
+                    //         .get(
+                    //           `${process.env.NEXT_PUBLIC_API_ROUTE}/modeling/predict/?name=${name}&feature=${formData[features[0].label]
+                    //           }&username=${username}&workspace=${workspace}&type=${type}`,
+                    //           {
+                    //             headers: {
+                    //               Authorization: `Token ${getCookie("token")}`,
+                    //             },
+                    //           }
+                    //         )
+                    //         .then((res) => {
+                    //           const { result } = res.data;
+                    //           setResult(result);
+                    //           setIsTesting(false);
+                    //         })
+                    //         .catch((error) => {
+                    //           setResult(<span className="text-pink">An error occurred.</span>);
+                    //           setIsTesting(false);
+                    //         });
+                    //     }}
+                      // />
                     )}
                   </FormModalContextProvider>
 
