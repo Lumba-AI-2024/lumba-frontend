@@ -65,6 +65,7 @@ const upload = () => {
             alert("Please select a target column.");
             return;
         }
+        console.log(dataset)
         const autoML = {
             username,
             workspace: workspaceName,
@@ -85,7 +86,7 @@ const upload = () => {
             console.error('Upload failed:', error);
             setIsUploading(false);
         }
-        router.push(`/workspace/${workspaceName}/automl/newProject/preprocess?type=${type}&checkedDataset=${dataset}&selectedTargetColumn=${selectedTargetColumn}&selectedTrainingColumns=${selectedTrainingColumns}`);
+        router.push(`/workspace/${workspaceName}/automl/newProject/preprocess?type=${type}&automlname=${formData?.name}&checkedDataset=${dataset}&selectedTargetColumn=${selectedTargetColumn}&selectedTrainingColumns=${selectedTrainingColumns}`);
     };
 
     // Update dataset when formData changes

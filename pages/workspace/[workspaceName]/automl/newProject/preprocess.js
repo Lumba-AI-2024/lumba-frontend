@@ -26,6 +26,8 @@ const preprocess = () => {
 
     let searchParams = useSearchParams();
     let type = searchParams.get("type");
+    const { automlname } = router.query;
+
 
     const { workspaceName } = router.query;
     const [file, setFile] = useState(null);
@@ -58,7 +60,7 @@ const preprocess = () => {
      
         try {
             await addAutoML(autoMLData);
-            router.push(`/workspace/${workspaceName}/automl/newProject/modelling/${autoMLData.get("name")}`);
+            router.push(`/workspace/${workspaceName}/automl/newProject/modelling/${automlname}`);
         } catch (error) {
             console.error('Upload failed:', error);
             setIsUploading(false);

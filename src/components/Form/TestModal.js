@@ -21,9 +21,8 @@ export default function TestModal({ handleSubmit, CustomButton, features, predic
           e.stopPropagation();
           setIsOpen(false);
         }}
-        className={`${
-          isOpen ? "block" : "hidden"
-        } z-30 fixed inset-0 w-screen h-screen bg-gray/60 transition duration-300`}
+        className={`${isOpen ? "block" : "hidden"
+          } z-30 fixed inset-0 w-screen h-screen bg-gray/60 transition duration-300`}
       ></div>
       <div
         onClick={(e) => e.stopPropagation()}
@@ -55,34 +54,46 @@ export default function TestModal({ handleSubmit, CustomButton, features, predic
             <div className="flex items-center gap-2">
               <span className="font-semibold">Feature to be trained</span> <Question label="predictor variable" />
             </div>
-            {features?.map((feature) => (
-              <Input
-                key={feature.label}
-                name={feature.label}
-                label={feature.label}
-                placeholder={feature.isNumeric ? "Enter numeric value" : "Enter categoric value"}
-              />
-            ))}
-            <div className="text-center">
-              <Button disabled={isTesting} variant={isTesting ? "disabled" : "primary"}>
-                Test
-              </Button>
-            </div>
+            {console.log(features)}
+            {(() => {
+              let parsedFeatures = [];
+              if (typeof features === 'string') {
+                parsedFeatures = features.split(',').map(feature => feature.trim());
+              }
+
+              return parsedFeatures.length > 0 ? (
+                parsedFeatures?.map((feature) => (
+                  <Input
+                    key={feature}
+                    name={feature}
+                    label={feature}
+                    // placeholder={feature.isNumeric ? "Enter numeric value" : "Enter categoric value"}
+                  />
+                ))
+              ) : (
+                <p>No features to be displayed</p>
+              );
+                })()}
+            < div className="text-center">
+            <Button disabled={isTesting} variant={isTesting ? "disabled" : "primary"}>
+              Test
+            </Button>
           </div>
-          <div className="mb-5 mt-2">
-            <div className="h-[1px] bg-gray/30 w-full absolute left-0 mt-2"></div>
-          </div>
-          <div className="flex flex-col gap-2">
-            <div className="flex items-center gap-2">
-              <span className="font-semibold">Target Predict Result</span> <Question label="outcome variable" />
-            </div>
-            <div className="w-full grid grid-cols-2">
-              <p>{predict}</p>
-              {result}
-            </div>
-          </div>
-        </form>
       </div>
+      <div className="mb-5 mt-2">
+        <div className="h-[1px] bg-gray/30 w-full absolute left-0 mt-2"></div>
+      </div>
+      <div className="flex flex-col gap-2">
+        <div className="flex items-center gap-2">
+          <span className="font-semibold">Target Predict Result</span> <Question label="outcome variable" />
+        </div>
+        <div className="w-full grid grid-cols-2">
+          <p>{predict}</p>
+          {result}
+        </div>
+      </div>
+    </form >
+      </div >
     </>
   );
 }

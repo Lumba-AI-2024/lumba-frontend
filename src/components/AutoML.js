@@ -17,6 +17,7 @@ import  useAutoML  from "../hooks/useAutoML";
 
 export default function AutoML({
   automlname,
+  dataset,
   datasetname,
   method,
   feature,

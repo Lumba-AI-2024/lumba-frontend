@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Delete from "./Icon/Delete";
+import Download from "./Icon/Download";
 import FormModal from "./Form/FormModal";
 import FormModalContextProvider from "../context/FormModalContext";
 import Spinner from "./Spinner";
@@ -95,12 +96,13 @@ export default function Model({
   name,
   file,
   metrics,
+  datasetname,
   score,
   // metrics_score,
   method,
   algorithm,
   updated_time,
-  features,
+  feature,
   predict,
   isDuplicate,
   isLoading = false,
@@ -109,12 +111,10 @@ export default function Model({
   username,
   workspace,
   isAuto = false,
-  status
+  status,
 }) {
-
   const [isTesting, setIsTesting] = React.useState(false);
   const [result, setResult] = React.useState("-");
-
 
   const searchParams = useSearchParams();
   const type = searchParams.get("type");
@@ -132,19 +132,20 @@ export default function Model({
   const { autoMLName, workspaceName } = router.query;
   const isHome = !realPath.split("/").includes("modeling");
   let parsedScore = null;
-  if (method !== "CLUSTERING") {
-    parsedScore = JSON.parse(score)
-  }
-  console.log(parsedScore)
+  parsedScore = JSON.parse(score);
+  console.log(parsedScore);
+
+  // Define the download URL
+
   return (
     <>
       <tr>
         <td colSpan="100%" className={noActions ? "pt-2" : "pt-4"}></td>
       </tr>
-      <tr className="relative" onClick={() => { }}>
+      <tr className="relative" onClick={() => {}}>
         <td className="bg-white rounded-l-md pl-4 py-2 relative px-4">
           <div className={`flex flex-col ${isLoading && "text-gray/50"}`}>
-            <span className="text-[10px] text-gray -mb-1">{file}</span>
+            <span className="text-[10px] text-gray -mb-1"></span>
             <span>{name}</span>
           </div>
         </td>
@@ -154,7 +155,7 @@ export default function Model({
 
             {method == "REGRESSION" && <span>{parsedScore.r2_score}</span>}
             {method == "CLASSIFICATION" && <span>{parsedScore.accuracy_score}</span>}
-            {method == "CLUSTERING" && <span>{score}</span>}
+            {method == "CLUSTERING" && <span>{parsedScore.silhouette_score}</span>}
           </div>
         </td>
         <td className="bg-white rounded-l-md pl-4 py-2 relative px-4">
@@ -181,6 +182,8 @@ export default function Model({
               ) : (
                 <>
                   {type === "predicting" && <ApiKey apiKey={apiKey} />}
+                  {/* Download button */}
+                  <Download onClick={() => {file}} />
                   <FormModalContextProvider>
                     <FormModal
                       variant="deleteModel"
@@ -197,7 +200,7 @@ export default function Model({
                             workspace: workspace,
                             type: type,
                           });
-                        } catch (err) { }
+                        } catch (err) {}
                       }}
                     >
                       <p>Are you sure you want to delete this model?</p>
@@ -205,54 +208,24 @@ export default function Model({
                   </FormModalContextProvider>
 
                   <FormModalContextProvider>
-                    {/* {algorithm === "KMEANS" && (
-                      <KMeansTestModal
-                        name={name}
-                        CustomButton={TestButton}
-                        isTesting={isTesting}
-                        features={features}
-                        result={isTesting ? <Spinner /> : result}
-                        handleSubmit={(formData) => {
-                          setIsTesting(true);
-                          const featureQueryString = Object.values(formData)
-                            .map((value) => `feature=${value}&`)
-                            .join("");
-                          axios
-                            .get(
-                              `${process.env.NEXT_PUBLIC_API_ROUTE}/modeling/predict/?name=${name}&${featureQueryString}username=${username}&workspace=${workspace}&type=${type}`,
-                              {
-                                headers: {
-                                  Authorization: `Token ${getCookie("token")}`,
-                                },
-                              }
-                            )
-                            .then((res) => {
-                              const { result } = res.data;
-                              setResult(result);
-                              setIsTesting(false);
-                            })
-                            .catch((error) => {
-                              setResult(<span className="text-pink">An error occurred.</span>);
-                              setIsTesting(false);
-                            });
-                        }}
-                      />
-                    )} */}
                     {["DECISION_TREE", "RANDOM_FOREST", "NEURAL_NETWORK", "XG_BOOST", "KMEANS", "DBSCAN"].includes(algorithm) && (
                       <TestModal
                         CustomButton={TestButton}
                         isTesting={isTesting}
-                        features={features}
+                        features={feature}
                         predict={predict}
                         result={isTesting ? <Spinner /> : result}
                         handleSubmit={(formData) => {
                           setIsTesting(true);
-                          const featureQueryString = Object.values(formData)
-                            .map((value) => `feature=${value}&`)
-                            .join("");
+                          const featureDict = Object.fromEntries(
+                            Object.entries(formData).map(([key, value]) => [key, value])
+                          );
+                        
+                          // Mengubah dictionary menjadi string JSON
+                          const featureQueryString = `feature=${JSON.stringify(featureDict)}`;
                           axios
                             .get(
-                              `${process.env.NEXT_PUBLIC_API_ROUTE}/modeling/predict/?name=${name}&${featureQueryString}username=${username}&workspace=${workspace}&type=${type}`,
+                              `${process.env.NEXT_PUBLIC_API_ROUTE}/modeling/predict/?name=${name}&${featureQueryString}&username=${username}&workspace=${workspace}&datasetname=${datasetname}`,
                               {
                                 headers: {
                                   Authorization: `Token ${getCookie("token")}`,
@@ -275,7 +248,7 @@ export default function Model({
                       <TestModal
                         CustomButton={TestButton}
                         isTesting={isTesting}
-                        features={features}
+                        features={feature}
                         predict={predict}
                         result={isTesting ? <Spinner /> : result}
                         handleSubmit={(formData) => {
@@ -304,16 +277,7 @@ export default function Model({
                     )}
                   </FormModalContextProvider>
 
-                  {method === "FORECASTING" && (
-                    <Button
-                      size="small"
-                      onClick={() => router.push(realPath + (isHome ? "/modeling/" : "/") + name + "?" + params)}
-                      type="button"
-                      testModel
-                    >
-                      <span className="text-[10px] font-medium px-3">View Chart</span>
-                    </Button>
-                  )}
+                  
                 </>
               )}
             </div>

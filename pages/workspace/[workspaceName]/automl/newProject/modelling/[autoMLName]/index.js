@@ -53,7 +53,7 @@ const modelling = () => {
                 console.log(a)
                 return parseFloat(b.parsedScore.r2_score) - parseFloat(a.parsedScore.r2_score);
             } else if (selectedAutoML.method === 'CLASSIFICATION') {
-            return parseFloat(b.parsedScore.accuracy_score) - parseFloat(a.parsedScore.accuracy_score);
+                return parseFloat(b.parsedScore.accuracy_score) - parseFloat(a.parsedScore.accuracy_score);
             } else if (selectedAutoML.method === 'CLUSTERING') {
                 console.log("bbb",b)
                 return parseFloat(b.parsedScore.silhouette_score) - parseFloat(a.parsedScore.silhouette_score);
@@ -102,7 +102,7 @@ const modelling = () => {
                         </thead>
                         <tbody>
                             {sortedModels.map((model) => (
-                                <Model username={username} workspace={workspaceName} key={model.id} isAuto={true} {...model} />
+                                <Model username={username} workspace={workspaceName} key={model.id} isAuto={true} file={model.model_file} {...model} />
                             ))}
                         </tbody>
                     </table>

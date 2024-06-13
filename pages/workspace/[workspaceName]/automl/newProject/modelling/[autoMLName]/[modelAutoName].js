@@ -122,7 +122,7 @@ const explain = () => {
                         </table>
                     </div>
 
-                    <h3>Used Parameter</h3>
+                    <h3>Used HyperParameter</h3>
 
                     <div className="overflow-x-auto">
                         <table className="min-w-full bg-white rounded-lg shadow-md">
