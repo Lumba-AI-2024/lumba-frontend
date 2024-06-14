@@ -144,12 +144,11 @@ const explain = () => {
                         )}
                         {selectedModel?.method === "CLASSIFICATION" && (
                             <p>
-                                For classification models, the SHAP plot indicates how each feature influences the probability of the target class. A high SHAP value means the feature contributes significantly to the prediction of that class. Each dot represents an instance, and colors can show whether the feature value is high (red) or low (blue).
-                            </p>
+                                For classification models, the SHAP plot indicates how each feature influences the probability of the target class. The bar plot shows the average impact of each feature on the model output for each class. The length of each bar represents the mean SHAP value (average impact on model output magnitude). Each color represents a different class, and longer bars indicate features with greater influence on the prediction for that class.                            </p>
                         )}
                         {selectedModel?.method === "CLUSTERING" && (
                             <p>
-                                For clustering models, SHAP values can help explain the features that most influence the assignment of instances to clusters. The plot will show how different features impact the clustering assignment, with higher SHAP values indicating greater influence.
+                                For clustering models, the SHAP plot indicates how each feature influences the probability of the target class. The bar plot shows the average impact of each feature on the model output for each class. The length of each bar represents the mean SHAP value (average impact on model output magnitude). Each color represents a different class, and longer bars indicate features with greater influence on the prediction for that class.                            
                             </p>
                         )}
                     </div>

@@ -87,6 +87,10 @@ export default function TestModal({ handleSubmit, CustomButton, features, predic
             <div className="flex items-center gap-2">
               <span className="font-semibold">Target Predict Result</span> <Question label="outcome variable" />
             </div>
+            <div className="text-gray-500 text-sm">
+              Note: The numerical prediction result corresponds to the<br />
+              alphabetical order of target values.
+            </div>
             <div className="w-full grid grid-cols-2">
               <p>{predict}</p>
               {result}
