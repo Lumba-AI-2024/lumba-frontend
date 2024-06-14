@@ -96,6 +96,7 @@ export default function Model({
   name,
   file,
   metrics,
+  dataset,
   datasetname,
   score,
   scaler,
@@ -138,12 +139,21 @@ export default function Model({
 
   // Define the download URL
   const handleDownload = () => {
-    const link = document.createElement("a");
-    link.href = file; // Use the `file` prop as the URL
-    link.download = name; // Use the `name` prop as the file name
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    const downloadFile = (file, name) => {
+      const link = document.createElement("a");
+      link.href = file;
+      link.download = name;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    };
+
+    if (name.startsWith("vanilla")) {
+      downloadFile(file, name);
+    } else {
+      downloadFile(file, name);
+      downloadFile(scaler, name + "_scaler");
+    }
   };
 
   return (
@@ -151,7 +161,7 @@ export default function Model({
       <tr>
         <td colSpan="100%" className={noActions ? "pt-2" : "pt-4"}></td>
       </tr>
-      <tr className="relative" onClick={() => {}}>
+      <tr className="relative" onClick={() => { }}>
         <td className="bg-white rounded-l-md pl-4 py-2 relative px-4">
           <div className={`flex flex-col ${isLoading && "text-gray/50"}`}>
             <span className="text-[10px] text-gray -mb-1"></span>
@@ -209,7 +219,7 @@ export default function Model({
                             workspace: workspace,
                             type: type,
                           });
-                        } catch (err) {}
+                        } catch (err) { }
                       }}
                     >
                       <p>Are you sure you want to delete this model?</p>
@@ -229,7 +239,7 @@ export default function Model({
                           const featureDict = Object.fromEntries(
                             Object.entries(formData).map(([key, value]) => [key, value])
                           );
-                        
+
                           // Mengubah dictionary menjadi string JSON
                           const featureQueryString = `feature=${JSON.stringify(featureDict)}`;
                           axios
@@ -252,41 +262,41 @@ export default function Model({
                             });
                         }}
                       />
-                    // )}
-                    // {algorithm === "LINEAR" && (
-                    //   <TestModal
-                    //     CustomButton={TestButton}
-                    //     isTesting={isTesting}
-                    //     features={feature}
-                    //     predict={predict}
-                    //     result={isTesting ? <Spinner /> : result}
-                    //     handleSubmit={(formData) => {
-                    //       setIsTesting(true);
-                    //       axios
-                    //         .get(
-                    //           `${process.env.NEXT_PUBLIC_API_ROUTE}/modeling/predict/?name=${name}&feature=${formData[features[0].label]
-                    //           }&username=${username}&workspace=${workspace}&type=${type}`,
-                    //           {
-                    //             headers: {
-                    //               Authorization: `Token ${getCookie("token")}`,
-                    //             },
-                    //           }
-                    //         )
-                    //         .then((res) => {
-                    //           const { result } = res.data;
-                    //           setResult(result);
-                    //           setIsTesting(false);
-                    //         })
-                    //         .catch((error) => {
-                    //           setResult(<span className="text-pink">An error occurred.</span>);
-                    //           setIsTesting(false);
-                    //         });
-                    //     }}
+                      // )}
+                      // {algorithm === "LINEAR" && (
+                      //   <TestModal
+                      //     CustomButton={TestButton}
+                      //     isTesting={isTesting}
+                      //     features={feature}
+                      //     predict={predict}
+                      //     result={isTesting ? <Spinner /> : result}
+                      //     handleSubmit={(formData) => {
+                      //       setIsTesting(true);
+                      //       axios
+                      //         .get(
+                      //           `${process.env.NEXT_PUBLIC_API_ROUTE}/modeling/predict/?name=${name}&feature=${formData[features[0].label]
+                      //           }&username=${username}&workspace=${workspace}&type=${type}`,
+                      //           {
+                      //             headers: {
+                      //               Authorization: `Token ${getCookie("token")}`,
+                      //             },
+                      //           }
+                      //         )
+                      //         .then((res) => {
+                      //           const { result } = res.data;
+                      //           setResult(result);
+                      //           setIsTesting(false);
+                      //         })
+                      //         .catch((error) => {
+                      //           setResult(<span className="text-pink">An error occurred.</span>);
+                      //           setIsTesting(false);
+                      //         });
+                      //     }}
                       // />
                     )}
                   </FormModalContextProvider>
 
-                  
+
                 </>
               )}
             </div>
